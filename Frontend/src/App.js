@@ -9,6 +9,7 @@ import SignIn from "./Views/SingIn/SingIn";
 import Login from "./Views/Login/Login";
 import { NotFound } from "./GlobalVariables";
 import Profile from "./Views/Profile/Profile";
+import Users from "./Views/Users/Users";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/SignIn" element={<SignIn />} />
             <Route path="/LogIn" element={<Login />} />
             <Route path="/Profile" element={<Profile />} />
+            <Route path="/Users" element={<Users />} />
             <Route
               path="*"
               element={<NotFound mensaje="La página que busca no existe" />}

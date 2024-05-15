@@ -16,6 +16,7 @@ export const urlFeedback = `${baseUrl}/comentarios`;
 export const urlClass = `${baseUrl}/class`;
 export const urlLogin = `${baseUrl}/auth`;
 export const urlSingIn = `${baseUrl}/register`;
+export const urlUsers = `${baseUrl}/users`
 
 export const urlReserveClass = `${baseUrl}/class/reserve`;
 

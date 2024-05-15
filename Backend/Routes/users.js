@@ -23,5 +23,29 @@ router.post("/", async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
+router.get('/',async (req,res)=>{
+  try {
+    const allUsers = await User.find()
+    res.json(allUsers)
+  } catch (error) {
+    res.status(500).send({ message: "Error al consultar los usuarios" });
+  }
+})
+router.delete("/:id", async (req, res) => {
+  const userID = req.params.id;
 
+  try {
+    const resultado = await User.deleteOne({ _id: userID }); // Eliminamos el comentario por su ID
+    if (resultado.deletedCount === 1) {
+      res.status(200).json({ message: "Usuario eliminado exitosamente." });
+    } else {
+      console.error("No se pudo encontrar el usuario para eliminar.");
+      res.status(404).json({ error: "Usuario no encontrado." });
+    }
+  } catch (error) {
+    console.error("Error al eliminar el usuario en MongoDB:", error);
+    res.status(500).json({ error: "Error al eliminar el usuario en MongoDB" });
+  }
+});
 module.exports = router;
+
