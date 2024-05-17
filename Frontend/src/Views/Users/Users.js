@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./Users.css";
 
 import {
     createToBD,
     selectFilterToBD,
     selectUserByToken,
+    deleteByIDToBD,
     NotFound,
     urlUsers,
     urlSingIn,
@@ -18,14 +20,14 @@ const Users = () => {
     const [isLoading, setLoading] = useState(true); // State to track loading status
     const [error, setError] = useState(null);
     const [editUser, setEditUser] = useState(null); //
-    
+    const navigate = useNavigate();
     useEffect(() => {
         // Fetch user data from the server on component mount
         fetchUsers()
-        
-    }, []); 
 
-    const fetchUsers = async ()=>{
+    }, []);
+
+    const fetchUsers = async () => {
         const response = await selectToBD(urlUsers)
         setUsers(response)
     }
@@ -38,7 +40,14 @@ const Users = () => {
         fetchUsers();
     };
 
+    const LoadEdit = (id) => {
+        navigate("/Users/edit/");
+    }
 
+    const Removefunction = async (email) => {
+       await deleteByIDToBD(urlUsers,email)
+       fetchUsers()
+    }
     // UI Handlers
     const handleAddFormSubmit = (event) => {
         event.preventDefault();
@@ -52,21 +61,47 @@ const Users = () => {
         };
         addUser(userData);
     };
-
-    
-
     return (
-        <div>
-            <h1>Registered Users</h1>
-            <ul>
-                {users.map(user => (
-                    <li key={user._id}>
-                        {user.firstName} {user.lastName} - {user.email}
-                        <button onClick={() => setEditUser(user)}>Edit</button>
+        <div className="container">
+            <div className="card-title">
+                <h2>Todos Los Usuarios</h2>
+            </div>
+            <div className="divbtn">
+                <Link to="employee/create" className="btn btn-success">Agregar Nuevo Usuario</Link>
+            </div>
+            <div className="card-body">
+                <table className="table table-bordered">
+                    <thead className="bg-dark text-white">
+                        <tr>
+                            <td>ID</td>
+                            <td>Nombre</td>
+                            <td>Email</td>
+                            <td>Tipo</td>
+                            <td>Funciones</td>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                    </li>
-                ))}
-            </ul>
+                        {users &&
+                            users.map(user => (
+                                <tr key={user._id}>
+                                    <td>{user._id}</td>
+                                    <td>{user.firstName} {user.lastName}</td>
+                                    <td>{user.email}</td>
+                                    <td>{user.role}</td>
+                                    <td>
+                                        <a onClick={() => { LoadEdit(user._id) }} className="btn btn-success">Editar</a>
+                                        <a onClick={() => { Removefunction(user._id) 
+                                            console.log(user.id)}} className="btn btn-danger">Eliminar</a>
+                                    </td>
+                                </tr>
+                            ))
+                        }
+
+                    </tbody>
+
+                </table>
+            </div>
         </div>
     );
 }

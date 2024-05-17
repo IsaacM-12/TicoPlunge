@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { User, validate } = require("../Models/User");
 const bcrypt = require("bcrypt");
-
+const mongoose = require("mongoose")
 router.post("/", async (req, res) => {
   try {
     const { error } = validate(req.body);
@@ -32,10 +32,10 @@ router.get('/',async (req,res)=>{
   }
 })
 router.delete("/:id", async (req, res) => {
+  
   const userID = req.params.id;
-
   try {
-    const resultado = await User.deleteOne({ _id: userID }); // Eliminamos el comentario por su ID
+    const resultado = await User.deleteOne({_id: userID }); // Eliminamos el comentario por su ID
     if (resultado.deletedCount === 1) {
       res.status(200).json({ message: "Usuario eliminado exitosamente." });
     } else {
