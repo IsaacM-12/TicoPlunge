@@ -14,20 +14,20 @@ const ViewStafCreateClass = ({
   };
 
   return (
-    <div className="createClassStyle">
-      <div className="form-container">
-        <h2 className="title">Crear Clase</h2>
-        <div className="social-message">
-          <div className="line"></div>
-          <div className="message">Tus citas programadas</div>
-          <div className="line"></div>
+    <div className="CreateClass-CreateClassStyle">
+      <div className="CreateClass-form-container">
+        <h2 className="CreateClass-title">Crear Clase</h2>
+        <div className="CreateClass-social-message">
+          <div className="CreateClass-line"></div>
+          <div className="CreateClass-message">Tus citas programadas</div>
+          <div className="CreateClass-line"></div>
         </div>
-        <form onSubmit={handleSubmit} className="form-CreateClass">
-          <div className="input-group-CreateClass">
+        <form onSubmit={handleSubmit} className="CreateClass-form">
+          <div className="CreateClass-input-group">
             <label htmlFor="inputActivity">*Actividad:</label>
             <select
               id="inputActivity"
-              className="select-CreateClass"
+              className="CreateClass-select"
               value={inputData.service}
               onChange={(e) => handleChange(e, "service")}
             >
@@ -37,7 +37,7 @@ const ViewStafCreateClass = ({
               <option value="baile">Baile</option>
             </select>
           </div>
-          <div className="input-group-CreateClass">
+          <div className="CreateClass-input-group">
             <label htmlFor="inputDate">*Fecha:</label>
             <input
               type="date"
@@ -45,22 +45,22 @@ const ViewStafCreateClass = ({
               value={inputData.date}
               onChange={(e) => handleChange(e, "date")}
               min={new Date().toISOString().split("T")[0]}
-              className="input-group-CreateClass input"
+              className="CreateClass-input"
               required
             />
           </div>
-          <div className="input-group-CreateClass">
+          <div className="CreateClass-input-group">
             <label htmlFor="inputHour">*Hora:</label>
             <input
               type="time"
               id="inputHour"
               value={inputData.hour}
               onChange={(e) => handleChange(e, "hour")}
-              className="input-group-CreateClass input"
+              className="CreateClass-input"
               required
             />
           </div>
-          <div className="input-group-CreateClass">
+          <div className="CreateClass-input-group">
             <label htmlFor="inputCapacity">*Cantidad de cupos:</label>
             <input
               type="number"
@@ -73,7 +73,7 @@ const ViewStafCreateClass = ({
             />
           </div>
 
-          <div className="input-group-CreateClass">
+          <div className="CreateClass-input-group">
             <label htmlFor="inputRepeatEvery">
               <hr />
               Opciones de abajo para más de 1 clase
@@ -85,12 +85,12 @@ const ViewStafCreateClass = ({
               id="inputRepeatEvery"
               value={inputData.repeatEveryMinutes}
               onChange={(e) => handleChange(e, "repeatEveryMinutes")}
-              className="input-group-CreateClass input"
+              className="CreateClass-input"
               min="1"
               max="999"
             />
           </div>
-          <div className="input-group-CreateClass">
+          <div className="CreateClass-input-group">
             <label htmlFor="inputRepeatFor">
               Repetir por (veces segun la cantidad de minutos anterior):
             </label>
@@ -99,12 +99,12 @@ const ViewStafCreateClass = ({
               id="inputRepeatFor"
               value={inputData.repeatNTimes}
               onChange={(e) => handleChange(e, "repeatNTimes")}
-              className="input-group-CreateClass input"
+              className="CreateClass-input"
               min="1"
               max="100"
             />
           </div>
-          <div className="input-group-CreateClass">
+          <div className="CreateClass-input-group">
             <label htmlFor="inputRepeatWeekly">
               Repetir cantidad todo lo anterior (semanas consecutivas):
             </label>
@@ -113,18 +113,18 @@ const ViewStafCreateClass = ({
               id="inputRepeatWeekly"
               value={inputData.repeatWeekly}
               onChange={(e) => handleChange(e, "repeatWeekly")}
-              className="input-group-CreateClass input"
+              className="CreateClass-input"
               min="1"
               max="52"
             />
           </div>
 
-          {/* por si hay un error en el form se muetre*/}
-          <div className={` m-3 ${showErroresForm ? "" : "d-none"}`}>
+          {/* por si hay un error en el form se muestre*/}
+          <div className={`m-3 ${showErroresForm ? "" : "d-none"}`}>
             {showErroresForm}
           </div>
 
-          <button type="submit" className="buttomCreate mt-4">
+          <button type="submit" className="CreateClass-buttom mt-4">
             Crear Clase
           </button>
         </form>

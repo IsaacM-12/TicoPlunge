@@ -1,4 +1,4 @@
-.createClassStyle {
+.CreateClass-CreateClassStyle {
   margin: 0;
   min-height: calc(100vh - 44px);
 }
@@ -10,7 +10,7 @@
   --class-background-color: #111827;
 }
 
-.form-container {
+.CreateClass-form-container {
   width: 320px;
   border-radius: 0.75rem;
   background-color: var(--class-background-color);
@@ -21,7 +21,7 @@
   margin-bottom: 20px;
 }
 
-.select-CreateClass {
+.CreateClass-select {
   background-color: transparent;
   color: var(--class-color-letter);
   padding: 2rem;
@@ -29,34 +29,34 @@
   padding-bottom: 10px;
 }
 
-.select-CreateClass option {
+.CreateClass-select option {
   background-color: var(--class-background-color);
 }
 
-.title {
+.CreateClass-title {
   text-align: center;
   font-size: 1.5rem;
   line-height: 2rem;
   font-weight: 700;
 }
 
-.form-CreateClass {
+.CreateClass-form {
   margin-top: 1.5rem;
 }
 
-.input-group-CreateClass {
+.CreateClass-input-group {
   margin-top: 0.25rem;
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
 
-.input-group-CreateClass label {
+.CreateClass-input-group label {
   display: block;
   color: rgba(156, 163, 175, 1);
   margin-bottom: 4px;
 }
 
-.input-group-CreateClass input {
+.CreateClass-input-group input {
   width: 100%;
   border-radius: 0.375rem;
   border: 1px solid rgba(55, 65, 81, 1);
@@ -66,11 +66,11 @@
   color: var(--class-color-letter);
 }
 
-.input-group-CreateClass input:focus {
+.CreateClass-input-group input:focus {
   border-color: rgba(167, 139, 250);
 }
 
-.buttomCreate {
+.CreateClass-buttom {
   display: block;
   width: 100%;
   background-color: #0d6efd;
@@ -82,23 +82,23 @@
   font-weight: 600;
   margin-top: 15px;
 }
-.buttomCreate:hover {
+.CreateClass-buttom:hover {
   background-color: #1462d8;
 }
 
-.social-message {
+.CreateClass-social-message {
   display: flex;
   align-items: center;
   padding-top: 1rem;
 }
 
-.line {
+.CreateClass-line {
   height: 1px;
   flex: 1 1 0%;
   background-color: rgba(55, 65, 81, 1);
 }
 
-.social-message .message {
+.CreateClass-social-message .CreateClass-message {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
   font-size: 0.875rem;
@@ -106,13 +106,13 @@
   color: rgba(156, 163, 175, 1);
 }
 
-.input-group-CreateClass[type="date"]::-webkit-calendar-picker-indicator {
+.CreateClass-input-group input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
   border-radius: 50%;
   padding: 4px;
 }
 
-.input-group-CreateClass[type="time"]::-webkit-calendar-picker-indicator {
+.CreateClass-input-group input[type="time"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
   border-radius: 50%;
   padding: 4px;

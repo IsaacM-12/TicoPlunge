@@ -85,13 +85,13 @@ const Feedback = () => {
     for (let i = 1; i <= 5; i++) {
       if (i <= rating) {
         stars.push(
-          <span className="star" key={i}>
+          <span className="feedback-star" key={i}>
             ★
           </span>
         );
       } else {
         stars.push(
-          <span className="star" key={i}>
+          <span className="feedback-star" key={i}>
             ☆
           </span>
         );
@@ -137,6 +137,9 @@ const Feedback = () => {
       setshowErroresForm(
         <ErrorAlert message="Debe llenar las estrellas y el comentario" />
       );
+      setTimeout(() => {
+        setshowErroresForm("");
+      }, timeWaitAlert);
       return;
     }
 
@@ -148,18 +151,18 @@ const Feedback = () => {
 
   return (
     <>
-      {usuarioActivo.role === "Administrator" && (
+      {usuarioActivo.role === "Administrator no" && (
         <ViewAdminFeedback renderStars={renderStars} />
       )}
 
-      {usuarioActivo.role === "Staff" ||
-        (usuarioActivo.role === "se" && ( //(usuarioActivo.role === "Client" && (
+      {usuarioActivo.role === "Staff no" ||
+        (usuarioActivo.role === "Client no" && (
           <ViewUserFeedback renderStars={renderStars} />
         ))}
 
-      {usuarioActivo.role !== "Administrator" &&
-        // usuarioActivo.role !== "Client" &&
-        usuarioActivo.role !== "Staff" && (
+      {usuarioActivo.role !== "Administrator no" &&
+        usuarioActivo.role !== "Client no" &&
+        usuarioActivo.role !== "Staff no" && (
           <ViewNoneloginFeedback
             handleSubmit={handleSubmit}
             setInputData={setInputData}

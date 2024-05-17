@@ -4,6 +4,7 @@ const app = express();
 const cors = require("cors");
 const connection = require("./db");
 const FeedbackRoutes = require("./Routes/Feedback");
+const PrivateFeedback = require("./Routes/PrivateFeedback");
 const ClassRoutes = require("./Routes/Class");
 const userRoutes = require("./Routes/users");
 const authRoutes = require("./Routes/authenticator");
@@ -19,6 +20,7 @@ app.use(cors());
 app.use("/register", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/comentarios", FeedbackRoutes);
+app.use("/privatefeedback", PrivateFeedback);
 app.use("/class", ClassRoutes);
 
 const port = process.env.PORT || 8080;

@@ -6,7 +6,7 @@ import Home from "./Views/Home/Home";
 import CreateClass from "./Views/CreateClass/CreateClass";
 import Appointment from "./Views/Appointment/Appointment";
 import SignIn from "./Views/SingIn/SingIn";
-import Login from "./Views/Login/Login";
+import Login from "./Views/SingIn/Login";
 import { NotFound } from "./GlobalVariables";
 import Profile from "./Views/Profile/Profile";
 import Users from "./Views/Users/Users";

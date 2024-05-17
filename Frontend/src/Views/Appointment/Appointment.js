@@ -71,9 +71,6 @@ const Appointment = () => {
     const classId = idClass;
     const response = await createToBD(urlReserveClass, { userId, classId });
     setshowAlerts(response);
-    setTimeout(() => {
-      setshowAlerts("");
-    }, timeWaitAlert);
   };
 
   const reserveAsAdmin = async () => {};
@@ -149,7 +146,6 @@ const Appointment = () => {
       setTimeout(() => {
         setshowErrorSearch("");
       }, timeWaitAlert);
-      return;
     }
     setshowErrorSearch("");
 
@@ -158,7 +154,7 @@ const Appointment = () => {
 
   return (
     <>
-      {usuarioActivo.role === "Administrator" ||
+      {usuarioActivo.role === "Administrator no" ||
         (usuarioActivo === "Staff" && (
           <ViewAdminAppointment
             showClasses={showClasses}
@@ -166,7 +162,7 @@ const Appointment = () => {
           />
         ))}
 
-      {usuarioActivo.role === "Client" && (
+      {usuarioActivo.role === "Client no" && (
         <ViewUserAppointment
           showClasses={showClasses}
           setInputData={setInputData}
@@ -178,10 +174,19 @@ const Appointment = () => {
         />
       )}
 
-      {usuarioActivo.role !== "Administrator" &&
-        usuarioActivo.role !== "Client" &&
-        usuarioActivo.role !== "Staff" && (
-          <NotFound mensaje="Por favor, inicia sesión para continuar" />
+      {usuarioActivo.role !== "Administrator no" &&
+        usuarioActivo.role !== "Client no" &&
+        usuarioActivo.role !== "Staff no" && (
+          // <NotFound mensaje="Por favor, inicia sesión para continuar" />
+          <ViewUserAppointment
+            showClasses={showClasses}
+            setInputData={setInputData}
+            inputData={inputData}
+            handleSubmitSearch={handleSubmitSearch}
+            showErrorSearch={showErrorSearch}
+            reserveAsClient={reserveAsClient}
+            showAlerts={showAlerts}
+          />
         )}
     </>
   );

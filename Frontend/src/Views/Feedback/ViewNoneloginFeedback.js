@@ -1,5 +1,7 @@
 import React from "react";
 
+import { redirectPrivateFeedback } from "../../GlobalVariables";
+
 const ViewNoneloginFeedback = ({
   handleSubmit,
   setInputData,
@@ -13,18 +15,20 @@ const ViewNoneloginFeedback = ({
   return (
     <div className="FeedbackStyle">
       {/* para mostrar mensajes */}
-      <div className={`m-4 ${showAlerts ? "" : "d-none"}`}>
+      <div className={` ${showAlerts ? "" : "d-none"}`}>
         <div className="mostrar-alert">{showAlerts}</div>
       </div>
 
-      <div className="rating-card">
+      <div className="feedback-rating-card">
         <form onSubmit={handleSubmit}>
-          <div className="text-wrapper">
-            <p className="text-title">Deja tu comentario</p>
-            <p className="text-subtitle">Nos gustaría saber tu opinión</p>
+          <div className="feedback-text-wrapper">
+            <p className="feedback-text-title">Deja tu comentario</p>
+            <p className="feedback-text-subtitle">
+              Nos gustaría saber tu opinión
+            </p>
           </div>
 
-          <div className="rating-stars-container">
+          <div className="feedback-rating-stars-container">
             {[...Array(5)].map((_, i) => (
               <React.Fragment key={i}>
                 <input
@@ -36,7 +40,7 @@ const ViewNoneloginFeedback = ({
                     setInputData({ ...inputData, rating: `${i + 1}` })
                   }
                 />
-                <label htmlFor={`star${i + 1}`} className="star-label">
+                <label htmlFor={`star${i + 1}`} className="feedback-star-label">
                   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
@@ -61,8 +65,8 @@ const ViewNoneloginFeedback = ({
             />
           </div>
 
-          {/* por si hay un error en el form se muetre*/}
-          <div className={` m-4 ${showErroresForm ? "" : "d-none"}`}>
+          {/* por si hay un error en el form se muestre*/}
+          <div className={` ${showErroresForm ? "" : "d-none"}`}>
             <div className="d-flex justify-content-center align-items-center">
               {showErroresForm}
             </div>
@@ -80,12 +84,14 @@ const ViewNoneloginFeedback = ({
         <div>
           {comentarios.length > 0 ? (
             comentarios.map((item) => (
-              <div key={item._id} className="feedbackBox m-4">
-                <span className="notititle">{item.usuario}</span>
+              <div key={item._id} className="feedback-Box m-4">
+                <span className="feedback-notititle">{item.usuario}</span>
                 <br></br>
                 <span>{renderStars(parseInt(item.rating))}</span>
                 <br></br>
-                <span className="notibody">Comentario: {item.comentario}</span>
+                <span className="feedback-notibody">
+                  Comentario: {item.comentario}
+                </span>
                 <button
                   className="btn btn-danger m-4"
                   onClick={() => deleteComentario(item._id)}

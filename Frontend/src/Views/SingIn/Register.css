@@ -1,4 +1,4 @@
-.login_container {
+.register_container {
   width: 100%;
   min-height: calc(100vh - 44px);
   background-color: #f5f5f5;
@@ -7,7 +7,7 @@
   justify-content: center;
 }
 
-.login_form_container {
+.register_form_container {
   width: 100%; /* Ancho relativo */
   max-width: 900px; /* Ancho máximo */
   height: 500px;
@@ -17,7 +17,7 @@
     0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
 }
 
-.left {
+.register-left {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -29,14 +29,14 @@
   padding: 3px;
 }
 
-.left h1 {
+.register-left h1 {
   margin-top: 0;
   color: white;
   font-size: 35px;
   align-self: center;
 }
 
-.right {
+.register-right {
   flex: 2;
   display: flex;
   flex-direction: column;
@@ -47,18 +47,18 @@
   border-bottom-right-radius: 10px;
 }
 
-.form_container {
+.register-form_container {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.form_container h1 {
+.register-form_container h1 {
   font-size: 40px;
   margin-top: 0;
 }
 
-.input {
+.register-input {
   outline: none;
   border: none;
   max-width: 95%; /* Ancho relativo */
@@ -70,8 +70,8 @@
   font-size: 14px;
 }
 
-.white_btn,
-.form_btn {
+.register-white_btn,
+.register-form_btn {
   border: none;
   outline: none;
   padding: 12px 0;
@@ -84,7 +84,7 @@
   cursor: pointer;
 }
 
-.form_btn {
+.register-form_btn {
   background-color: #0d6efd;
   color: white;
   margin: 10px;

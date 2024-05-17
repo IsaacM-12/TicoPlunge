@@ -41,7 +41,7 @@ const CreateClass = () => {
    */
   const GetUserActive = async () => {
     const user = await selectUserByToken();
-    // setUsuarioActivo(user);
+    setUsuarioActivo(user);
   };
 
   /**
@@ -152,14 +152,17 @@ const CreateClass = () => {
       setshowErroresForm(
         <SuccessAlert message="¡Todas las clases fueron creadas exitosamente!" />
       );
+      setTimeout(() => {
+        setshowErroresForm("");
+      }, timeWaitAlert);
     } else {
       setshowErroresForm(
         <ErrorAlert message="No se pudieron crear algunas clases. Es posible que ya existieran o que haya ocurrido un error durante el proceso de creación." />
       );
+      setTimeout(() => {
+        setshowErroresForm("");
+      }, timeWaitAlert);
     }
-    setTimeout(() => {
-      setshowErroresForm("");
-    }, timeWaitAlert);
   };
 
   /**
@@ -178,6 +181,9 @@ const CreateClass = () => {
       setshowErroresForm(
         <ErrorAlert message="Debe llenar al menos los que tienen un simbolo (*)" />
       );
+      setTimeout(() => {
+        setshowErroresForm("");
+      }, timeWaitAlert);
       return;
     }
 
@@ -189,12 +195,16 @@ const CreateClass = () => {
       createAppointments();
     } else {
       setshowErroresForm(<ErrorAlert message="Acción cancelada." />);
+      setTimeout(() => {
+        setshowErroresForm("");
+      }, timeWaitAlert);
     }
   };
 
   return (
     <>
-      {(usuarioActivo === "Staff" || usuarioActivo === "Administrator") && (
+      {(usuarioActivo.role === "Staff no" ||
+        usuarioActivo.role === "Administrator no") && (
         <ViewStafCreateClass
           inputData={inputData}
           showErroresForm={showErroresForm}
@@ -203,9 +213,16 @@ const CreateClass = () => {
         />
       )}
 
-      {usuarioActivo !== "Administrator" && usuarioActivo !== "Staff" && (
-        <NotFound mensaje="Por favor, inicia sesión para continuar" />
-      )}
+      {usuarioActivo.role !== "Administrator no" &&
+        usuarioActivo.role !== "Staff no" && (
+          // <NotFound mensaje="Por favor, inicia sesión para continuar" />
+          <ViewStafCreateClass
+            inputData={inputData}
+            showErroresForm={showErroresForm}
+            handleSubmit={handleSubmit}
+            setInputData={setInputData}
+          />
+        )}
     </>
   );
 };

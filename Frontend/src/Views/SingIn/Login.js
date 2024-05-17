@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, redirect } from "react-router-dom";
-import "./Login.css"; // Import the CSS module
 import {
   createToBD,
   deleteByIDToBD,
@@ -39,18 +38,19 @@ const Login = () => {
   };
 
   return (
-    <div className="login_container">
-      <div className="login_form_container">
-        <div className="left">
+    <div className="register_container">
+      <div className="register_form_container">
+        <div className="register-left">
           <h1>¿No tienes cuenta?</h1>
           <Link to={redirectRegister}>
-            <button type="button" className="white_btn">
+            <button type="button" className="register-white_btn">
               Registrarse
             </button>
           </Link>
         </div>
-        <div className="right">
-          <form className="form_container" onSubmit={handleSubmit}>
+
+        <div className="register-right">
+          <form className="register-form_container" onSubmit={handleSubmit}>
             <h1>Inicia sesión en tu cuenta</h1>
             <input
               type="email"
@@ -59,7 +59,7 @@ const Login = () => {
               onChange={handleChange}
               value={data.email}
               required
-              className="input"
+              className="register-input"
             />
             <input
               type="password"
@@ -68,11 +68,10 @@ const Login = () => {
               onChange={handleChange}
               value={data.password}
               required
-              className="input"
+              className="register-input"
             />
-
             {error && <div className="errorMsg">{error}</div>}
-            <button type="submit" className="form_btn">
+            <button type="submit" className="register-form_btn">
               Iniciar sesión
             </button>
           </form>
