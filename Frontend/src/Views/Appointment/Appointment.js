@@ -146,6 +146,7 @@ const Appointment = () => {
       setTimeout(() => {
         setshowErrorSearch("");
       }, timeWaitAlert);
+      return;
     }
     setshowErrorSearch("");
 
