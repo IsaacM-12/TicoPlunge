@@ -29,27 +29,33 @@ const ViewNoneloginFeedback = ({
           </div>
 
           <div className="feedback-rating-stars-container">
-            {[...Array(5)].map((_, i) => (
-              <React.Fragment key={i}>
-                <input
-                  value={i + 1}
-                  name="rate"
-                  id={`star${i + 1}`}
-                  type="radio"
-                  onChange={() =>
-                    setInputData({ ...inputData, rating: `${i + 1}` })
-                  }
-                />
-                <label htmlFor={`star${i + 1}`} className="feedback-star-label">
-                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                      pathLength="360"
-                    ></path>
-                  </svg>
-                </label>
-              </React.Fragment>
-            ))}
+            {[...Array(5)].map((_, i) => {
+              const value = 5 - i; // Ajuste del valor para corregir el orden
+              return (
+                <React.Fragment key={i}>
+                  <input
+                    value={value} // El valor del input, que va de 1 a 5
+                    name="rate"
+                    id={`star${value}`}
+                    type="radio"
+                    onChange={() =>
+                      setInputData({ ...inputData, rating: `${value}` })
+                    }
+                  />
+                  <label
+                    htmlFor={`star${value}`}
+                    className="feedback-star-label"
+                  >
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
+                        pathLength="360"
+                      ></path>
+                    </svg>
+                  </label>
+                </React.Fragment>
+              );
+            })}
           </div>
 
           <div>
@@ -85,7 +91,10 @@ const ViewNoneloginFeedback = ({
           {comentarios.length > 0 ? (
             comentarios.map((item) => (
               <div key={item._id} className="feedback-Box m-4">
-                <span className="feedback-notititle">{item.usuario}</span>
+                <span className="feedback-notititle">
+                  {item.usuario}
+                  {new Date(item.creationDate).toLocaleDateString()}
+                </span>
                 <br></br>
                 <span>{renderStars(parseInt(item.rating))}</span>
                 <br></br>

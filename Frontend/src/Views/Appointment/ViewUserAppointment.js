@@ -62,9 +62,17 @@ const ViewUserAppointment = ({
               <div key={index} className="card">
                 <span>Profesor: {item.usuario}</span>
                 <br />
-                <span>Hora: {item.hour}</span>
+                <span>
+                  Hora:{" "}
+                  {new Date(item.date).toLocaleTimeString("es-ES", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
                 <br />
-                <span>Fecha: {item.date}</span>
+                <span>
+                  Fecha: {new Date(item.date).toLocaleDateString("es-ES")}
+                </span>
                 <br />
                 <span>Cupos disponibles: {item.capacity}</span>
                 <br />

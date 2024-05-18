@@ -1,8 +1,8 @@
 # TicoPlunche
 
 ## By
-- Isaac Meléndez Gatgens
 
+- Isaac Meléndez Gatgens
 
 ## Información del Proyecto
 
@@ -10,7 +10,7 @@
 
 ## Tecnologías Utilizadas
 
-- Node
+- Node (Version v18.14.2)
 - Express
 - Mongo
 

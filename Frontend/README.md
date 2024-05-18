@@ -11,8 +11,9 @@
 ## Tecnologías Utilizadas
 
 - React (^18.2.0) con react-router-dom
-- Bootstrap
+- Bootstrap 
 - Mongo
+- Node (Version v18.14.2)
 
 ## Instrucciones para Iniciar la Aplicación
 

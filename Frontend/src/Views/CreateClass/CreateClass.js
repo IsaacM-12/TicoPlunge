@@ -63,16 +63,15 @@ const CreateClass = () => {
    * @returns {boolean} - True si se crea la clase con éxito, false si hay un error o si el usuario cancela.
    */
 
-  const createClassBD = async (date, hour, usuario, service, capacity) => {
+  const createClassBD = async (date, service, capacity) => {
     const newClass = {
       date: date,
-      hour: hour,
-      usuario: usuario,
+      usuario: usuarioActivo.firstName,
       service: service,
       capacity: capacity,
     };
 
-    const confirmationMessage = `¿Estás seguro de que deseas crear la clase para ${date} a las ${hour}?`;
+    const confirmationMessage = `¿Estás seguro de que deseas crear la clase para ${date} a las ${date}?`;
     const confirmed = window.confirm(confirmationMessage);
 
     if (!confirmed) {
@@ -115,27 +114,16 @@ const CreateClass = () => {
           newDate.getTime() + j * 7 * 24 * 60 * 60 * 1000
         );
 
-        const formattedDate = finalDate.toISOString().split("T")[0];
-        const formattedHour = finalDate
-          .toTimeString()
-          .split(" ")[0]
-          .substring(0, 8); // Extrae correctamente la hora
-
         newAppointments.push({
-          date: formattedDate,
-          hour: formattedHour,
+          date: finalDate.toISOString(), // Almacena la fecha y la hora completas en formato ISO
         });
       }
     }
 
     let allCreated = true;
     for (const appointment of newAppointments) {
-      // console.log("vamos");
-
       const success = await createClassBD(
         appointment.date,
-        appointment.hour,
-        usuarioActivo,
         inputData.service,
         inputData.capacity
       );

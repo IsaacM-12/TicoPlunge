@@ -29,16 +29,15 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   // Extraemos los datos de la clase del cuerpo de la solicitud
   const claseData = req.body;
-
   // Validamos los datos de la clase
   const { error } = validateClass(claseData);
+
   if (error) return res.status(400).send(error.details[0].message);
 
   try {
     // Verificar si ya existe una clase con los mismos datos de fecha, hora, usuario y servicio
     const existingClass = await Class.findOne({
       date: claseData.date,
-      hour: claseData.hour,
       usuario: claseData.usuario,
       service: claseData.service,
     });
