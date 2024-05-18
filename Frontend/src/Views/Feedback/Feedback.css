@@ -136,3 +136,17 @@
     transform: scale(1);
   }
 }
+
+
+
+
+.feedback-rating-card-edit {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.9); /* Fondo semitransparente */
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 9999; /* Asegura que esté encima de todo */
+}

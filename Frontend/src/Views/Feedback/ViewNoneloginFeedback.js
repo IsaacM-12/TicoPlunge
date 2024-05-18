@@ -9,6 +9,8 @@ const ViewNoneloginFeedback = ({
   deleteComentario,
   renderStars,
   showAlerts,
+  usuarioActivo,
+  editComentario,
 }) => {
   return (
     <div className="FeedbackStyle">
@@ -16,6 +18,11 @@ const ViewNoneloginFeedback = ({
       <div className={` ${showAlerts ? "" : "d-none"}`}>
         <div className="mostrar-alert">{showAlerts}</div>
       </div>
+
+      {/* para editar */}
+      {/* <div className={` ${showAlerts ? "" : "d-none"}`}>
+        <div>{showAlerts}</div>
+      </div> */}
 
       <div className="feedback-rating-card">
         <form onSubmit={handleSubmit}>
@@ -102,6 +109,17 @@ const ViewNoneloginFeedback = ({
                 <span className="feedback-notibody">
                   Comentario: {item.comentario}
                 </span>
+
+                {/* si fue el que lo creo  */}
+                {item.usuario === usuarioActivo.firstName && (
+                  <button
+                    className="btn btn-primary m-4"
+                    onClick={() => editComentario(item._id)}
+                  >
+                    Editar
+                  </button>
+                )}
+
                 <button
                   className="btn btn-danger m-4"
                   onClick={() => deleteComentario(item._id)}

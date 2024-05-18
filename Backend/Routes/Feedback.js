@@ -53,6 +53,53 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Ruta para actualizar un comentario existente
+router.put("/:id", async (req, res) => {
+  // Extraer el ID del comentario de los parámetros de la solicitud
+  const comentarioId = req.params.id;
+
+  // Extraer los nuevos datos del comentario del cuerpo de la solicitud
+  const nuevoComentario = req.body;
+
+  // Validar el comentario utilizando Joi
+  const { error } = validateFeedback(nuevoComentario);
+  if (error) {
+    // Si hay errores de validación, devolver un error 400 con los detalles del error
+    return res.status(400).json({ error: error.details[0].message });
+  }
+
+  try {
+    // Verificar si existe el comentario que se intenta actualizar
+    const comentarioExistente = await Feedback.findById(comentarioId);
+
+    // Si el comentario no existe, devolver un mensaje indicando que no se puede encontrar
+    if (!comentarioExistente) {
+      return res.status(404).json({
+        message: "El comentario no se encontró.",
+        error: "El comentario no existe",
+      });
+    }
+
+    // Actualizar el comentario existente con los nuevos datos
+    const comentarioActualizado = await Feedback.findByIdAndUpdate(
+      comentarioId,
+      nuevoComentario,
+      { new: true } // Para devolver el documento actualizado en lugar del original
+    );
+
+    // Devolver una respuesta exitosa con el comentario actualizado
+    res.status(200).json({
+      message: "Comentario actualizado exitosamente.",
+      comentario: comentarioActualizado,
+    });
+  } catch (error) {
+    console.error("Error al actualizar comentario en MongoDB:", error);
+    res
+      .status(500)
+      .json({ error: "Error al actualizar comentario en MongoDB" });
+  }
+});
+
 // Ruta para eliminar un comentario por su ID
 router.delete("/:id", async (req, res) => {
   const comentarioId = req.params.id;

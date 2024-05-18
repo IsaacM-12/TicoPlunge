@@ -123,6 +123,60 @@ export const createToBD = async (serviceUrl, infoToSave) => {
 };
 
 /**
+ * Envía una solicitud PUT a la URL del servicio especificado para actualizar un documento en la base de datos MongoDB.
+ * @param {string} serviceUrl - La URL del servicio donde se actualizará el documento.
+ * @param {string} documentId - El ID del documento que se actualizará.
+ * @param {Object} newData - Los nuevos datos que se asignarán al documento.
+ * @returns {Promise<JSX.Element>} Una promesa que se resuelve con un mensaje de éxito o error después de intentar actualizar el documento.
+ */
+export const updateToBD = async (serviceUrl, documentId, newData) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    // Send a PUT request to the service URL with the provided data
+    const response = await axios.put(
+      `${serviceUrl}/${documentId}`,
+      newData,
+      config
+    );
+
+    //----------------------------------------------------------------------------------------------
+    // borrar al terminar el desarrollo
+    console.log("log del updateToBD cuando se hizo con exito ", response);
+    //----------------------------------------------------------------------------------------------
+
+    const message = (
+      <SuccessAlert
+        message={response.data.message || "Se ha actualizado correctamente"}
+      />
+    );
+
+    // Show success message
+    return message;
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.error) {
+      // Si el error proviene del servidor y contiene un mensaje de error
+      console.error("Error al actualizar documento en MongoDB:", error);
+      const errorMessage = error.response.data.error;
+      // Aquí puedes usar el mensaje de error para mostrarlo en tu aplicación
+      console.error("Mensaje de error:", errorMessage);
+      const message = <ErrorAlert message={errorMessage} />;
+      return message;
+    } else {
+      // Para errores no relacionados con el servidor, usa el mensaje de error predeterminado
+      const errorMessage = error.message || "Error desconocido";
+      console.error("Error desconocido:", errorMessage);
+      console.error("Mensaje de error:", errorMessage);
+      const message = <ErrorAlert message={errorMessage} />;
+    }
+  }
+};
+
+/**
  * Borra un comentario de la base de datos haciendo una solicitud DELETE a la URL especificada.
  * @param {string} url - La URL base del servicio donde se encuentra el recurso a borrar.
  * @param {string} id - El ID del comentario que se desea borrar.

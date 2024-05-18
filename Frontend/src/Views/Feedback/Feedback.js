@@ -12,6 +12,7 @@ import {
   ErrorAlert,
   timeWaitAlert,
 } from "../../GlobalVariables";
+import React from "react";
 
 const Feedback = () => {
   // -------------------------------------------------------------
@@ -74,6 +75,10 @@ const Feedback = () => {
     setTimeout(() => {
       setshowErroresForm("");
     }, timeWaitAlert);
+  };
+
+  const editComentario = async (id) => {
+    setshowErroresForm(<div className="feedback-rating-card-edit">{id}</div>);
   };
 
   /**
@@ -172,6 +177,8 @@ const Feedback = () => {
             deleteComentario={deleteComentariosBD}
             renderStars={renderStars}
             showAlerts={showAlerts}
+            usuarioActivo={usuarioActivo}
+            editComentario={editComentario}
           />
         )}
     </>
