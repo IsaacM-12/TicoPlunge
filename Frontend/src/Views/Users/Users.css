@@ -1,8 +1,3 @@
-/* General body styling */
-body {
-    font-family: Arial, sans-serif;
-}
-
 /* Container for users and forms */
 .container {
     width: 80%;
@@ -12,17 +7,17 @@ body {
 }
 
 /* Styling for headers */
-h1, h2 {
+.h1, .h2 {
     color: #333;
 }
 
 /* User list styles */
-ul {
+.ul {
     list-style-type: none;
     padding: 0;
 }
 
-li {
+.li {
     background: #f9f9f9;
     border: 1px solid #ddd;
     margin-top: 5px;
@@ -33,7 +28,7 @@ li {
 }
 
 /* Button styles */
-button {
+.button {
     padding: 8px 16px;
     margin-left: 8px;
     background-color: #5C67F2;
@@ -43,19 +38,19 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+.button:hover {
     background-color: #3a40e0;
 }
 
 /* Form styling */
-form {
+.form {
     background: #ffffff;
     padding: 20px;
     margin-top: 20px;
     border: 1px solid #ddd;
 }
 
-input, select {
+.input, .select {
     padding: 8px;
     margin: 5px;
     width: calc(100% - 22px); /* Adjust width for padding and border */
@@ -63,7 +58,7 @@ input, select {
 }
 
 /* Submit button for forms */
-form button {
+.form button {
     width: 100%;
     box-sizing: border-box; /* Includes padding and border in width */
 }

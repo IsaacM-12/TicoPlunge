@@ -119,6 +119,52 @@ export const createToBD = async (serviceUrl, infoToSave) => {
   }
 };
 
+export const updateToDB = async  (serviceUrl, infoToSave) => {
+  
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    console.log(infoToSave)
+
+    // Send a PUT request to the service URL with the provided data
+    const response = await axios.put(serviceUrl, infoToSave, config);
+
+    //----------------------------------------------------------------------------------------------
+    // borrar al terminar el desarrollo
+    console.log("log del updatetoDB cuando se hizo con exito ", response);
+    //----------------------------------------------------------------------------------------------
+
+    const message = (
+      <SuccessAlert
+        message={response.data.message || "Se ha actualizado correctamente"}
+      />
+    );
+
+    // Show success message
+    return message;
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.error) {
+      // Si el error proviene del servidor y contiene un mensaje de error
+      console.error("Error al insertar documento en MongoDB:", error);
+      const errorMessage = error.response.data.error;
+      // Aquí puedes usar el mensaje de error para mostrarlo en tu aplicación
+      console.error("Mensaje de error:", errorMessage);
+      const message = <ErrorAlert message={errorMessage} />;
+      return message;
+    } else {
+      // Para errores no relacionados con el servidor, usa el mensaje de error predeterminado
+      const errorMessage = error.message || "Error desconocido";
+      console.error("Error desconocido:", errorMessage);
+      console.error("Mensaje de error:", errorMessage);
+      const message = <ErrorAlert message={errorMessage} />;
+    }
+  }
+
+}
+
 /**
  * Borra un comentario de la base de datos haciendo una solicitud DELETE a la URL especificada.
  * @param {string} url - La URL base del servicio donde se encuentra el recurso a borrar.

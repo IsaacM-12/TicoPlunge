@@ -166,7 +166,7 @@ const Appointment = () => {
           />
         ))}
 
-      {usuarioActivo.role === "Client" && (
+      {usuarioActivo.role === "Staff" && (
         <ViewUserAppointment
           showClasses={showClasses}
           setInputData={setInputData}

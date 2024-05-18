@@ -1,66 +1,48 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Modal, Button } from "react-bootstrap";
+import UserEdit from "./UserEdit";
 import "./Users.css";
 
 import {
-    createToBD,
-    selectFilterToBD,
-    selectUserByToken,
-    deleteByIDToBD,
-    NotFound,
-    urlUsers,
-    urlSingIn,
-    ErrorAlert,
-    timeWaitAlert,
-    SuccessAlert,
     selectToBD,
+    deleteByIDToBD,
+    urlUsers,
+    SuccessAlert
 } from "../../GlobalVariables";
-const Users = () => {
-    const [users, setUsers] = useState([]); // State to store user data
-    const [isLoading, setLoading] = useState(true); // State to track loading status
-    const [error, setError] = useState(null);
-    const [editUser, setEditUser] = useState(null); //
-    const navigate = useNavigate();
-    useEffect(() => {
-        // Fetch user data from the server on component mount
-        fetchUsers()
 
+const Users = () => {
+    const [users, setUsers] = useState([]);
+    const [isLoading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [editUser, setEditUser] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+
+    useEffect(() => {
+        fetchUsers();
     }, []);
 
     const fetchUsers = async () => {
-        const response = await selectToBD(urlUsers)
-        setUsers(response)
-    }
+        const response = await selectToBD(urlUsers);
+        setUsers(response);
+        setLoading(false);
+    };
 
+    const LoadEdit = (user) => {
+        setEditUser(user);
+        setShowModal(true);
+    };
 
-    const addUser = async (userData) => {
+    const handleModalClose = () => {
+        setEditUser(null);
+        setShowModal(false);
+    };
 
-        const { data: res } = await createToBD(urlSingIn, userData);
-        setError(<SuccessAlert message={res.message} />);
+    const Removefunction = async (user) => {
+        await deleteByIDToBD(urlUsers, user.id);
         fetchUsers();
     };
 
-    const LoadEdit = (id) => {
-        navigate("/Users/edit/");
-    }
-
-    const Removefunction = async (email) => {
-       await deleteByIDToBD(urlUsers,email)
-       fetchUsers()
-    }
-    // UI Handlers
-    const handleAddFormSubmit = (event) => {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        const userData = {
-            firstName: formData.get('firstName'),
-            lastName: formData.get('lastName'),
-            email: formData.get('email'),
-            password: formData.get('password'),
-            role: formData.get('role')
-        };
-        addUser(userData);
-    };
     return (
         <div className="container">
             <div className="card-title">
@@ -81,7 +63,6 @@ const Users = () => {
                         </tr>
                     </thead>
                     <tbody>
-
                         {users &&
                             users.map(user => (
                                 <tr key={user._id}>
@@ -90,20 +71,26 @@ const Users = () => {
                                     <td>{user.email}</td>
                                     <td>{user.role}</td>
                                     <td>
-                                        <a onClick={() => { LoadEdit(user._id) }} className="btn btn-success">Editar</a>
-                                        <a onClick={() => { Removefunction(user._id) 
-                                            console.log(user.id)}} className="btn btn-danger">Eliminar</a>
+                                        <Button onClick={() => LoadEdit(user)} className="btn btn-success">Editar</Button>
+                                        <Button onClick={() => Removefunction(user)} className="btn btn-danger">Eliminar</Button>
                                     </td>
                                 </tr>
                             ))
                         }
-
                     </tbody>
-
                 </table>
             </div>
+
+            <Modal show={showModal} onHide={handleModalClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Editar Usuario</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {editUser && <UserEdit user={editUser} onClose={handleModalClose} onSave={fetchUsers} />}
+                </Modal.Body>
+            </Modal>
         </div>
     );
-}
+};
 
-export default Users
+export default Users;
