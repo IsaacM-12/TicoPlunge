@@ -1,16 +1,114 @@
-.homeStyle {
-  background-color: rgb(16, 15, 15);
-  color: white;
-  padding-top: 20px;
-  padding-bottom: 20px;
+
+
+.homeStyle{
+  min-height: calc(100vh - 44px);
+  background-color: #5c1d1d;
+  align-items: center;
+  justify-content: center;
+  /* Add your background pattern here */
+  width: 100%;
+  height: 100%;
+  --s: 37px; /* control the size */
+
+  --c: #0000, rgb(0, 67, 99) 0.5deg 119.5deg, #0000 120deg;
+  --g1: conic-gradient(from 60deg at 56.25% calc(425% / 6), var(--c));
+  --g2: conic-gradient(from 180deg at 43.75% calc(425% / 6), var(--c));
+  --g3: conic-gradient(from -60deg at 50% calc(175% / 12), var(--c));
+  background: var(--g1), var(--g1) var(--s) calc(1.73 * var(--s)), var(--g2),
+    var(--g2) var(--s) calc(1.73 * var(--s)), var(--g3) var(--s) 0,
+    var(--g3) 0 calc(1.73 * var(--s)) #ecbe13;
+  background-size: calc(2 * var(--s)) calc(3.46 * var(--s));
+
+}
+
+.todo{
+    background-color: rgb(255, 255, 255);
+    margin: 0px 100px;
+    min-height: 100vh;
 }
 
 .bg-image {
-  background-image: url("https://png.pngtree.com/thumb_back/fw800/background/20230616/pngtree-luxury-bathroom-design-featuring-a-large-bathtub-and-striking-black-marble-image_3601729.jpg");
+  background-image: url("../../Imagenes/descarga.jpg");
   background-size: cover;
   min-height: 50vh;
 }
 
-.row:nth-child(even) .bg-image {
-  background-image: none;
+.cold-plunge{
+  border: 3px double black;
+  border-radius: 80px;
+  margin: 0px 0px;
+  padding: 10px 0px;
+  width: 10%;
+  
 }
+
+.quienes-somos{
+  border-top: 3px double orange;
+  border-right: 3px double brown;
+  border-bottom: 3px double brown;
+  border-left: 3px double brown;
+  margin: 10px;
+  padding: 40px;
+  width: 100%;
+  border-radius: 89px;
+
+}
+
+.redes{
+  border: 3px double black;
+  margin: 0px 25%;
+  padding: 10px;
+  width: 50%;
+}
+
+.visit-comunity{
+    margin: 30px;
+   padding: 40px; /*superior, derecha, inferior e izquierda*/ 
+   border: 1px solid black;
+   background-color: azure;
+   border-radius: 89px;
+   background: linear-gradient(145deg, #e6e6e6, #ffffff);
+   box-shadow:  34px 34px 67px #b0b0b0,-34px -34px 67px #ffffff;
+}
+
+.titulo{
+    color: #000000;
+    border: 5px solid black;
+    background-color: azure;
+    border-radius: 10px;
+    width: 50%;
+    position: 0;
+    margin: 0px 25%;
+}
+
+.comunity{
+    
+   margin-top: 30px;
+   margin-bottom: 80px;
+   margin-right: 10px;
+   margin-left: 40px;
+   padding-top: 30px;
+   padding-bottom: 80px;
+   padding-right: 50px;
+   padding-left: 40px;
+   border: 1px solid black;
+   background-color: azure;
+   border-radius: 89px;
+   background: linear-gradient(145deg, #e6e6e6, #ffffff);
+   box-shadow:  34px 34px 67px #b0b0b0,-34px -34px 67px #ffffff;
+}
+
+
+main article {
+    margin-bottom: 40px;
+}
+
+footer {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 0px 0;
+    text-align: center;
+}
+
+
+  
