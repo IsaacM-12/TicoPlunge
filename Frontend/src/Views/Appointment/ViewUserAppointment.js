@@ -11,6 +11,7 @@ const ViewUserAppointment = ({
 }) => {
   return (
     <div className="AppointmentStyle">
+      <h1>Reserva tu clase </h1>
       {/* para mostrar mensajes */}
       <div className={`m-4 ${showAlerts ? "" : "d-none"}`}>
         <div className="mostrar-alert">{showAlerts}</div>
@@ -26,8 +27,8 @@ const ViewUserAppointment = ({
                 id="searchInput"
                 placeholder="Ingrese su búsqueda"
                 value={inputData.search}
-                onChange={
-                  (e) => setInputData({ ...inputData, search: e.target.value }) // Corrección aquí
+                onChange={(e) =>
+                  setInputData({ ...inputData, search: e.target.value })
                 }
               />
             </div>

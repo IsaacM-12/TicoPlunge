@@ -1,0 +1,59 @@
+.PrivateFeedbackStyle {
+  /* background: linear-gradient(to bottom, #111827, #f5f5f5); 
+  color: white;*/
+  margin: 0;
+  min-height: calc(100vh - 44px);
+}
+/* ---------------------------------------
+--  para mostrar los comentarios esta en Feedback.css
+------------------------------------------ */
+
+/* ---------------------------------------
+--  para dejar comentarios
+------------------------------------------ */
+
+.PrivateFeedback-rating-card {
+  min-height: calc(100vh - 44px);
+  width: auto;
+  background: #111827;
+  padding: 30px 20px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.PrivateFeedback-rating-card textarea {
+  background-color: transparent;
+  color: white;
+  width: 80%;
+  height: 200px;
+}
+
+.PrivateFeedback-rating-card button {
+  background-color: #02934f;
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.PrivateFeedback-text-wrapper {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.PrivateFeedback-text-title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #02934f;
+}
+
+.PrivateFeedback-text-subtitle {
+  color: #999086;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}

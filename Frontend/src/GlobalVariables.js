@@ -15,6 +15,7 @@ export const redirectPrivateFeedback = `/PrivateFeedback `;
 export const baseUrl = "http://localhost:8080";
 
 export const urlFeedback = `${baseUrl}/comentarios`;
+export const urlPrivateFeedback = `${baseUrl}/privatefeedback`;
 export const urlClass = `${baseUrl}/class`;
 export const urlLogin = `${baseUrl}/auth`;
 export const urlSingIn = `${baseUrl}/register`;

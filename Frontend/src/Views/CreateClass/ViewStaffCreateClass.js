@@ -16,7 +16,7 @@ const ViewStafCreateClass = ({
   return (
     <div className="CreateClass-CreateClassStyle">
       <div className="CreateClass-form-container">
-        <h2 className="CreateClass-title">Crear Clase</h2>
+        <h1 className="CreateClass-title">Crear Clase</h1>
         <div className="CreateClass-social-message">
           <div className="CreateClass-line"></div>
           <div className="CreateClass-message">Tus citas programadas</div>

@@ -10,6 +10,7 @@ import Login from "./Views/SingIn/Login";
 import { NotFound } from "./GlobalVariables";
 import Profile from "./Views/Profile/Profile";
 import Users from "./Views/Users/Users";
+import PrivateFeedback from "./Views/PrivateFeedback/PrivateFeedback";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="/Feedback" element={<Feedback />} />
+            <Route path="/PrivateFeedback" element={<PrivateFeedback />} />
             <Route path="/CreateClass" element={<CreateClass />} />
             <Route path="/AppointmentForm" element={<Appointment />} />
             <Route path="/SignIn" element={<SignIn />} />

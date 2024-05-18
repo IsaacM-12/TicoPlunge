@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const { Feedback } = require("../Models/FeedbackModel");
+const { Feedback, validateFeedback } = require("../Models/FeedbackModel");
 
 // Ruta para obtener todos los comentarios
 router.get("/", async (req, res) => {
@@ -19,18 +19,24 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   // Extraemos los datos del comentario del cuerpo de la solicitud
   const comentario = req.body;
+
+  // Validar el comentario utilizando Joi
+  const { error } = validateFeedback(comentario);
+  if (error) {
+    // Si hay errores de validación, devolver un error 400 con los detalles del error
+    return res.status(400).json({ error: error.details[0].message });
+  }
+
   try {
     // Verificar si ya existe un comentario con el mismo contenido
     const comentarioExistente = await Feedback.findOne(comentario);
 
     // Si ya existe, devolver un mensaje indicando que el comentario ya existe
     if (comentarioExistente) {
-      return res
-        .status(400)
-        .json({
-          message: "El comentario ya existe.",
-          error: "El comentario ya existe",
-        });
+      return res.status(400).json({
+        message: "El comentario ya existe.",
+        error: "El comentario ya existe",
+      });
     }
 
     // Si no existe, crear un nuevo comentario

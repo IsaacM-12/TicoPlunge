@@ -1,59 +1,32 @@
 import React from "react";
 
-const ViewNoneloginFeedback = ({
+import { redirectPrivateFeedback } from "../../GlobalVariables";
+
+const ViewNoneloginPrivateFeedback = ({
   handleSubmit,
   setInputData,
   inputData,
   showErroresForm,
   comentarios,
   deleteComentario,
-  renderStars,
   showAlerts,
 }) => {
   return (
-    <div className="FeedbackStyle">
+    <div className="PrivateFeedbackStyle">
       {/* para mostrar mensajes */}
       <div className={` ${showAlerts ? "" : "d-none"}`}>
         <div className="mostrar-alert">{showAlerts}</div>
       </div>
 
-      <div className="feedback-rating-card">
+      <div className="PrivateFeedback-rating-card">
         <form onSubmit={handleSubmit}>
-          <div className="feedback-text-wrapper">
-            <h1 className="feedback-text-title">Deja tu comentario</h1>
-            <p className="feedback-text-subtitle">
-              Nos gustaría saber tu opinión
+          <div className="PrivateFeedback-text-wrapper">
+            <p className="PrivateFeedback-text-title">
+              Deja tu comentario de forma anónima
             </p>
-          </div>
-
-          <div className="feedback-rating-stars-container">
-            {[...Array(5)].map((_, i) => {
-              const value = 5 - i; // Ajuste del valor para corregir el orden
-              return (
-                <React.Fragment key={i}>
-                  <input
-                    value={value} // El valor del input, que va de 1 a 5
-                    name="rate"
-                    id={`star${value}`}
-                    type="radio"
-                    onChange={() =>
-                      setInputData({ ...inputData, rating: `${value}` })
-                    }
-                  />
-                  <label
-                    htmlFor={`star${value}`}
-                    className="feedback-star-label"
-                  >
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
-                        pathLength="360"
-                      ></path>
-                    </svg>
-                  </label>
-                </React.Fragment>
-              );
-            })}
+            <p className="PrivateFeedback-text-subtitle">
+              Solo lo verán los trabajadores, no estará de forma pública
+            </p>
           </div>
 
           <div>
@@ -69,7 +42,7 @@ const ViewNoneloginFeedback = ({
             />
           </div>
 
-          {/* por si hay un error en el form se muestre*/}
+          {/* Por si hay un error en el formulario */}
           <div className={` ${showErroresForm ? "" : "d-none"}`}>
             <div className="d-flex justify-content-center align-items-center">
               {showErroresForm}
@@ -77,14 +50,11 @@ const ViewNoneloginFeedback = ({
           </div>
 
           <div className="input-group mt-3">
-            <button className="btn btn-primary" type="submit">
+            <button className="btn btn-success" type="submit">
               Crear Comentario
             </button>
           </div>
         </form>
-        <div className="m-4">
-          <a href="/PrivateFeedback">Dejar retroalimentación privada</a>
-        </div>
       </div>
 
       <div className="container mt-4 ">
@@ -96,8 +66,6 @@ const ViewNoneloginFeedback = ({
                   {item.usuario}
                   {new Date(item.creationDate).toLocaleDateString()}
                 </span>
-                <br></br>
-                <span>{renderStars(parseInt(item.rating))}</span>
                 <br></br>
                 <span className="feedback-notibody">
                   Comentario: {item.comentario}
@@ -121,4 +89,4 @@ const ViewNoneloginFeedback = ({
   );
 };
 
-export default ViewNoneloginFeedback;
+export default ViewNoneloginPrivateFeedback;

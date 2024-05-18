@@ -71,7 +71,16 @@ const CreateClass = () => {
       capacity: capacity,
     };
 
-    const confirmationMessage = `¿Estás seguro de que deseas crear la clase para ${date} a las ${date}?`;
+    const dateObject = new Date(date);
+
+    // Obtener la fecha en formato de cadena
+    const fecha = dateObject.toDateString();
+
+    // Obtener la hora en formato de cadena
+    const hora = dateObject.toTimeString().split(" ")[0]; // Se usa split para eliminar la parte de la zona horaria
+
+    // Construir el mensaje de confirmación
+    const confirmationMessage = `¿Estás seguro de que deseas crear la clase para ${fecha} a las ${hora}?`;
     const confirmed = window.confirm(confirmationMessage);
 
     if (!confirmed) {

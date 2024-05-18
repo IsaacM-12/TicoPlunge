@@ -22,6 +22,12 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   // Extraemos los datos del comentario del cuerpo de la solicitud
   const comentario = req.body;
+  // Validar el comentario utilizando Joi
+  const { error } = validatePrivateFeedback(comentario);
+  if (error) {
+    // Si hay errores de validación, devolver un error 400 con los detalles del error
+    return res.status(400).json({ error: error.details[0].message });
+  }
   try {
     // Verificar si ya existe un comentario con el mismo contenido
     const comentarioExistente = await PrivateFeedback.findOne(comentario);

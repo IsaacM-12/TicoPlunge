@@ -96,13 +96,17 @@ const Appointment = () => {
    */
   const searchByAnyBD = async () => {
     const fechaActual = new Date();
+
+    const fechaInicio = new Date(inputData.searchDate + "T00:00:00.000Z"); // Combina la fecha con la hora 00:00:00.000Z
+    // Establecer la fecha final al final del día seleccionado
+    const fechaFin = new Date(inputData.searchDate + "T23:59:59.999Z"); // Combina la fecha con la hora 23:59:59.999Z
+
     // filtro al buscar
     let filtro = {
       $and: [
         {
           $or: [
             { usuario: { $regex: inputData.search, $options: "i" } },
-            { hour: { $regex: inputData.search, $options: "i" } },
             { service: { $regex: inputData.search, $options: "i" } },
             {
               $expr: {
@@ -122,7 +126,7 @@ const Appointment = () => {
     // Verificar si se ha seleccionado una fecha
     if (inputData.searchDate) {
       filtro.$and.push({
-        date: { $regex: inputData.searchDate, $options: "i" },
+        date: { $gte: fechaInicio, $lte: fechaFin }, // Filtrar por la fecha seleccionada
       });
     }
     const response = await selectFilterToBD(urlClass, filtro);
