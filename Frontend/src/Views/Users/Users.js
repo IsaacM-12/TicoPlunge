@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
 import UserEdit from "./UserEdit";
+import UserAdd from "./UserAdd";
 import "./Users.css";
 
 import {
@@ -16,7 +17,8 @@ const Users = () => {
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [editUser, setEditUser] = useState(null);
-    const [showModal, setShowModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [showAddModal, setShowAddModal] = useState(false);
 
     useEffect(() => {
         fetchUsers();
@@ -30,16 +32,20 @@ const Users = () => {
 
     const LoadEdit = (user) => {
         setEditUser(user);
-        setShowModal(true);
+        setShowEditModal(true);
     };
 
-    const handleModalClose = () => {
+    const handleEditModalClose = () => {
         setEditUser(null);
-        setShowModal(false);
+        setShowEditModal(false);
+    };
+
+    const handleAddModalClose = () => {
+        setShowAddModal(false);
     };
 
     const Removefunction = async (user) => {
-        await deleteByIDToBD(urlUsers, user.id);
+        await deleteByIDToBD(urlUsers, user._id);
         fetchUsers();
     };
 
@@ -49,7 +55,7 @@ const Users = () => {
                 <h2>Todos Los Usuarios</h2>
             </div>
             <div className="divbtn">
-                <Link to="employee/create" className="btn btn-success">Agregar Nuevo Usuario</Link>
+                <Button onClick={() => setShowAddModal(true)} className="btn btn-success">Agregar Nuevo Usuario</Button>
             </div>
             <div className="card-body">
                 <table className="table table-bordered">
@@ -81,12 +87,21 @@ const Users = () => {
                 </table>
             </div>
 
-            <Modal show={showModal} onHide={handleModalClose}>
+            <Modal show={showEditModal} onHide={handleEditModalClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Editar Usuario</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {editUser && <UserEdit user={editUser} onClose={handleModalClose} onSave={fetchUsers} />}
+                    {editUser && <UserEdit user={editUser} onClose={handleEditModalClose} onSave={fetchUsers} />}
+                </Modal.Body>
+            </Modal>
+
+            <Modal show={showAddModal} onHide={handleAddModalClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Agregar Usuario</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <UserAdd onClose={handleAddModalClose} onSave={fetchUsers} />
                 </Modal.Body>
             </Modal>
         </div>
