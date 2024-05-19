@@ -61,7 +61,7 @@ const Feedback = () => {
   const createComentariosBD = async () => {
     const newComentario = {
       comentario: inputData.comentario,
-      usuario: usuarioActivo.firstName,
+      usuario: usuarioActivo.email,
       rating: inputData.rating,
     };
 
@@ -188,11 +188,11 @@ const Feedback = () => {
 
       {/* mostrar form de feedback solo a los de User y Staff*/}
       <div
-      // className={
-      //   usuarioActivo.role === "Client" || usuarioActivo.role === "Staff"
-      //     ? ""
-      //     : "d-none"
-      // }
+        className={
+          usuarioActivo.role === "Client" || usuarioActivo.role === "Staff"
+            ? ""
+            : "d-none"
+        }
       >
         <div className="feedback-rating-card">
           <form onSubmit={handleSubmit}>
@@ -275,9 +275,11 @@ const Feedback = () => {
               <div key={item._id} className="feedback-Box m-4">
                 <span className="feedback-notititle">
                   {item.usuario}
-                  {new Date(item.creationDate).toLocaleDateString()}
+                  <span className="m-3">
+                    {new Date(item.creationDate).toLocaleDateString()}
+                  </span>
+                  <br></br>
                 </span>
-                <br></br>
                 <span>{renderStars(parseInt(item.rating))}</span>
                 <br></br>
                 <span className="feedback-notibody">
@@ -286,20 +288,29 @@ const Feedback = () => {
 
                 {/* si fue el que lo creo o es admin se muestre el boton de borrar y editar */}
                 <div
-                // className={
-                //   item.usuario === usuarioActivo.firstName ||
-                //   "Admin" === usuarioActivo.role
-                //     ? ""
-                //     : "d-none"
-                // }
+                  className={
+                    item.usuario === usuarioActivo.email ||
+                    "Administrator" === usuarioActivo.role
+                      ? ""
+                      : "d-none"
+                  }
                 >
                   <div>
-                    <button
-                      onClick={() => OnClickEdit(item)}
-                      className="btn btn-primary m-4"
+                    {/* editar solo si fue el que lo creo */}
+
+                    <span
+                      className={
+                        item.usuario === usuarioActivo.email ? "" : "d-none"
+                      }
                     >
-                      Editar
-                    </button>
+                      <button
+                        onClick={() => OnClickEdit(item)}
+                        className="btn btn-primary m-4"
+                      >
+                        Editar
+                      </button>
+                    </span>
+
                     <button
                       className="btn btn-danger m-4"
                       onClick={() => deleteComentariosBD(item._id)}

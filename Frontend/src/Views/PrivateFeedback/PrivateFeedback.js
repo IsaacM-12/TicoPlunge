@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./PrivateFeedback.css";
 import { Modal } from "react-bootstrap";
 import React from "react";
+import { NotFound } from "../../GlobalVariables";
 
 import {
   createToBD,
@@ -31,7 +32,6 @@ const PrivateFeedback = () => {
   // -------------------------------------------------------------
   const [inputData, setInputData] = useState({
     comentario: "",
-    rating: "",
   });
 
   /**
@@ -106,11 +106,9 @@ const PrivateFeedback = () => {
     event.preventDefault();
 
     // Verificar si se proporcionaron datos para la calificación y el comentario
-    if (!inputData.rating || !inputData.comentario) {
+    if (!inputData.comentario) {
       // Mostrar un mensaje de error si no se proporcionaron los datos requeridos
-      setshowErroresForm(
-        <ErrorAlert message="Debe llenar las estrellas y el comentario" />
-      );
+      setshowErroresForm(<ErrorAlert message="Debe llenar  el comentario" />);
       setTimeout(() => {
         setshowErroresForm("");
       }, timeWaitAlert);
@@ -131,9 +129,7 @@ const PrivateFeedback = () => {
       </div>
 
       {/* mostrar form de private feedback solo a los de Client*/}
-      <div
-      //  className={usuarioActivo.role === "Client" ? "" : "d-none"}
-      >
+      <div className={usuarioActivo.role === "Client" ? "" : "d-none"}>
         <div className="PrivateFeedback-rating-card">
           <form onSubmit={handleSubmit}>
             <div className="PrivateFeedback-text-wrapper">
@@ -181,11 +177,12 @@ const PrivateFeedback = () => {
 
       {/* mostrar los mensajes privados solo a Staff y Administrator */}
       <div
-      // className={
-      //   usuarioActivo.role === "Administrator" || usuarioActivo.role === "Staff"
-      //     ? ""
-      //     : "d-none"
-      // }
+        className={
+          usuarioActivo.role === "Administrator" ||
+          usuarioActivo.role === "Staff"
+            ? ""
+            : "d-none"
+        }
       >
         <div className="container mt-4 ">
           <div>
@@ -201,13 +198,20 @@ const PrivateFeedback = () => {
                     Comentario: {item.comentario}
                   </span>
 
-                  <div>
-                    <button
-                      className="btn btn-danger m-4"
-                      onClick={() => deleteComentariosBD(item._id)}
-                    >
-                      Borrar
-                    </button>
+                  {/* mostrar boton borrar solo al admin */}
+                  <div
+                    className={
+                      usuarioActivo.role === "Administrator" ? "" : "d-none"
+                    }
+                  >
+                    <div>
+                      <button
+                        className="btn btn-danger m-4"
+                        onClick={() => deleteComentariosBD(item._id)}
+                      >
+                        Borrar
+                      </button>
+                    </div>{" "}
                   </div>
                 </div>
               ))
@@ -218,6 +222,11 @@ const PrivateFeedback = () => {
             )}
           </div>
         </div>
+      </div>
+
+      {/* mostrar mensaje si no ha iniciado sesion*/}
+      <div className={!usuarioActivo.role ? "" : "d-none"}>
+        <NotFound mensaje="Por favor, inicia sesión para continuar" />
       </div>
     </div>
   );

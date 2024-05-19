@@ -336,9 +336,7 @@ const CreateClass = () => {
       {/* mostrar mensaje si no ha iniciado sesion*/}
       <div
         className={
-          usuarioActivo.role !== "Administrator" &&
-          usuarioActivo.role !== "Staff" &&
-          usuarioActivo.role !== "Client"
+          !usuarioActivo.role 
             ? ""
             : "d-none"
         }

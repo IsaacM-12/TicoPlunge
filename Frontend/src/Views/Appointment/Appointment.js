@@ -199,14 +199,8 @@ const Appointment = () => {
 
   return (
     <div>
-      {/* mostrar solo a los de Administrator y Staff*/}
-      <div
-      // className={
-      //   usuarioActivo.role === "Administrator" || usuarioActivo.role === "Staff"
-      //     ? ""
-      //     : "d-none"
-      // }
-      >
+      {/* mostrar solo a los registrados*/}
+      <div className={usuarioActivo.role ? "" : "d-none"}>
         <div className="AppointmentStyle">
           <h1>Reserva tu clase </h1>
           {/* para mostrar mensajes */}
@@ -283,17 +277,24 @@ const Appointment = () => {
                     </button>
 
                     <div
-                    // className={
-                    //   usuarioActivo.role === "Administrator" || usuarioActivo.role === "Staff"
-                    //     ? ""
-                    //     : "d-none"
-                    // }
+                      className={
+                        usuarioActivo.role === "Administrator" ||
+                        (usuarioActivo.role === "Staff" && usuarioActivo.firstName === item.usuario)
+                          ? ""
+                          : "d-none"
+                      }
                     >
                       <button
                         className="btn btn-success m-4"
                         onClick={() => OnClickEdit(item)}
                       >
                         Editar
+                      </button>
+                      <button
+                        className="btn btn-danger m-4"
+                        onClick={() => OnClickEdit(item)}
+                      >
+                        Borrar
                       </button>
                     </div>
                   </div>
@@ -309,15 +310,7 @@ const Appointment = () => {
       </div>
 
       {/* mostrar mensaje si no ha iniciado sesion*/}
-      <div
-        className={
-          usuarioActivo.role !== "Administrator" &&
-          usuarioActivo.role !== "Staff" &&
-          usuarioActivo.role !== "Client"
-            ? ""
-            : "d-none"
-        }
-      >
+      <div className={!usuarioActivo.role ? "" : "d-none"}>
         <NotFound mensaje="Por favor, inicia sesión para continuar" />
       </div>
 
