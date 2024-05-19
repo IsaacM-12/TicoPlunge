@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { Class, validateClass } = require("../Models/ClassModel");
 const { User, validate } = require("../Models/User");
+const mongoose = require("mongoose");
 
 // Ruta para obtener todas las clases
 router.get("/", async (req, res) => {
@@ -60,6 +61,60 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Ruta para actualizar una clase existente
+router.put("/:id", async (req, res) => {
+  const claseId = req.params.id;
+
+  // Validar que claseId sea un ObjectId válido
+  if (!mongoose.Types.ObjectId.isValid(claseId)) {
+    return res.status(400).json({ error: "ID de clase no válido" });
+  }
+
+  const nuevaClase = req.body;
+
+  const { error } = validateClass(nuevaClase);
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
+
+  try {
+    const claseExistente = await Class.findById(claseId);
+
+    if (!claseExistente) {
+      return res.status(404).json({
+        message: "La clase no se encontró.",
+        error: "La clase no existe",
+      });
+    }
+    // Verificar si hay estudiantes inscritos en la clase
+    if (claseExistente.students.length > 0) {
+      return res.status(400).json({
+        error: "No se puede cambiar la clase cuando hay clientes inscritos.",
+      });
+    }
+
+    const claseActualizada = await Class.findByIdAndUpdate(
+      claseId,
+      { $set: nuevaClase },
+      { new: true } // Para devolver el documento actualizado en lugar del original
+    );
+
+    if (!claseActualizada) {
+      return res.status(500).json({
+        message: "No se pudo actualizar la clase.",
+        error: "No se pudo realizar la actualización",
+      });
+    }
+
+    res.status(200).json({
+      message: "Clase actualizada exitosamente.",
+    });
+  } catch (error) {
+    console.error("Error al actualizar clase en MongoDB:", error);
+    res.status(500).json({ error: "Error al actualizar clase en MongoDB" });
+  }
+});
+
 // Ruta para eliminar una clase por su ID
 router.delete("/:id", async (req, res) => {
   const claseId = req.params.id;
@@ -78,7 +133,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.post("/reserve", async (req, res) => {
+router.post("/reserveAsClient", async (req, res) => {
   const { userId, classId } = req.body;
 
   try {
@@ -110,8 +165,16 @@ router.post("/reserve", async (req, res) => {
         .json({ error: "Usuario ya inscrito en esta clase" });
     }
 
+    // Verificar si hay cupos disponibles en la clase
+    if (clase.capacity <= 0) {
+      return res.status(400).json({ error: "No hay cupos disponibles" });
+    }
+
     // Restar 1 al campo de créditos del usuario
     user.creditos -= 1;
+
+    // Restar 1 al campo de capacity de la clase
+    clase.capacity -= 1;
 
     // Agregar el ID del usuario a la lista de estudiantes de la clase
     clase.students.push(userId);

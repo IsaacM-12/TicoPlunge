@@ -21,7 +21,8 @@ export const urlLogin = `${baseUrl}/auth`;
 export const urlSingIn = `${baseUrl}/register`;
 export const urlUsers = `${baseUrl}/users`;
 
-export const urlReserveClass = `${baseUrl}/class/reserve`;
+export const urlReserveClassAsClient = `${baseUrl}/class/reserveAsClient`;
+export const urlReserveClassAsAdmin = `${baseUrl}/class/reserveAsAdmin`;
 
 // -------------------------------------------------------------
 // constante de cuanto tiempo mostrar los mensajes de error en milisegundos

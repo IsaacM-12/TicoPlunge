@@ -17,7 +17,7 @@ const validateClass = (data) => {
     date: Joi.date().required().label("Date"),
     usuario: Joi.string().required().label("Usuario"),
     service: Joi.string().required().label("Service"),
-    capacity: Joi.number().integer().min(1).required().label("Capacity"),
+    capacity: Joi.number().integer().min(0).required().label("Capacity"),
     students: Joi.array().items(Joi.string()).label("Students"), // Validación para la lista de estudiantes
   });
   return schema.validate(data);

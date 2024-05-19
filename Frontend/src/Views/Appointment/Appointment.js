@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import "./Appointment.css";
+import { Modal } from "react-bootstrap";
+import AppointmentEdit from "./AppointmentEdit";
 
 import {
   createToBD,
   selectFilterToBD,
-  urlReserveClass,
+  urlReserveClassAsClient,
+  urlReserveClassAsAdmin,
   selectUserByToken,
   urlClass,
   NotFound,
@@ -68,8 +71,17 @@ const Appointment = () => {
 
     const userId = usuarioActivo._id;
     const classId = idClass;
-    const response = await createToBD(urlReserveClass, { userId, classId });
+    const response = await createToBD(urlReserveClassAsClient, {
+      userId,
+      classId,
+    });
+
+    await selectClassBD();
+
     setshowAlerts(response);
+    setTimeout(() => {
+      setshowAlerts("");
+    }, timeWaitAlert);
   };
 
   const reserveAsAdmin = async () => {};
@@ -156,6 +168,35 @@ const Appointment = () => {
     await searchByAnyBD();
   };
 
+  // -------------------------------------------------------------
+  // parametros para el edit
+  // -------------------------------------------------------------
+
+  const [appointmentActual, setAppointmentActual] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [mostrarEditAppointment, setMostrarEditAppointment] = useState(false);
+
+  /**
+   * Función para manejar el cierre del modal de edición de Appointment.
+   * Limpia los estados relacionados con la edición y oculta el modal.
+   */
+  const handleModalClose = () => {
+    setMostrarEditAppointment(false);
+    setAppointmentActual(false);
+    setShowModal(false);
+  };
+
+  /**
+   * Función para manejar el clic en el botón de editar un Appointment.
+   * Establece el estado para mostrar el modal de edición y guarda el Appointment actual a editar.
+   * @param {Object} item - El Appointment a editar.
+   */
+  const OnClickEdit = async (item) => {
+    setMostrarEditAppointment(true);
+    setAppointmentActual(item);
+    setShowModal(true);
+  };
+
   return (
     <div>
       {/* mostrar solo a los de Administrator y Staff*/}
@@ -240,6 +281,21 @@ const Appointment = () => {
                     >
                       AGENDAR
                     </button>
+
+                    <div
+                    // className={
+                    //   usuarioActivo.role === "Administrator" || usuarioActivo.role === "Staff"
+                    //     ? ""
+                    //     : "d-none"
+                    // }
+                    >
+                      <button
+                        className="btn btn-success m-4"
+                        onClick={() => OnClickEdit(item)}
+                      >
+                        Editar
+                      </button>
+                    </div>
                   </div>
                 ))
               ) : (
@@ -264,6 +320,24 @@ const Appointment = () => {
       >
         <NotFound mensaje="Por favor, inicia sesión para continuar" />
       </div>
+
+      {/* Ventana para editar  */}
+      <Modal show={showModal} onHide={handleModalClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Editar Clase</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {mostrarEditAppointment && (
+            <AppointmentEdit
+              Appointment={appointmentActual}
+              onClose={handleModalClose}
+              onSave={OnClickEdit}
+              setshowAlerts={setshowAlerts}
+              selectClassBD={selectClassBD}
+            />
+          )}
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
