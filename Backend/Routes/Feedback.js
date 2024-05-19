@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const mongoose = require("mongoose");
 
 const { Feedback, validateFeedback } = require("../Models/FeedbackModel");
 
@@ -55,24 +56,23 @@ router.post("/", async (req, res) => {
 
 // Ruta para actualizar un comentario existente
 router.put("/:id", async (req, res) => {
-  // Extraer el ID del comentario de los parámetros de la solicitud
   const comentarioId = req.params.id;
 
-  // Extraer los nuevos datos del comentario del cuerpo de la solicitud
+  // Validar que comentarioId sea un ObjectId válido
+  if (!mongoose.Types.ObjectId.isValid(comentarioId)) {
+    return res.status(400).json({ error: "ID de comentario no válido" });
+  }
+
   const nuevoComentario = req.body;
 
-  // Validar el comentario utilizando Joi
   const { error } = validateFeedback(nuevoComentario);
   if (error) {
-    // Si hay errores de validación, devolver un error 400 con los detalles del error
     return res.status(400).json({ error: error.details[0].message });
   }
 
   try {
-    // Verificar si existe el comentario que se intenta actualizar
     const comentarioExistente = await Feedback.findById(comentarioId);
 
-    // Si el comentario no existe, devolver un mensaje indicando que no se puede encontrar
     if (!comentarioExistente) {
       return res.status(404).json({
         message: "El comentario no se encontró.",
@@ -80,14 +80,19 @@ router.put("/:id", async (req, res) => {
       });
     }
 
-    // Actualizar el comentario existente con los nuevos datos
     const comentarioActualizado = await Feedback.findByIdAndUpdate(
       comentarioId,
-      nuevoComentario,
+      { $set: nuevoComentario },
       { new: true } // Para devolver el documento actualizado en lugar del original
     );
 
-    // Devolver una respuesta exitosa con el comentario actualizado
+    if (!comentarioActualizado) {
+      return res.status(500).json({
+        message: "No se pudo actualizar el comentario.",
+        error: "No se pudo realizar la actualización",
+      });
+    }
+
     res.status(200).json({
       message: "Comentario actualizado exitosamente.",
       comentario: comentarioActualizado,

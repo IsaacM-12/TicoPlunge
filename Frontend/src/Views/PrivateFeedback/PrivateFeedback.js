@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import "./PrivateFeedback.css";
-import ViewAdminPrivateFeedback from "./ViewAdminPrivateFeedback";
-import ViewUserPrivateFeedback from "./ViewUserPrivateFeedback";
-import ViewNoneloginPrivateFeedback from "./ViewNoneloginPrivateFeedback";
+import { Modal } from "react-bootstrap";
+import React from "react";
+
 import {
   createToBD,
   deleteByIDToBD,
@@ -31,6 +31,7 @@ const PrivateFeedback = () => {
   // -------------------------------------------------------------
   const [inputData, setInputData] = useState({
     comentario: "",
+    rating: "",
   });
 
   /**
@@ -105,9 +106,11 @@ const PrivateFeedback = () => {
     event.preventDefault();
 
     // Verificar si se proporcionaron datos para la calificación y el comentario
-    if (!inputData.comentario) {
+    if (!inputData.rating || !inputData.comentario) {
       // Mostrar un mensaje de error si no se proporcionaron los datos requeridos
-      setshowErroresForm(<ErrorAlert message="Debe llenar el comentario" />);
+      setshowErroresForm(
+        <ErrorAlert message="Debe llenar las estrellas y el comentario" />
+      );
       setTimeout(() => {
         setshowErroresForm("");
       }, timeWaitAlert);
@@ -121,26 +124,102 @@ const PrivateFeedback = () => {
   };
 
   return (
-    <>
-      {usuarioActivo.role === "Client no" && <ViewUserPrivateFeedback />}
+    <div className="FeedbackStyle">
+      {/* para mostrar mensajes de alerta*/}
+      <div className={` ${showAlerts ? "" : "d-none"}`}>
+        <div className="mostrar-alert">{showAlerts}</div>
+      </div>
 
-      {usuarioActivo.role === "Administrator no" ||
-        (usuarioActivo.role === "Staff no" && <ViewAdminPrivateFeedback />)}
+      {/* mostrar form de private feedback solo a los de Client*/}
+      <div
+      //  className={usuarioActivo.role === "Client" ? "" : "d-none"}
+      >
+        <div className="PrivateFeedback-rating-card">
+          <form onSubmit={handleSubmit}>
+            <div className="PrivateFeedback-text-wrapper">
+              <h1 className="PrivateFeedback-text-title">
+                Deja tu comentario Privado
+              </h1>
+              <p className="PrivateFeedback-text-subtitle">
+                Este sera visible solo para los empleados de Tico Plunche.
+              </p>
+            </div>
 
-      {usuarioActivo.role !== "Administrator no" &&
-        usuarioActivo.role !== "Client no" &&
-        usuarioActivo.role !== "Staff no" && (
-          <ViewNoneloginPrivateFeedback
-            handleSubmit={handleSubmit}
-            setInputData={setInputData}
-            inputData={inputData}
-            showErroresForm={showErroresForm}
-            comentarios={showComentarios}
-            deleteComentario={deleteComentariosBD}
-            showAlerts={showAlerts}
-          />
-        )}
-    </>
+            <div>
+              <textarea
+                type="text"
+                id="inputComentario"
+                className="m-4"
+                value={inputData.comentario}
+                onChange={(e) =>
+                  setInputData({ ...inputData, comentario: e.target.value })
+                }
+                required
+              />
+            </div>
+
+            {/* por si hay un error en el form se muestre*/}
+            <div className={` ${showErroresForm ? "" : "d-none"}`}>
+              <div className="d-flex justify-content-center align-items-center">
+                {showErroresForm}
+              </div>
+            </div>
+
+            <div className="input-group mt-3">
+              <button className="btn btn-primary" type="submit">
+                Crear Comentario
+              </button>
+            </div>
+          </form>
+          <div className="m-4">
+            <a className="PrivateFeedback-link" href="/Feedback">
+              Deja un comentario publico
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* mostrar los mensajes privados solo a Staff y Administrator */}
+      <div
+      // className={
+      //   usuarioActivo.role === "Administrator" || usuarioActivo.role === "Staff"
+      //     ? ""
+      //     : "d-none"
+      // }
+      >
+        <div className="container mt-4 ">
+          <div>
+            {showComentarios.length > 0 ? (
+              showComentarios.map((item) => (
+                <div key={item._id} className="feedback-Box m-4">
+                  <span className="feedback-notititle">
+                    {item.usuario}
+                    {new Date(item.creationDate).toLocaleDateString()}
+                  </span>
+                  <br></br>
+                  <span className="feedback-notibody">
+                    Comentario: {item.comentario}
+                  </span>
+
+                  <div>
+                    <button
+                      className="btn btn-danger m-4"
+                      onClick={() => deleteComentariosBD(item._id)}
+                    >
+                      Borrar
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="no-data">
+                <h2>No Hay Comentario</h2>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 export default PrivateFeedback;

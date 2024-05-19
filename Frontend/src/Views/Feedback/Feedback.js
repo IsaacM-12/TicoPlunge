@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import "./Feedback.css";
-import ViewAdminFeedback from "./ViewAdminFeedback";
-import ViewUserFeedback from "./ViewUserFeedback";
-import ViewNoneloginFeedback from "./ViewNoneloginFeedback";
+import FeedbackEdit from "./FeedbackEdit";
+import { Modal } from "react-bootstrap";
+import React from "react";
+
 import {
   createToBD,
   deleteByIDToBD,
@@ -12,7 +13,6 @@ import {
   ErrorAlert,
   timeWaitAlert,
 } from "../../GlobalVariables";
-import React from "react";
 
 const Feedback = () => {
   // -------------------------------------------------------------
@@ -75,10 +75,6 @@ const Feedback = () => {
     setTimeout(() => {
       setshowErroresForm("");
     }, timeWaitAlert);
-  };
-
-  const editComentario = async (id) => {
-    setshowErroresForm(<div className="feedback-rating-card-edit">{id}</div>);
   };
 
   /**
@@ -154,34 +150,192 @@ const Feedback = () => {
     createComentariosBD();
   };
 
+  // -------------------------------------------------------------
+  // parametros para el edit
+  // -------------------------------------------------------------
+
+  const [comentarioActual, setComentarioActual] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [mostrarEditComentario, setMostrarEditComentario] = useState(false);
+
+  /**
+   * Función para manejar el cierre del modal de edición de comentarios.
+   * Limpia los estados relacionados con la edición y oculta el modal.
+   */
+  const handleModalClose = () => {
+    setMostrarEditComentario(false); // Oculta el componente de edición de comentarios
+    setComentarioActual(false); // Limpia el comentario actual
+    setShowModal(false); // Oculta el modal
+  };
+
+  /**
+   * Función para manejar el clic en el botón de editar un comentario.
+   * Establece el estado para mostrar el modal de edición y guarda el comentario actual a editar.
+   * @param {Object} item - El comentario a editar.
+   */
+  const OnClickEdit = async (item) => {
+    setMostrarEditComentario(true); // Muestra el componente de edición de comentarios
+    setComentarioActual(item); // Guarda el comentario actual en el estado
+    setShowModal(true); // Muestra el modal
+  };
+
   return (
-    <>
-      {usuarioActivo.role === "Administrator no" && (
-        <ViewAdminFeedback renderStars={renderStars} />
-      )}
+    <div className="FeedbackStyle">
+      {/* para mostrar mensajes de alerta*/}
+      <div className={` ${showAlerts ? "" : "d-none"}`}>
+        <div className="mostrar-alert">{showAlerts}</div>
+      </div>
 
-      {usuarioActivo.role === "Staff no" ||
-        (usuarioActivo.role === "Client no" && (
-          <ViewUserFeedback renderStars={renderStars} />
-        ))}
+      {/* mostrar form de feedback solo a los de User y Staff*/}
+      <div
+      // className={
+      //   usuarioActivo.role === "Client" || usuarioActivo.role === "Staff"
+      //     ? ""
+      //     : "d-none"
+      // }
+      >
+        <div className="feedback-rating-card">
+          <form onSubmit={handleSubmit}>
+            <div className="feedback-text-wrapper">
+              <h1 className="feedback-text-title">Deja tu comentario</h1>
+              <p className="feedback-text-subtitle">
+                Nos gustaría saber tu opinión
+              </p>
+            </div>
 
-      {usuarioActivo.role !== "Administrator no" &&
-        usuarioActivo.role !== "Client no" &&
-        usuarioActivo.role !== "Staff no" && (
-          <ViewNoneloginFeedback
-            handleSubmit={handleSubmit}
-            setInputData={setInputData}
-            inputData={inputData}
-            showErroresForm={showErroresForm}
-            comentarios={showComentarios}
-            deleteComentario={deleteComentariosBD}
-            renderStars={renderStars}
-            showAlerts={showAlerts}
-            usuarioActivo={usuarioActivo}
-            editComentario={editComentario}
-          />
-        )}
-    </>
+            <div className="feedback-rating-stars-container">
+              {[...Array(5)].map((_, i) => {
+                const value = 5 - i; // Ajuste del valor para corregir el orden
+                return (
+                  <React.Fragment key={i}>
+                    <input
+                      value={value} // El valor del input, que va de 1 a 5
+                      name="rate"
+                      id={`star${value}`}
+                      type="radio"
+                      onChange={() =>
+                        setInputData({ ...inputData, rating: `${value}` })
+                      }
+                    />
+                    <label
+                      htmlFor={`star${value}`}
+                      className="feedback-star-label"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
+                          pathLength="360"
+                        ></path>
+                      </svg>
+                    </label>
+                  </React.Fragment>
+                );
+              })}
+            </div>
+
+            <div>
+              <textarea
+                type="text"
+                id="inputComentario"
+                className="m-4"
+                value={inputData.comentario}
+                onChange={(e) =>
+                  setInputData({ ...inputData, comentario: e.target.value })
+                }
+                required
+              />
+            </div>
+
+            {/* por si hay un error en el form se muestre*/}
+            <div className={` ${showErroresForm ? "" : "d-none"}`}>
+              <div className="d-flex justify-content-center align-items-center">
+                {showErroresForm}
+              </div>
+            </div>
+
+            <div className="input-group mt-3">
+              <button className="btn btn-primary" type="submit">
+                Crear Comentario
+              </button>
+            </div>
+          </form>
+          <div className="m-4">
+            <a href="/PrivateFeedback">Dejar retroalimentación privada</a>
+          </div>
+        </div>
+      </div>
+
+      <div className="container mt-4 ">
+        <div>
+          {showComentarios.length > 0 ? (
+            showComentarios.map((item) => (
+              <div key={item._id} className="feedback-Box m-4">
+                <span className="feedback-notititle">
+                  {item.usuario}
+                  {new Date(item.creationDate).toLocaleDateString()}
+                </span>
+                <br></br>
+                <span>{renderStars(parseInt(item.rating))}</span>
+                <br></br>
+                <span className="feedback-notibody">
+                  Comentario: {item.comentario}
+                </span>
+
+                {/* si fue el que lo creo o es admin se muestre el boton de borrar y editar */}
+                <div
+                // className={
+                //   item.usuario === usuarioActivo.firstName ||
+                //   "Admin" === usuarioActivo.role
+                //     ? ""
+                //     : "d-none"
+                // }
+                >
+                  <div>
+                    <button
+                      onClick={() => OnClickEdit(item)}
+                      className="btn btn-primary m-4"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="btn btn-danger m-4"
+                      onClick={() => deleteComentariosBD(item._id)}
+                    >
+                      Borrar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="no-data">
+              <h2>No Hay Comentario</h2>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Ventana para editar  */}
+      <Modal show={showModal} onHide={handleModalClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Editar Mensaje</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {mostrarEditComentario && (
+            <FeedbackEdit
+              feedback={comentarioActual}
+              onClose={handleModalClose}
+              onSave={OnClickEdit}
+              setshowAlerts={setshowAlerts}
+              selectComentariosBD={selectComentariosBD}
+            />
+          )}
+        </Modal.Body>
+      </Modal>
+    </div>
   );
 };
 export default Feedback;
