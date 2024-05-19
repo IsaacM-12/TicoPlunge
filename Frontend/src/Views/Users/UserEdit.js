@@ -3,14 +3,14 @@ import { updateToDB, SuccessAlert, urlUsers } from "../../GlobalVariables";
 
 const UserEdit = ({ user, onClose, onSave }) => {
     const [name, setName] = useState(user.firstName || "");
+    const [lastname, setLastName] = useState(user.lastName || "");
     const [email, setEmail] = useState(user.email || "");
     const [role, setRole] = useState(user.role || "");
-    const [creditos, setCreditos] = useState(user.creditos || 0);
     const [validation, setValidation] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const updatedUser = { ...user, firstName: name, email, role};
+        const updatedUser = { ...user, firstName: name,lastName: lastname , email, role};
         await updateUser(updatedUser);
         onSave();
         onClose();
@@ -35,6 +35,18 @@ const UserEdit = ({ user, onClose, onSave }) => {
                 />
                 {name.length === 0 && validation && <span className="text-danger">Enter the name</span>}
             </div>
+            <div className="form-group">
+                <label>Apellido</label>
+                <input
+                    required
+                    value={lastname}
+                    onMouseDown={e => setValidation(true)}
+                    onChange={e => setLastName(e.target.value)}
+                    className="form-control"
+                />
+                {name.length === 0 && validation && <span className="text-danger">Enter the Lastname</span>}
+            </div>
+
             <div className="form-group">
                 <label>Email</label>
                 <input

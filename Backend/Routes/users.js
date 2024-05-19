@@ -1,8 +1,9 @@
 const router = require("express").Router();
-const { User, validate } = require("../Models/User");
+const { User, validate} = require("../Models/User");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose")
 const Joi = require("joi");
+
 router.post("/", async (req, res) => {
   try {
     const { error } = validate(req.body);
@@ -50,15 +51,19 @@ router.delete("/:id", async (req, res) => {
 });
 
 router.put("/", async (req, res) => {
-  console.log(req.body)
+
   const userId = req.body._id;
 
   // Validación solo de los campos que se van a actualizar
   const schema = Joi.object({
+    _id:Joi.string().label("ID"),
     firstName: Joi.string().label("First Name"),
     lastName: Joi.string().label("Last Name"),
+    email: Joi.string().label("Email"),
     role: Joi.string().valid("Administrator", "Staff", "Client").label("Role"),
-    creditos: Joi.number().min(0).label("Credits")
+    password: Joi.string().required().label("Password"),
+    creditos: Joi.number().min(0).label("Credits"),
+    __v: Joi.number().label("Version")
   });
 
   const { error } = schema.validate(req.body);
@@ -67,14 +72,13 @@ router.put("/", async (req, res) => {
   try {
     const user = await User.findById(userId);
     if (!user) return res.status(404).send({ message: "User not found" });
-
     const updates = req.body;
     Object.keys(updates).forEach((key) => {
       user[key] = updates[key];
     });
 
     await user.save();
-    res.send({ message: "User updated successfully", user });
+    res.send({ message: "User updated successfully"});
   } catch (error) {
     res.status(500).send({ message: "Internal Server Error" });
   }
