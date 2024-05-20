@@ -36,6 +36,11 @@ userSchema.methods.generateAuthToken = function () {
   return token;
 };
 
+// Definir una opción de población personalizada
+userSchema.statics.populateOptions = {
+  select: '-password', // Excluir el campo 'password'
+};
+
 const User = mongoose.model("User", userSchema); // Capitalized the model name conventionally
 
 const validate = (data) => {

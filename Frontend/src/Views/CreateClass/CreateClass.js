@@ -65,7 +65,7 @@ const CreateClass = () => {
   const createClassBD = async (date, service, capacity) => {
     const newClass = {
       date: date,
-      usuario: usuarioActivo.firstName,
+      user: usuarioActivo._id,
       service: service,
       capacity: capacity,
     };
@@ -207,15 +207,15 @@ const CreateClass = () => {
   return (
     <div className="CreateClass-CreateClassStyle">
       {/* mostrar solo a los de Administrator y Staff*/}
-      <div
-        // className={
-        //   usuarioActivo.role === "Administrator" ||
-        //   usuarioActivo.role === "Staff"
-        //     ? ""
-        //     : "d-none"
-        // }
+      <span
+        className={
+          usuarioActivo.role === "Administrator" ||
+          usuarioActivo.role === "Staff"
+            ? ""
+            : "d-none"
+        }
       >
-        <div >
+        <div>
           <div className="CreateClass-form-container">
             <h1 className="CreateClass-title">Crear Clase</h1>
             <div className="CreateClass-social-message">
@@ -331,16 +331,10 @@ const CreateClass = () => {
             </form>
           </div>
         </div>
-      </div>
+      </span>
 
       {/* mostrar mensaje si no ha iniciado sesion*/}
-      <div
-        className={
-          !usuarioActivo.role 
-            ? ""
-            : "d-none"
-        }
-      >
+      <div className={!usuarioActivo.role ? "" : "d-none"}>
         <NotFound mensaje="Por favor, inicia sesión para continuar" />
       </div>
     </div>

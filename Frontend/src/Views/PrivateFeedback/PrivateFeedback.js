@@ -60,7 +60,7 @@ const PrivateFeedback = () => {
   const createComentariosBD = async () => {
     const newComentario = {
       comentario: inputData.comentario,
-      usuario: usuarioActivo.firstName,
+      user: usuarioActivo._id,
     };
 
     // Manda a crear el comentario a la base de datos
@@ -190,7 +190,7 @@ const PrivateFeedback = () => {
               showComentarios.map((item) => (
                 <div key={item._id} className="feedback-Box m-3">
                   <span className="feedback-notititle">
-                    {item.usuario}
+                    {item.user.firstName}
                     {new Date(item.creationDate).toLocaleDateString()}
                   </span>
                   <br></br>
@@ -199,7 +199,7 @@ const PrivateFeedback = () => {
                   </span>
 
                   {/* mostrar boton borrar solo al admin */}
-                  <div
+                  <span
                     className={
                       usuarioActivo.role === "Administrator" ? "" : "d-none"
                     }
@@ -212,7 +212,7 @@ const PrivateFeedback = () => {
                         Borrar
                       </button>
                     </div>{" "}
-                  </div>
+                  </span>
                 </div>
               ))
             ) : (

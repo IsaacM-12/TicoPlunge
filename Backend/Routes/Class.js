@@ -13,10 +13,10 @@ router.get("/", async (req, res) => {
     if (filtro) {
       // Convierte el filtro de cadena JSON a objeto
       const filtroObj = JSON.parse(filtro);
-      clases = await Class.find(filtroObj);
+      clases = await Class.find(filtroObj).populate('user').populate('students');
     } else {
       // Si no hay filtro en la consulta, simplemente obtenemos todas las clases
-      clases = await Class.find();
+      clases = await Class.find().populate('user').populate('students');
     }
 
     res.json(clases); // Devuelve las clases como JSON

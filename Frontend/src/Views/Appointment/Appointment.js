@@ -8,6 +8,7 @@ import {
   selectFilterToBD,
   urlReserveClassAsClient,
   urlReserveClassAsAdmin,
+  deleteByIDToBD,
   selectUserByToken,
   urlClass,
   NotFound,
@@ -145,6 +146,21 @@ const Appointment = () => {
   };
 
   /**
+   * Función asincrónica para eliminar una clase de la base de datos.
+   * @param {string} id - El ID de la clase que se va a eliminar.
+   */
+  const deleteClassBD = async (id) => {
+    // Eliminar el comentario de la base de datos por su ID
+    const response = await deleteByIDToBD(urlClass, id);
+    setshowAlerts(response);
+    setTimeout(() => {
+      setshowAlerts("");
+    }, timeWaitAlert);
+    // Si la eliminación tiene éxito, seleccionar los comentarios actualizados
+    await selectClassBD();
+  };
+
+  /**
    * Función para manejar el evento de envío del formulario de búsqueda.
    * Realiza la búsqueda en la base de datos según los criterios especificados en los campos de búsqueda.
    * Muestra un mensaje de error si no se proporciona ningún criterio de búsqueda.
@@ -200,7 +216,7 @@ const Appointment = () => {
   return (
     <div>
       {/* mostrar solo a los registrados*/}
-      <div className={usuarioActivo.role ? "" : "d-none"}>
+      <span className={usuarioActivo.role ? "" : "d-none"}>
         <div className="AppointmentStyle">
           <h1>Reserva tu clase </h1>
           {/* para mostrar mensajes */}
@@ -215,7 +231,7 @@ const Appointment = () => {
                   <input
                     type="text"
                     className="form-control"
-                    id="searchInput"
+                    id="searchInputReserveClass"
                     placeholder="Ingrese su búsqueda"
                     value={inputData.search}
                     onChange={(e) =>
@@ -251,52 +267,49 @@ const Appointment = () => {
             <div className="Appointment-card-container">
               {showClasses.length > 0 ? (
                 showClasses.map((item, index) => (
-                  <div key={index} className="card">
-                    <span>Profesor: {item.usuario}</span>
-                    <br />
-                    <span>
+                  <div key={index} className="Appointment-card">
+                    <p>Profesor: {item.user.firstName}</p>
+                    <p>
                       Hora:{" "}
                       {new Date(item.date).toLocaleTimeString("es-ES", {
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
-                    </span>
-                    <br />
-                    <span>
+                    </p>
+                    <p>
                       Fecha: {new Date(item.date).toLocaleDateString("es-ES")}
-                    </span>
-                    <br />
-                    <span>Cupos disponibles: {item.capacity}</span>
-                    <br />
-                    <span>Actividad: {item.service}</span>
+                    </p>
+                    <p>Cupos disponibles: {item.capacity}</p>
+                    <p>Actividad: {item.service}</p>
                     <button
-                      className="btn btn-primary m-4"
+                      className="btn btn-primary m-2"
                       onClick={() => reserveAsClient(item._id)}
                     >
                       INSCRIBIRSE
                     </button>
 
-                    <div
+                    <span
                       className={
                         usuarioActivo.role === "Administrator" ||
-                        (usuarioActivo.role === "Staff" && usuarioActivo.firstName === item.usuario)
+                        (usuarioActivo.role === "Staff" &&
+                          usuarioActivo._id === item.user._id)
                           ? ""
                           : "d-none"
                       }
                     >
                       <button
-                        className="btn btn-success m-4"
+                        className="btn btn-success m-2"
                         onClick={() => OnClickEdit(item)}
                       >
                         Editar
                       </button>
                       <button
-                        className="btn btn-danger m-4"
-                        onClick={() => OnClickEdit(item)}
+                        className="btn btn-danger m-2"
+                        onClick={() => deleteClassBD(item._id)}
                       >
                         Borrar
                       </button>
-                    </div>
+                    </span>
                   </div>
                 ))
               ) : (
@@ -307,7 +320,7 @@ const Appointment = () => {
             </div>
           </div>
         </div>
-      </div>
+      </span>
 
       {/* mostrar mensaje si no ha iniciado sesion*/}
       <div className={!usuarioActivo.role ? "" : "d-none"}>

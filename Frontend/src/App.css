@@ -116,11 +116,17 @@ button:active {
 /* Hamster cargando  */
 /* ---------------------------------- */
 .NotFound {
+  position: fixed; /* Establecer la posición fija */
+  top: 40px; /* Colocar en la parte superior */
+  left: 0; /* Colocar en el borde izquierdo */
+  width: 100%; /* Ocupar todo el ancho */
+  height: 100%; /* Ocupar toda la altura */
   background-color: rgb(16, 15, 15);
-  min-height: calc(100vh - 44px);
   padding: 30px;
+  margin: 0; /* Eliminar márgenes */
   color: white;
 }
+
 
 .conteiner-hamster {
   margin-left: 44%;

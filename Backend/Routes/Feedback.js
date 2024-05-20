@@ -6,7 +6,7 @@ const { Feedback, validateFeedback } = require("../Models/FeedbackModel");
 // Ruta para obtener todos los comentarios
 router.get("/", async (req, res) => {
   try {
-    const comentarios = await Feedback.find(); // Obtenemos todos los comentarios
+    const comentarios = await Feedback.find().populate('user'); // Obtenemos todos los comentarios
     res.json(comentarios); // Devolvemos los comentarios como JSON
   } catch (error) {
     console.error("Error al consultar comentarios en MongoDB:", error);

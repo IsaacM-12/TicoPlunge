@@ -62,7 +62,7 @@ const Feedback = () => {
   const createComentariosBD = async () => {
     const newComentario = {
       comentario: inputData.comentario,
-      usuario: usuarioActivo.email,
+      user: usuarioActivo._id,
       rating: inputData.rating,
     };
 
@@ -185,7 +185,7 @@ const Feedback = () => {
       </div>
 
       {/* mostrar form de feedback solo a los de User y Staff*/}
-      <div
+      <span
         className={
           usuarioActivo.role === "Client" || usuarioActivo.role === "Staff"
             ? ""
@@ -266,7 +266,7 @@ const Feedback = () => {
             </Link>
           </div>
         </div>
-      </div>
+      </span>
 
       <div className="container mt-4 ">
         <div>
@@ -274,7 +274,7 @@ const Feedback = () => {
             showComentarios.map((item) => (
               <div key={item._id} className="feedback-Box m-4">
                 <span className="feedback-notititle">
-                  {item.usuario}
+                  {item.user.firstName}
                   <span className="m-3">
                     {new Date(item.creationDate).toLocaleDateString()}
                   </span>
@@ -287,9 +287,9 @@ const Feedback = () => {
                 </span>
 
                 {/* si fue el que lo creo o es admin se muestre el boton de borrar y editar */}
-                <div
+                <span
                   className={
-                    item.usuario === usuarioActivo.email ||
+                    item.user._id === usuarioActivo._id ||
                     "Administrator" === usuarioActivo.role
                       ? ""
                       : "d-none"
@@ -300,7 +300,7 @@ const Feedback = () => {
 
                     <span
                       className={
-                        item.usuario === usuarioActivo.email ? "" : "d-none"
+                        item.user._id === usuarioActivo._id ? "" : "d-none"
                       }
                     >
                       <button
@@ -318,7 +318,7 @@ const Feedback = () => {
                       Borrar
                     </button>
                   </div>
-                </div>
+                </span>
               </div>
             ))
           ) : (

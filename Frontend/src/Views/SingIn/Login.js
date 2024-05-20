@@ -11,6 +11,7 @@ import {
   SuccessAlert,
   ErrorAlert,
 } from "../../GlobalVariables";
+import "./Register.css";
 
 const Login = () => {
   const [data, setData] = useState({ email: "", password: "" });

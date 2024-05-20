@@ -17,7 +17,7 @@ const FeedbackEdit = ({
     const parametrosActualizar = {
       comentario: comentario.comentario,
       rating: comentario.rating,
-      usuario: comentario.usuario,
+      user: comentario.user._id,
     };
     const response = await updateToBD(
       urlFeedback,

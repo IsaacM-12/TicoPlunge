@@ -16,7 +16,7 @@ const AppointmentEdit = ({
     const parametrosActualizar = {
       capacity: Appointment.capacity,
       date: Appointment.date,
-      usuario: Appointment.usuario,
+      user: Appointment.user._id,
       service: Appointment.service,
     };
     const response = await updateToBD(
