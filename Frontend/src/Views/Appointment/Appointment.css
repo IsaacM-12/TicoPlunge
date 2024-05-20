@@ -1,6 +1,7 @@
 .AppointmentStyle {
   min-height: calc(100vh - 44px);
   margin: 0;
+  
 }
 .AppointmentStyle h1 {
   margin-top: 20px;

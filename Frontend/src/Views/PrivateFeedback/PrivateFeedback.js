@@ -122,14 +122,14 @@ const PrivateFeedback = () => {
   };
 
   return (
-    <div className="FeedbackStyle">
+    <div className="PrivateFeedbackStyle">
       {/* para mostrar mensajes de alerta*/}
       <div className={` ${showAlerts ? "" : "d-none"}`}>
         <div className="mostrar-alert">{showAlerts}</div>
       </div>
 
       {/* mostrar form de private feedback solo a los de Client*/}
-      <div className={usuarioActivo.role === "Client" ? "" : "d-none"}>
+      <span className={usuarioActivo.role === "Client" ? "" : "d-none"}>
         <div className="PrivateFeedback-rating-card">
           <form onSubmit={handleSubmit}>
             <div className="PrivateFeedback-text-wrapper">
@@ -162,7 +162,7 @@ const PrivateFeedback = () => {
             </div>
 
             <div className="input-group mt-3">
-              <button className="btn btn-primary" type="submit">
+              <button className="btn btn-success" type="submit">
                 Crear Comentario
               </button>
             </div>
@@ -173,10 +173,10 @@ const PrivateFeedback = () => {
             </a>
           </div>
         </div>
-      </div>
+      </span>
 
       {/* mostrar los mensajes privados solo a Staff y Administrator */}
-      <div
+      <span
         className={
           usuarioActivo.role === "Administrator" ||
           usuarioActivo.role === "Staff"
@@ -184,11 +184,11 @@ const PrivateFeedback = () => {
             : "d-none"
         }
       >
-        <div className="container mt-4 ">
+        <div className="container pt-4 ">
           <div>
             {showComentarios.length > 0 ? (
               showComentarios.map((item) => (
-                <div key={item._id} className="feedback-Box m-4">
+                <div key={item._id} className="feedback-Box m-3">
                   <span className="feedback-notititle">
                     {item.usuario}
                     {new Date(item.creationDate).toLocaleDateString()}
@@ -222,7 +222,7 @@ const PrivateFeedback = () => {
             )}
           </div>
         </div>
-      </div>
+      </span>
 
       {/* mostrar mensaje si no ha iniciado sesion*/}
       <div className={!usuarioActivo.role ? "" : "d-none"}>

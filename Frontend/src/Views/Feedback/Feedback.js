@@ -3,6 +3,7 @@ import "./Feedback.css";
 import FeedbackEdit from "./FeedbackEdit";
 import { Modal } from "react-bootstrap";
 import React from "react";
+import { Link } from "react-router-dom";
 
 import {
   createToBD,
@@ -156,14 +157,12 @@ const Feedback = () => {
 
   const [comentarioActual, setComentarioActual] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [mostrarEditComentario, setMostrarEditComentario] = useState(false);
 
   /**
    * Función para manejar el cierre del modal de edición de comentarios.
    * Limpia los estados relacionados con la edición y oculta el modal.
    */
   const handleModalClose = () => {
-    setMostrarEditComentario(false); // Oculta el componente de edición de comentarios
     setComentarioActual(false); // Limpia el comentario actual
     setShowModal(false); // Oculta el modal
   };
@@ -174,7 +173,6 @@ const Feedback = () => {
    * @param {Object} item - El comentario a editar.
    */
   const OnClickEdit = async (item) => {
-    setMostrarEditComentario(true); // Muestra el componente de edición de comentarios
     setComentarioActual(item); // Guarda el comentario actual en el estado
     setShowModal(true); // Muestra el modal
   };
@@ -263,7 +261,9 @@ const Feedback = () => {
             </div>
           </form>
           <div className="m-4">
-            <a href="/PrivateFeedback">Dejar retroalimentación privada</a>
+            <Link to="/PrivateFeedback" className="btn btn-warning m-2">
+              Dejar comentario privado
+            </Link>
           </div>
         </div>
       </div>
@@ -335,15 +335,13 @@ const Feedback = () => {
           <Modal.Title>Editar Mensaje</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {mostrarEditComentario && (
-            <FeedbackEdit
-              feedback={comentarioActual}
-              onClose={handleModalClose}
-              onSave={OnClickEdit}
-              setshowAlerts={setshowAlerts}
-              selectComentariosBD={selectComentariosBD}
-            />
-          )}
+          <FeedbackEdit
+            feedback={comentarioActual}
+            onClose={handleModalClose}
+            onSave={OnClickEdit}
+            setshowAlerts={setshowAlerts}
+            selectComentariosBD={selectComentariosBD}
+          />
         </Modal.Body>
       </Modal>
     </div>

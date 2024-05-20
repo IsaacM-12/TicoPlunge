@@ -273,7 +273,7 @@ const Appointment = () => {
                       className="btn btn-primary m-4"
                       onClick={() => reserveAsClient(item._id)}
                     >
-                      AGENDAR
+                      INSCRIBIRSE
                     </button>
 
                     <div

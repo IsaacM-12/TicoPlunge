@@ -205,7 +205,7 @@ const CreateClass = () => {
   };
 
   return (
-    <div>
+    <div className="CreateClass-CreateClassStyle">
       {/* mostrar solo a los de Administrator y Staff*/}
       <div
         // className={
@@ -215,7 +215,7 @@ const CreateClass = () => {
         //     : "d-none"
         // }
       >
-        <div className="CreateClass-CreateClassStyle">
+        <div >
           <div className="CreateClass-form-container">
             <h1 className="CreateClass-title">Crear Clase</h1>
             <div className="CreateClass-social-message">
