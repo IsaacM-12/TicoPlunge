@@ -27,10 +27,29 @@
     min-height: 100vh;
 }
 
+.esquina{
+  border-top: 3px double orange;
+  border-right: 3px double brown;
+  border-bottom: 3px double brown;
+  border-left: 3px double brown;
+  margin: 10px;
+  padding: 40px;
+  width: 7%;
+  border-radius: 89px;
+  color: #333; /* Color del texto */
+  background-color: #f9f9f9; /* Color de fondo */
+  position: fixed;
+  top: 760px;
+  left: 1550px;
+  object-fit: cover;
+}
+
 .bg-image {
-  background-image: url("../../Imagenes/descarga.jpg");
+  background-image: url("../../../Imagenes/IMG_0305.jpg");
   background-size: cover;
-  min-height: 50vh;
+  min-height: 100px;
+  background-position: center;
+  object-fit: cover;
 }
 
 .cold-plunge{
@@ -42,6 +61,13 @@
   
 }
 
+.explicacion{
+  text-align: center;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .quienes-somos{
   border-top: 3px double orange;
   border-right: 3px double brown;
@@ -51,7 +77,8 @@
   padding: 40px;
   width: 100%;
   border-radius: 89px;
-
+  color: #333; /* Color del texto */
+  background-color: #f9f9f9; /* Color de fondo */
 }
 
 .redes{
