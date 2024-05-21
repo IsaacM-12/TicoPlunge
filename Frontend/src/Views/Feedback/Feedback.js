@@ -13,7 +13,9 @@ import {
   selectUserByToken,
   ErrorAlert,
   timeWaitAlert,
+  redirectPrivateFeedback,
 } from "../../GlobalVariables";
+import PrivateFeedback from "../PrivateFeedback/PrivateFeedback";
 
 const Feedback = () => {
   // -------------------------------------------------------------
@@ -261,7 +263,7 @@ const Feedback = () => {
             </div>
           </form>
           <div className="m-4">
-            <Link to="/PrivateFeedback" className="btn btn-warning m-2">
+            <Link to={redirectPrivateFeedback} className="btn btn-warning m-2">
               Dejar comentario privado
             </Link>
           </div>

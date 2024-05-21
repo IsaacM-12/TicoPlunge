@@ -3,6 +3,7 @@ import "./PrivateFeedback.css";
 import { Modal } from "react-bootstrap";
 import React from "react";
 import { NotFound } from "../../GlobalVariables";
+import { Link } from "react-router-dom";
 
 import {
   createToBD,
@@ -12,6 +13,7 @@ import {
   selectUserByToken,
   ErrorAlert,
   timeWaitAlert,
+  redirectFeedback,
 } from "../../GlobalVariables";
 
 const PrivateFeedback = () => {
@@ -168,9 +170,9 @@ const PrivateFeedback = () => {
             </div>
           </form>
           <div className="m-4">
-            <a className="PrivateFeedback-link" href="/Feedback">
-              Deja un comentario publico
-            </a>
+            <Link to={redirectFeedback} className="btn btn-primary m-2">
+              Dejar comentario privado
+            </Link>
           </div>
         </div>
       </span>

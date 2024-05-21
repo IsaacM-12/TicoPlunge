@@ -17,7 +17,7 @@
 .PrivateFeedback-rating-card {
   min-height: calc(100vh - 44px);
   width: auto;
-  background: #11161f;
+  background: transparent;
   padding: 100px 20px;
   font-family: Arial, Helvetica, sans-serif;
   margin: 0;

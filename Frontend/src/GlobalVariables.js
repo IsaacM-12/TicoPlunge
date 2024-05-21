@@ -7,6 +7,7 @@ import axios from "axios";
 export const redirectRegister = `/SignIn`;
 export const redirectLogin = `/LogIn`;
 export const redirectPrivateFeedback = `/PrivateFeedback `;
+export const redirectFeedback = `/Feedback `;
 
 // -------------------------------------------------------------
 // urls del backend
