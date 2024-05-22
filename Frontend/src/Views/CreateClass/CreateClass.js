@@ -63,14 +63,15 @@ const CreateClass = () => {
    */
 
   const createClassBD = async (date, service, capacity) => {
+    const dateObject = new Date(date);
+    const isoDate = dateObject.toISOString();
+
     const newClass = {
-      date: date,
+      date: isoDate,
       user: usuarioActivo._id,
       service: service,
       capacity: capacity,
     };
-
-    const dateObject = new Date(date);
 
     // Obtener la fecha en formato de cadena
     const fecha = dateObject.toDateString();

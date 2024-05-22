@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import "./Appointment.css";
 import { Modal } from "react-bootstrap";
 import AppointmentEdit from "./AppointmentEdit";
+import { format, parseISO } from "date-fns";
+import { es } from "date-fns/locale";
+import moment from "moment-timezone";
 
 import {
   createToBD,
@@ -92,13 +95,14 @@ const Appointment = () => {
    * Se utiliza para obtener las clases disponibles para reserva.
    */
   const selectClassBD = async () => {
-    const fechaActual = new Date(); // Obtiene la fecha actual
+    const fechaActual = new Date().toISOString(); // Obtiene la fecha actual
     let filtro = {
       date: { $gt: fechaActual }, // Filtra las clases con fecha mayor a la fecha actual
     };
 
     const response = await selectFilterToBD(urlClass, filtro);
     setshowClasses(response);
+    console.log(response);
   };
 
   /**
@@ -107,11 +111,23 @@ const Appointment = () => {
    * y se filtran las clases con fecha mayor a la actual.
    */
   const searchByAnyBD = async () => {
-    const fechaActual = new Date();
+    const fechaActual = moment().toISOString();
 
-    const fechaInicio = new Date(inputData.searchDate + "T00:00:00.000Z"); // Combina la fecha con la hora 00:00:00.000Z
-    // Establecer la fecha final al final del día seleccionado
-    const fechaFin = new Date(inputData.searchDate + "T23:59:59.999Z"); // Combina la fecha con la hora 23:59:59.999Z
+    // Parsear la fecha de entrada asegurando que es en formato YYYY-MM-DD en la zona horaria local
+    const fechaBase = moment.tz(
+      inputData.searchDate,
+      "YYYY-MM-DD",
+      "America/Your_Timezone"
+    ); // Reemplaza 'America/Your_Timezone' con tu zona horaria
+
+    // Crear la fecha de inicio al inicio del día en UTC
+    const fechaInicio = fechaBase.clone().startOf("day").utc().toISOString();
+
+    // Crear la fecha de fin al final del día en UTC
+    const fechaFin = fechaBase.clone().endOf("day").utc().toISOString();
+
+    console.log(`Fecha actual: ${fechaActual}`);
+    console.log(`Buscando desde: ${fechaInicio} hasta: ${fechaFin}`);
 
     // filtro al buscar
     let filtro = {
@@ -279,6 +295,9 @@ const Appointment = () => {
                     <p>
                       Fecha: {new Date(item.date).toLocaleDateString("es-ES")}
                     </p>
+
+                    <p>FechaENBD: {item.date}</p>
+
                     <p>Cupos disponibles: {item.capacity}</p>
                     <p>Actividad: {item.service}</p>
                     <button

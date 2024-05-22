@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate  } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { selectUserByToken } from "../../GlobalVariables";
 import { useEffect, useState } from "react";
@@ -34,15 +34,13 @@ function Navbar() {
     );
     if (confirmLogout) {
       localStorage.setItem("token", "");
-      window.location = "/"; 
+      window.location = "/";
     }
   };
   return (
     <div>
       <div className="containe-navbar">
-        <div
-        className={usuarioActivo.role ? "" : "d-none"}
-        >
+        <div className={usuarioActivo.role ? "" : "d-none"}>
           <Link to="/Profile" className="link-navbar">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -63,9 +61,7 @@ function Navbar() {
           </Link>
         </div>
 
-        <div
-        className={!usuarioActivo.role ? "" : "d-none"}
-        >
+        <div className={!usuarioActivo.role ? "" : "d-none"}>
           <Link to="/LogIn" className="link-navbar">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -128,11 +124,13 @@ function Navbar() {
         </div>
 
         <div
-         className={
-          usuarioActivo.role === "Administrator" || usuarioActivo.role === "Staff"
-            ? ""
-            : "d-none"
-        }>
+          className={
+            usuarioActivo.role === "Administrator" ||
+            usuarioActivo.role === "Staff"
+              ? ""
+              : "d-none"
+          }
+        >
           <Link to="/PrivateFeedback" className="link-navbar">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -153,11 +151,12 @@ function Navbar() {
         </div>
 
         <div
-        className={
-          usuarioActivo.role === "Administrator" || usuarioActivo.role === "Staff"
-            ? ""
-            : "d-none"
-        }
+          className={
+            usuarioActivo.role === "Administrator" ||
+            usuarioActivo.role === "Staff"
+              ? ""
+              : "d-none"
+          }
         >
           <Link to="/CreateClass" className="link-navbar">
             <svg
@@ -179,9 +178,7 @@ function Navbar() {
           </Link>
         </div>
 
-        <div
-        className={usuarioActivo.role ? "" : "d-none"}
-        >
+        <div className={usuarioActivo.role ? "" : "d-none"}>
           <Link to="/AppointmentForm" className="link-navbar">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -205,8 +202,37 @@ function Navbar() {
         </div>
 
         <div
-        className={usuarioActivo.role ? "" : "d-none"}
+          className={
+            usuarioActivo.role === "Administrator" ||
+            usuarioActivo.role === "Staff"
+              ? ""
+              : "d-none"
+          }
         >
+          <Link to="/CreateService" className="link-navbar">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-codepen"
+            >
+              <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon>
+              <line x1="12" y1="22" x2="12" y2="15.5"></line>
+              <polyline points="22 8.5 12 15.5 2 8.5"></polyline>
+              <polyline points="2 15.5 12 8.5 22 15.5"></polyline>
+              <line x1="12" y1="2" x2="12" y2="8.5"></line>
+            </svg>
+            Servicios
+          </Link>
+        </div>
+
+        <div className={usuarioActivo.role ? "" : "d-none"}>
           <Link className="link-navbar" onClick={handleLogout}>
             <svg
               xmlns="http://www.w3.org/2000/svg"

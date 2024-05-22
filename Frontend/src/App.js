@@ -11,6 +11,7 @@ import { NotFound } from "./GlobalVariables";
 import Profile from "./Views/Profile/Profile";
 import Users from "./Views/Users/Users";
 import PrivateFeedback from "./Views/PrivateFeedback/PrivateFeedback";
+import CreateService from "./Views/Services/CreateService";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/LogIn" element={<Login />} />
             <Route path="/Profile" element={<Profile />} />
             <Route path="/Users" element={<Users />} />
+            <Route path="/CreateService" element={<CreateService />} />
             <Route
               path="*"
               element={<NotFound mensaje="La página que busca no existe" />}

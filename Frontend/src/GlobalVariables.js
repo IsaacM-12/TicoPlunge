@@ -24,6 +24,8 @@ export const urlUsers = `${baseUrl}/users`;
 
 export const urlReserveClassAsClient = `${baseUrl}/class/reserveAsClient`;
 export const urlReserveClassAsAdmin = `${baseUrl}/class/reserveAsAdmin`;
+export const urlService = `${baseUrl}/service`;
+export const urlGetStaff = `${baseUrl}/service/staff`;
 
 // -------------------------------------------------------------
 // constante de cuanto tiempo mostrar los mensajes de error en milisegundos
@@ -174,6 +176,7 @@ export const updateToBD = async (serviceUrl, documentId, newData) => {
       console.error("Error desconocido:", errorMessage);
       console.error("Mensaje de error:", errorMessage);
       const message = <ErrorAlert message={errorMessage} />;
+      return message;
     }
   }
 };
