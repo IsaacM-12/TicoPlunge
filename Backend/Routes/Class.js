@@ -15,16 +15,20 @@ router.get("/", async (req, res) => {
       const filtroObj = JSON.parse(filtro);
       clases = await Class.find(filtroObj)
         .populate("user")
-        .populate("students");
+        .populate("students")
+        .populate("service");
     } else {
       // Si no hay filtro en la consulta, simplemente obtenemos todas las clases
-      clases = await Class.find().populate("user").populate("students");
+      clases = await Class.find()
+        .populate("user")
+        .populate("students")
+        .populate("service");
     }
 
     res.json(clases); // Devuelve las clases como JSON
   } catch (error) {
     console.error("Error al consultar clases en MongoDB:", error);
-    res.status(500).json({ error: "Error al consultar clases en MongoDB" });
+    res.status(500).json({ error: "Error al consultar clases en MongoD" });
   }
 });
 

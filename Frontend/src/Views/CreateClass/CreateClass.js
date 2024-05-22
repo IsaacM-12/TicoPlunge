@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./CreateClass.css";
-import moment from 'moment-timezone';
+import moment from "moment-timezone";
 
 import {
   selectUserByToken,
   selectFilterToBD,
+  selectToBD,
+  urlService,
   urlClass,
   NotFound,
   SuccessAlert,
@@ -18,6 +20,8 @@ const CreateClass = () => {
   // Se usara para optener los datos de la persona activa
   // -------------------------------------------------------------
   const [usuarioActivo, setUsuarioActivo] = useState("Staff");
+
+  const [existingServices, setExistingServices] = useState([]);
 
   // -------------------------------------------------------------
   // Estas se mostraran en el HTML
@@ -52,6 +56,7 @@ const CreateClass = () => {
   useEffect(() => {
     // Llamar a la función para obtener y establecer el usuario activo
     GetUserActive();
+    fetchExistingServices();
   }, []);
 
   /**
@@ -69,18 +74,18 @@ const CreateClass = () => {
     const dateCostaRica = moment.tz(date, "America/Costa_Rica");
 
     // Convertir la fecha al formato deseado
-    const dateFormatted = dateCostaRica.format();  // Formato completo con fecha y hora
+    const dateFormatted = dateCostaRica.format(); // Formato completo con fecha y hora
 
     const newClass = {
-      date: dateFormatted,  // Usamos la fecha formateada con la zona horaria de Costa Rica
+      date: dateFormatted, // Usamos la fecha formateada con la zona horaria de Costa Rica
       user: usuarioActivo._id,
       service: service,
       capacity: capacity,
     };
 
     // Obtener la fecha y hora en un formato legible para confirmar
-    const fecha = dateCostaRica.format("dddd, MMMM Do YYYY");  // Formato más legible para la fecha
-    const hora = dateCostaRica.format("HH:mm:ss");  // Formato de 24 horas
+    const fecha = dateCostaRica.format("dddd, MMMM Do YYYY"); // Formato más legible para la fecha
+    const hora = dateCostaRica.format("HH:mm:ss"); // Formato de 24 horas
 
     // Construir el mensaje de confirmación
     const confirmationMessage = `¿Estás seguro de que deseas crear la clase para el ${fecha} a las ${hora}?`;
@@ -165,6 +170,24 @@ const CreateClass = () => {
     }
   };
 
+  const fetchExistingServices = async () => {
+    try {
+      const ServicesData = await selectToBD(urlService);
+      if (ServicesData.length > 0) {
+        setExistingServices(
+          ServicesData.map((service) => ({
+            ...service,
+            encargados: service.encargados,
+          }))
+        );
+      } else {
+        setExistingServices([]);
+      }
+    } catch (error) {
+      console.error("Error al obtener servicios existentes:", error);
+    }
+  };
+
   /**
    * Maneja el envío del formulario para crear una nueva cita.
    * @param {Event} e - El evento de envío del formulario.
@@ -229,8 +252,8 @@ const CreateClass = () => {
             </div>
             <form onSubmit={handleSubmit} className="CreateClass-form">
               <div className="CreateClass-input-group">
-                <label htmlFor="inputActivity">*Actividad:</label>
-                <select
+                <label htmlFor="inputActivity">*ac:</label>
+                {/* <select
                   id="inputActivity"
                   className="CreateClass-select"
                   value={inputData.service}
@@ -240,8 +263,23 @@ const CreateClass = () => {
                   <option value="box">Box</option>
                   <option value="plunche">Plunche</option>
                   <option value="baile">Baile</option>
+                </select> */}
+                <select
+                  id="inputActivity"
+                  className="CreateClass-select"
+                  value={inputData.service}
+                  onChange={(e) => handleChange(e, "service")}
+                  required
+                >
+                  <option value="">Seleccione una opción</option>
+                  {existingServices.map((service) => (
+                    <option key={service._id} value={service._id}>
+                      {service.name}
+                    </option>
+                  ))}
                 </select>
               </div>
+
               <div className="CreateClass-input-group">
                 <label htmlFor="inputDate">*Fecha:</label>
                 <input
@@ -249,7 +287,7 @@ const CreateClass = () => {
                   id="inputDate"
                   value={inputData.date}
                   onChange={(e) => handleChange(e, "date")}
-                  min={moment().tz("America/Costa_Rica").format('YYYY-MM-DD')}
+                  min={moment().tz("America/Costa_Rica").format("YYYY-MM-DD")}
                   className="CreateClass-input"
                   required
                 />

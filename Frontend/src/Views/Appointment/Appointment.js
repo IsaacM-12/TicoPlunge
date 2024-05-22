@@ -129,15 +129,12 @@ const Appointment = () => {
     // Crear la fecha de fin al final del día en la zona horaria de Costa Rica
     const fechaFin = fechaBase.clone().endOf("day").toISOString();
 
-    console.log(`Fecha actual: ${fechaActual}`);
-    console.log(`Buscando desde: ${fechaInicio} hasta: ${fechaFin}`);
-
     let filtro = {
       $and: [
         {
           $or: [
             { usuario: { $regex: inputData.search, $options: "i" } },
-            { service: { $regex: inputData.search, $options: "i" } },
+            // { service: { $regex: inputData.search, $options: "i" } },
             {
               $expr: {
                 $cond: {
@@ -305,7 +302,7 @@ const Appointment = () => {
                     <p>FechaENBD: {item.date}</p>
 
                     <p>Cupos disponibles: {item.capacity}</p>
-                    <p>Actividad: {item.service}</p>
+                    <p>Actividad: {item.service.name}</p>
                     <button
                       className="btn btn-primary m-2"
                       onClick={() => reserveAsClient(item._id)}
