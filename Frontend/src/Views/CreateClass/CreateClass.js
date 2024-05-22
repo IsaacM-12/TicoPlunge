@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./CreateClass.css";
+import moment from 'moment-timezone';
+
 import {
   selectUserByToken,
   selectFilterToBD,
@@ -63,24 +65,25 @@ const CreateClass = () => {
    */
 
   const createClassBD = async (date, service, capacity) => {
-    const dateObject = new Date(date);
-    const isoDate = dateObject.toISOString();
+    // Parsear la fecha de entrada en la zona horaria de Costa Rica
+    const dateCostaRica = moment.tz(date, "America/Costa_Rica");
+
+    // Convertir la fecha al formato deseado
+    const dateFormatted = dateCostaRica.format();  // Formato completo con fecha y hora
 
     const newClass = {
-      date: isoDate,
+      date: dateFormatted,  // Usamos la fecha formateada con la zona horaria de Costa Rica
       user: usuarioActivo._id,
       service: service,
       capacity: capacity,
     };
 
-    // Obtener la fecha en formato de cadena
-    const fecha = dateObject.toDateString();
-
-    // Obtener la hora en formato de cadena
-    const hora = dateObject.toTimeString().split(" ")[0]; // Se usa split para eliminar la parte de la zona horaria
+    // Obtener la fecha y hora en un formato legible para confirmar
+    const fecha = dateCostaRica.format("dddd, MMMM Do YYYY");  // Formato más legible para la fecha
+    const hora = dateCostaRica.format("HH:mm:ss");  // Formato de 24 horas
 
     // Construir el mensaje de confirmación
-    const confirmationMessage = `¿Estás seguro de que deseas crear la clase para ${fecha} a las ${hora}?`;
+    const confirmationMessage = `¿Estás seguro de que deseas crear la clase para el ${fecha} a las ${hora}?`;
     const confirmed = window.confirm(confirmationMessage);
 
     if (!confirmed) {
@@ -246,7 +249,7 @@ const CreateClass = () => {
                   id="inputDate"
                   value={inputData.date}
                   onChange={(e) => handleChange(e, "date")}
-                  min={new Date().toISOString().split("T")[0]}
+                  min={moment().tz("America/Costa_Rica").format('YYYY-MM-DD')}
                   className="CreateClass-input"
                   required
                 />

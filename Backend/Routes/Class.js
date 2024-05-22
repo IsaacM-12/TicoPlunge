@@ -21,7 +21,6 @@ router.get("/", async (req, res) => {
       clases = await Class.find().populate("user").populate("students");
     }
 
-    console.log(clases);
     res.json(clases); // Devuelve las clases como JSON
   } catch (error) {
     console.error("Error al consultar clases en MongoDB:", error);
@@ -35,7 +34,6 @@ router.post("/", async (req, res) => {
   const claseData = req.body;
   // Validamos los datos de la clase
   const { error } = validateClass(claseData);
-  console.log(claseData.date)
 
   if (error) return res.status(400).send(error.details[0].message);
 

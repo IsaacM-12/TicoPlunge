@@ -40,6 +40,8 @@ const Appointment = () => {
   const [showErrorSearch, setshowErrorSearch] = useState("");
   const [showAlerts, setshowAlerts] = useState("");
 
+  // Ajusta la fecha mínima a la fecha actual en Costa Rica
+  const minDate = moment().tz("America/Costa_Rica").format("YYYY-MM-DD");
   /**
    * Función asincrónica para obtener y establecer el usuario activo utilizando el token de autenticación.
    */
@@ -95,7 +97,7 @@ const Appointment = () => {
    * Se utiliza para obtener las clases disponibles para reserva.
    */
   const selectClassBD = async () => {
-    const fechaActual = new Date().toISOString(); // Obtiene la fecha actual
+    const fechaActual = moment().tz("America/Costa_Rica").toISOString();
     let filtro = {
       date: { $gt: fechaActual }, // Filtra las clases con fecha mayor a la fecha actual
     };
@@ -111,25 +113,25 @@ const Appointment = () => {
    * y se filtran las clases con fecha mayor a la actual.
    */
   const searchByAnyBD = async () => {
-    const fechaActual = moment().toISOString();
+    // Fecha y hora actual en zona horaria de Costa Rica
+    const fechaActual = moment().tz("America/Costa_Rica").toISOString();
 
-    // Parsear la fecha de entrada asegurando que es en formato YYYY-MM-DD en la zona horaria local
+    // Parsear la fecha de entrada asegurando que es en formato YYYY-MM-DD en la zona horaria de Costa Rica
     const fechaBase = moment.tz(
       inputData.searchDate,
       "YYYY-MM-DD",
-      "America/Your_Timezone"
-    ); // Reemplaza 'America/Your_Timezone' con tu zona horaria
+      "America/Costa_Rica"
+    );
 
-    // Crear la fecha de inicio al inicio del día en UTC
-    const fechaInicio = fechaBase.clone().startOf("day").utc().toISOString();
+    // Crear la fecha de inicio al inicio del día en la zona horaria de Costa Rica
+    const fechaInicio = fechaBase.clone().startOf("day").toISOString();
 
-    // Crear la fecha de fin al final del día en UTC
-    const fechaFin = fechaBase.clone().endOf("day").utc().toISOString();
+    // Crear la fecha de fin al final del día en la zona horaria de Costa Rica
+    const fechaFin = fechaBase.clone().endOf("day").toISOString();
 
     console.log(`Fecha actual: ${fechaActual}`);
     console.log(`Buscando desde: ${fechaInicio} hasta: ${fechaFin}`);
 
-    // filtro al buscar
     let filtro = {
       $and: [
         {
@@ -139,9 +141,9 @@ const Appointment = () => {
             {
               $expr: {
                 $cond: {
-                  if: { $isNumber: "$capacity" }, // Verificar si el campo capacity es un número
+                  if: { $isNumber: "$capacity" },
                   then: { $eq: ["$capacity", parseInt(inputData.search)] },
-                  else: { $eq: ["", ""] }, // Si es un string, devuelve un filtro vacío
+                  else: { $eq: ["", ""] },
                 },
               },
             },
@@ -157,6 +159,7 @@ const Appointment = () => {
         date: { $gte: fechaInicio, $lte: fechaFin }, // Filtrar por la fecha seleccionada
       });
     }
+
     const response = await selectFilterToBD(urlClass, filtro);
     setshowClasses(response);
   };
@@ -264,7 +267,7 @@ const Appointment = () => {
                     onChange={(e) =>
                       setInputData({ ...inputData, searchDate: e.target.value })
                     }
-                    min={new Date().toISOString().split("T")[0]}
+                    min={moment().tz("America/Costa_Rica").format("YYYY-MM-DD")}
                   />
                 </div>
 
@@ -287,13 +290,16 @@ const Appointment = () => {
                     <p>Profesor: {item.user.firstName}</p>
                     <p>
                       Hora:{" "}
-                      {new Date(item.date).toLocaleTimeString("es-ES", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {moment(item.date)
+                        .tz("America/Costa_Rica")
+                        .format("HH:mm")}
                     </p>
+
                     <p>
-                      Fecha: {new Date(item.date).toLocaleDateString("es-ES")}
+                      Fecha:{" "}
+                      {moment(item.date)
+                        .tz("America/Costa_Rica")
+                        .format("DD/MM/YYYY")}
                     </p>
 
                     <p>FechaENBD: {item.date}</p>
