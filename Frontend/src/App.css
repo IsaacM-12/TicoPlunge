@@ -3,6 +3,27 @@
 }
 
 /* ---------------------------------------
+--  para usarlas global osea cuando una cambia cambian todo donde este
+------------------------------------------ */
+:root {
+  --color-letter-form: rgba(243, 244, 246, 1);
+  --background-color-form: linear-gradient(
+    to right,
+    rgb(20, 30, 48),
+    rgb(36, 59, 85)
+  );
+  --background-color-principal: linear-gradient(to bottom, #111827, #b3afaf);
+}
+
+/* opciones
+
+#1a1a1a; 
+linear-gradient(to right, rgb(20, 30, 48), rgb(36, 59, 85));
+#111827
+
+*/
+
+/* ---------------------------------------
 --  para que se mueva los butones al presionarlos
 ------------------------------------------ */
 button:active {
@@ -126,7 +147,6 @@ button:active {
   margin: 0; /* Eliminar márgenes */
   color: white;
 }
-
 
 .conteiner-hamster {
   margin-left: 44%;

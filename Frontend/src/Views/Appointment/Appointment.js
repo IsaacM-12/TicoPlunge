@@ -30,7 +30,6 @@ const Appointment = () => {
   // Seran input
   // -------------------------------------------------------------
   const [inputData, setInputData] = useState({
-    search: "",
     searchDate: "",
   });
 
@@ -129,9 +128,6 @@ const Appointment = () => {
         .endOf("day")
         .toDate(); // Fecha de fin del día seleccionado
 
-      console.log(fechaInicio);
-      console.log(fechaFin);
-      console.log(fechaActual);
       filtro.$and.push({
         date: {
           $gte: fechaInicio,
@@ -140,14 +136,8 @@ const Appointment = () => {
       });
     }
 
-    try {
-      const response = await axios.get(urlClass, {
-        params: { filtro: JSON.stringify(filtro) },
-      });
-      setshowClasses(response.data);
-    } catch (error) {
-      console.error("Error al obtener los datos:", error);
-    }
+    const response = await selectFilterToBD(urlClass, filtro);
+    setshowClasses(response);
   };
 
   /**
@@ -173,7 +163,7 @@ const Appointment = () => {
    */
   const handleSubmitSearch = async (event) => {
     event.preventDefault(); // Evitar que el formulario se envíe vacio
-    if (!inputData.search && !inputData.searchDate) {
+    if (!inputData.searchDate) {
       selectClassBD();
       return;
     }
@@ -225,23 +215,10 @@ const Appointment = () => {
           <div className="container mt-5">
             <div className="search">
               <form className="form-inline" onSubmit={handleSubmitSearch}>
-                <div className="form-group mx-sm-3 mb-2">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="searchInputReserveClass"
-                    placeholder="Ingrese su búsqueda"
-                    value={inputData.search}
-                    onChange={(e) =>
-                      setInputData({ ...inputData, search: e.target.value })
-                    }
-                  />
-                </div>
                 <div className="mb-2">
                   <input
                     type="date"
                     id="inputDate"
-                    className="Appointment-input-date"
                     value={inputData.searchDate}
                     onChange={(e) =>
                       setInputData({ ...inputData, searchDate: e.target.value })
@@ -261,12 +238,23 @@ const Appointment = () => {
                   Buscar
                 </button>
               </form>
+
+              <button onClick={selectClassBD} className="btn btn-primary mb-4">
+                Ver Todas
+              </button>
             </div>
             <div className="Appointment-card-container">
               {showClasses.length > 0 ? (
                 showClasses.map((item, index) => (
                   <div key={index} className="Appointment-card">
+                    <p className="stylePActivity">
+                      Actividad: {item.service.name}
+                    </p>
+
+                    <p>Fecha: {moment(item.date).format("DD/MM/YYYY")}</p>
+
                     <p>Profesor: {item.user.firstName}</p>
+
                     <p>
                       Hora:{" "}
                       {moment(item.date)
@@ -274,12 +262,8 @@ const Appointment = () => {
                         .format("HH:mm")}
                     </p>
 
-                    <p>Fecha: {moment(item.date).format("DD/MM/YYYY")}</p>
-
-                    <p>FechaENBD: {item.date}</p>
-
                     <p>Cupos disponibles: {item.capacity}</p>
-                    <p>Actividad: {item.service.name}</p>
+
                     <button
                       className="btn btn-primary m-2"
                       onClick={() => reserveAsClient(item._id)}
@@ -313,7 +297,7 @@ const Appointment = () => {
                 ))
               ) : (
                 <div className="Appointment-no-data">
-                  <h2>No hay datos disponibles</h2>
+                  <h2>Aun no hay clases</h2>
                 </div>
               )}
             </div>

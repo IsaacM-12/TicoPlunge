@@ -2,15 +2,10 @@
   margin: 0;
   min-height: calc(100vh - 44px);
 
-  background: linear-gradient(to bottom, #111827, #b3afaf);
+  background: var(--background-color-principal);
   background-attachment: fixed;
   padding-top: 30px;
-  color: white
-}
-
-:root {
-  --class-color-letter-service: rgba(243, 244, 246, 1);
-  --class-background-color-service: #111827;
+  color: white;
 }
 
 .card-container-service {
@@ -20,14 +15,15 @@
 }
 
 .card-service {
+  background: var(--background-color-form);
+  color: var(--color-letter-form);
   box-sizing: border-box;
   height: 200px;
   width: calc(33.333% - 20px);
   margin-bottom: 20px;
   padding: 1rem;
-  background-color: var(--class-background-color-service);
   border: 1px solid rgb(48, 128, 148);
-  border-radius: 0.90rem;
+  border-radius: 0.9rem;
   box-shadow: blue;
   text-align: center;
   cursor: pointer;
@@ -37,13 +33,12 @@
   align-items: center;
   justify-content: center;
   user-select: none;
-  color: var(--class-color-letter-service);
 }
 
-.card-title-service { 
-  font-size: 1.5rem; 
-  font-weight: 700; 
-  margin-bottom: 0.5rem; 
+.card-title-service {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
 .card-subtitle-service {
@@ -53,20 +48,20 @@
   font-weight: 700;
 }
 
-.card-divider-service { 
-  width: 80%; 
+.card-divider-service {
+  width: 80%;
   height: 1px;
-  background-color: rgba(156, 163, 175, 1);
+  background-color: rgb(175, 166, 156);
   margin-bottom: 0.5rem;
 }
 
 .card-list-service {
-  text-align: center; 
+  text-align: center;
   width: 100%;
   font-size: medium;
-  display: flex; 
+  display: flex;
   flex-direction: column;
-  align-items: center; 
+  align-items: center;
 }
 
 .card-service:hover {
@@ -75,20 +70,20 @@
 }
 
 .form-container-service {
+  background: var(--background-color-form);
+  color: var(--color-letter-form);
   width: 320px;
-  border-radius: 0.90rem;
-  background-color: var(--class-background-color-service);
+  border-radius: 0.9rem;
   padding: 2rem;
-  color: var(--class-color-letter-service);
   margin: 0 auto;
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
 .select-createService-service {
+  background: var(--background-color-form);
+  color: var(--color-letter-form);
   width: 100%;
-  background-color: var(--class-background-color-service);
-  color: var(--class-color-letter-service);
   padding: 2rem;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -97,7 +92,8 @@
 }
 
 .select-createService-service option {
-  background-color: var(--class-background-color-service);
+  background: var(--background-color-form);
+  color: var(--color-letter-form);
   align-items: center;
 }
 
@@ -133,25 +129,26 @@
 
 .input-group-createService-service {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: flex-start;
   align-items: center;
 }
 
 .input-group-createService-service label {
-  display:block;
+  display: block;
   color: rgba(156, 163, 175, 1);
   margin-bottom: 4px;
 }
 
 .input-group-createService-service input {
+  background: var(--background-color-form);
+  color: var(--color-letter-form);
   width: 100%;
   border-radius: 0.375rem;
   border: 1px solid rgb(81, 73, 55);
   outline: 0;
-  background-color: var(--class-background-color-service);
+
   padding: 0.75rem 1rem;
-  color: var(--class-color-letter-service);
 }
 
 .input-group-createService-service input:focus {
@@ -179,6 +176,7 @@
   border-radius: 0.375rem;
   font-weight: 600;
   margin-top: 15px;
+  color: white;
 }
 
 .buttomCreate-service:hover {
@@ -217,7 +215,6 @@
   border-radius: 50%;
   padding: 4px;
 }
-
 
 /* Media Query para reducir el tamaño de los elementos cuando la pantalla es más pequeña */
 @media screen and (max-width: 600px) {

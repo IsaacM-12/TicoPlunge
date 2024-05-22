@@ -249,7 +249,7 @@ const CreateClass = () => {
             </div>
             <form onSubmit={handleSubmit} className="CreateClass-form">
               <div className="CreateClass-input-group">
-                <label htmlFor="inputActivity">*ac:</label>
+                <label htmlFor="inputActivity">*Actividad:</label>
                 <select
                   id="inputActivity"
                   className="CreateClass-select"

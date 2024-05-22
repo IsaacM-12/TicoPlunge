@@ -17,7 +17,7 @@ const AppointmentEdit = ({
       capacity: Appointment.capacity,
       date: Appointment.date,
       user: Appointment.user._id,
-      service: Appointment.service,
+      service: Appointment.service._id,
     };
     const response = await updateToBD(
       urlClass,
