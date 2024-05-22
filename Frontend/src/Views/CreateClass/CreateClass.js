@@ -70,29 +70,26 @@ const CreateClass = () => {
    */
 
   const createClassBD = async (date, service, capacity) => {
-    // Parsear la fecha de entrada en la zona horaria de Costa Rica
-    const dateCostaRica = moment.tz(date, "America/Costa_Rica");
-
-    // Convertir la fecha al formato deseado
-    const dateFormatted = dateCostaRica.format(); // Formato completo con fecha y hora
+    // Convertir la fecha al formato ISO manteniendo la zona horaria de Costa Rica
+    const dateTime = moment(date).tz("America/Costa_Rica");
+    const dateFormatted = dateTime.format(); // Esto garantiza el formato ISO con la zona horaria correcta
 
     const newClass = {
-      date: dateFormatted, // Usamos la fecha formateada con la zona horaria de Costa Rica
+      date: dateFormatted, // Fecha en formato ISO con zona horaria
       user: usuarioActivo._id,
       service: service,
       capacity: capacity,
     };
 
     // Obtener la fecha y hora en un formato legible para confirmar
-    const fecha = dateCostaRica.format("dddd, MMMM Do YYYY"); // Formato más legible para la fecha
-    const hora = dateCostaRica.format("HH:mm:ss"); // Formato de 24 horas
+    const fecha = dateTime.format("dddd, MMMM Do YYYY"); // Formato legible para la fecha
+    const hora = dateTime.format("HH:mm"); // Formato de hora legible
 
     // Construir el mensaje de confirmación
     const confirmationMessage = `¿Estás seguro de que deseas crear la clase para el ${fecha} a las ${hora}?`;
     const confirmed = window.confirm(confirmationMessage);
 
     if (!confirmed) {
-      // Si el usuario cancela, no hacemos nada y retornamos false
       return false;
     }
 
@@ -103,10 +100,10 @@ const CreateClass = () => {
         },
       };
       await axios.post(urlClass, newClass, config);
-      return true; // Retorna true si se crea con éxito
+      return true;
     } catch (error) {
       console.error("Error al insertar documento en MongoDB:", error);
-      return false; // Retorna false si hay un error
+      return false;
     }
   };
 
@@ -253,17 +250,6 @@ const CreateClass = () => {
             <form onSubmit={handleSubmit} className="CreateClass-form">
               <div className="CreateClass-input-group">
                 <label htmlFor="inputActivity">*ac:</label>
-                {/* <select
-                  id="inputActivity"
-                  className="CreateClass-select"
-                  value={inputData.service}
-                  onChange={(e) => handleChange(e, "service")}
-                >
-                  <option value="">Seleccione una opcion</option>
-                  <option value="box">Box</option>
-                  <option value="plunche">Plunche</option>
-                  <option value="baile">Baile</option>
-                </select> */}
                 <select
                   id="inputActivity"
                   className="CreateClass-select"

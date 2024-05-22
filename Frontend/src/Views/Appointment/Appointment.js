@@ -5,6 +5,7 @@ import AppointmentEdit from "./AppointmentEdit";
 import { format, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
 import moment from "moment-timezone";
+import axios from "axios";
 
 import {
   createToBD,
@@ -40,8 +41,6 @@ const Appointment = () => {
   const [showErrorSearch, setshowErrorSearch] = useState("");
   const [showAlerts, setshowAlerts] = useState("");
 
-  // Ajusta la fecha mínima a la fecha actual en Costa Rica
-  const minDate = moment().tz("America/Costa_Rica").format("YYYY-MM-DD");
   /**
    * Función asincrónica para obtener y establecer el usuario activo utilizando el token de autenticación.
    */
@@ -97,14 +96,14 @@ const Appointment = () => {
    * Se utiliza para obtener las clases disponibles para reserva.
    */
   const selectClassBD = async () => {
-    const fechaActual = moment().tz("America/Costa_Rica").toISOString();
+    // Fecha y hora actual en zona horaria de Costa Rica
+    const fechaActual = moment().tz("America/Costa_Rica").toDate(); // Obtener la fecha actual en la zona horaria de Costa Rica
     let filtro = {
       date: { $gt: fechaActual }, // Filtra las clases con fecha mayor a la fecha actual
     };
 
     const response = await selectFilterToBD(urlClass, filtro);
     setshowClasses(response);
-    console.log(response);
   };
 
   /**
@@ -113,52 +112,42 @@ const Appointment = () => {
    * y se filtran las clases con fecha mayor a la actual.
    */
   const searchByAnyBD = async () => {
-    // Fecha y hora actual en zona horaria de Costa Rica
-    const fechaActual = moment().tz("America/Costa_Rica").toISOString();
-
-    // Parsear la fecha de entrada asegurando que es en formato YYYY-MM-DD en la zona horaria de Costa Rica
-    const fechaBase = moment.tz(
-      inputData.searchDate,
-      "YYYY-MM-DD",
-      "America/Costa_Rica"
-    );
-
-    // Crear la fecha de inicio al inicio del día en la zona horaria de Costa Rica
-    const fechaInicio = fechaBase.clone().startOf("day").toISOString();
-
-    // Crear la fecha de fin al final del día en la zona horaria de Costa Rica
-    const fechaFin = fechaBase.clone().endOf("day").toISOString();
+    const fechaActual = moment().tz("America/Costa_Rica").toDate(); // Obtener la fecha actual en la zona horaria de Costa Rica
 
     let filtro = {
-      $and: [
-        {
-          $or: [
-            { usuario: { $regex: inputData.search, $options: "i" } },
-            // { service: { $regex: inputData.search, $options: "i" } },
-            {
-              $expr: {
-                $cond: {
-                  if: { $isNumber: "$capacity" },
-                  then: { $eq: ["$capacity", parseInt(inputData.search)] },
-                  else: { $eq: ["", ""] },
-                },
-              },
-            },
-          ],
-        },
-        { date: { $gt: fechaActual } }, // Filtra las clases con fecha mayor a la fecha actual
-      ],
+      $and: [{ date: { $gt: fechaActual } }],
     };
 
-    // Verificar si se ha seleccionado una fecha
+    // Verificar si se ha seleccionado una fecha específica de búsqueda
     if (inputData.searchDate) {
+      const fechaInicio = moment
+        .tz(inputData.searchDate, "YYYY-MM-DD", "America/Costa_Rica")
+        .startOf("day")
+        .toDate(); // Fecha de inicio del día seleccionado
+      const fechaFin = moment
+        .tz(inputData.searchDate, "YYYY-MM-DD", "America/Costa_Rica")
+        .endOf("day")
+        .toDate(); // Fecha de fin del día seleccionado
+
+      console.log(fechaInicio);
+      console.log(fechaFin);
+      console.log(fechaActual);
       filtro.$and.push({
-        date: { $gte: fechaInicio, $lte: fechaFin }, // Filtrar por la fecha seleccionada
+        date: {
+          $gte: fechaInicio,
+          $lte: fechaFin,
+        },
       });
     }
 
-    const response = await selectFilterToBD(urlClass, filtro);
-    setshowClasses(response);
+    try {
+      const response = await axios.get(urlClass, {
+        params: { filtro: JSON.stringify(filtro) },
+      });
+      setshowClasses(response.data);
+    } catch (error) {
+      console.error("Error al obtener los datos:", error);
+    }
   };
 
   /**
@@ -185,14 +174,7 @@ const Appointment = () => {
   const handleSubmitSearch = async (event) => {
     event.preventDefault(); // Evitar que el formulario se envíe vacio
     if (!inputData.search && !inputData.searchDate) {
-      setshowErrorSearch(
-        <ErrorAlert
-          message={"Bebe llenar al menos un campo para poder buscar"}
-        />
-      );
-      setTimeout(() => {
-        setshowErrorSearch("");
-      }, timeWaitAlert);
+      selectClassBD();
       return;
     }
     setshowErrorSearch("");
@@ -292,12 +274,7 @@ const Appointment = () => {
                         .format("HH:mm")}
                     </p>
 
-                    <p>
-                      Fecha:{" "}
-                      {moment(item.date)
-                        .tz("America/Costa_Rica")
-                        .format("DD/MM/YYYY")}
-                    </p>
+                    <p>Fecha: {moment(item.date).format("DD/MM/YYYY")}</p>
 
                     <p>FechaENBD: {item.date}</p>
 
