@@ -205,38 +205,40 @@ const PurchaseHistory = () => {
           </label>
         </div>
         {showForm && (
-          <form onSubmit={handleAddPurchase} className="purchase-form m-2">
-            <div>
-              <label>Cliente:</label>
-              <input
-                type="text"
-                value={buyerName}
-                onChange={(e) => setBuyerName(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>Monto total:</label>
-              <input
-                type="number"
-                value={totalAmount}
-                onChange={(e) => setTotalAmount(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>Detalle:</label>
-              <br/>
-              <textarea
-                value={detail}
-                onChange={(e) => setDetail(e.target.value)}
-                required
-              ></textarea>
-            </div>
-            <button className="btn btn-primary m-4" type="submit">
-              Añadir compra
-            </button>
-          </form>
+          <div className="purchase-form-container m-4">
+            <form onSubmit={handleAddPurchase} className="purchase-form">
+              <div>
+                <label>Cliente:</label>
+                <input
+                  type="text"
+                  value={buyerName}
+                  onChange={(e) => setBuyerName(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label>Monto total:</label>
+                <input
+                  type="number"
+                  value={totalAmount}
+                  onChange={(e) => setTotalAmount(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label>Detalle:</label>
+                <br />
+                <textarea
+                  value={detail}
+                  onChange={(e) => setDetail(e.target.value)}
+                  required
+                ></textarea>
+              </div>
+              <button className="btn btn-primary m-4" type="submit">
+                Añadir compra
+              </button>
+            </form>
+          </div>
         )}
         <div>
           <GlobalFilter
