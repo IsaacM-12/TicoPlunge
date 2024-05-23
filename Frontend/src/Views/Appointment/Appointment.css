@@ -19,6 +19,7 @@
   border-radius: 10px;
   padding: 10px;
 }
+
 /* ---------------------------------------
 --  Estilo de como mostrar las citas
 ------------------------------------------ */
@@ -78,10 +79,6 @@ p.stylePActivity {
 /* ---------------------------------------
 --  Estilo para form de buscar
 ------------------------------------------ */
-
-#searchInputReserveClass {
-  border: 2px solid #0b5ed6;
-}
 
 /* Media Query para reducir el tamaño de los elementos cuando la pantalla es más pequeña */
 @media screen and (max-width: 600px) {

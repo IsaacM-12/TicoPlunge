@@ -1,5 +1,5 @@
 .PrivateFeedbackStyle {
-  background: linear-gradient(to bottom, #111827, #b3afaf);
+  background: var(--background-color-principal);
   background-attachment: fixed;
 
   color: white;

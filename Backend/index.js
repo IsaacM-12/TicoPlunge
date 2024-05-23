@@ -9,7 +9,8 @@ const ClassRoutes = require("./Routes/Class");
 const userRoutes = require("./Routes/users");
 const authRoutes = require("./Routes/authenticator");
 const ServicesRoutes = require("./Routes/service");
-// const PlanRoutes = require("./Routes/plan");
+const PlanRoutes = require("./Routes/plan");
+const purchaseHistoryRouter = require("./Routes/purchaseHistory");
 
 // database connection
 connection();
@@ -18,6 +19,9 @@ connection();
 app.use(express.json());
 app.use(cors());
 
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());
+
 // routes
 app.use("/register", userRoutes);
 app.use("/auth", authRoutes);
@@ -25,7 +29,8 @@ app.use("/comentarios", FeedbackRoutes);
 app.use("/privatefeedback", PrivateFeedback);
 app.use("/class", ClassRoutes);
 app.use("/service", ServicesRoutes);
-// app.use("/plan", PlanRoutes);
+app.use("/plan", PlanRoutes);
+app.use("/purchase-history", purchaseHistoryRouter);
 
 const port = process.env.PORT || 8080;
 app.listen(port, console.log(`Listening on port ${port}...`));

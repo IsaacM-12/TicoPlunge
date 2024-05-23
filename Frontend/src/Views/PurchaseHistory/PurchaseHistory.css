@@ -1,0 +1,79 @@
+.purchase-history-Style {
+  padding: 30px;
+  margin: 0;
+  min-height: calc(100vh - 44px);
+  width: 100%;
+  background: var(--background-color-principal);
+  background-attachment: fixed;
+  padding: 30px;
+  color: white;
+}
+
+.purchase-history-Style select {
+  padding: 10px;
+  background: var(--background-color-form);
+  color: var(--color-letter-form);
+  border-radius: 10px;
+}
+.purchase-history-Style option {
+  color: white;
+  background-color: rgb(36, 35, 34);
+}
+
+.purchase-history-Style input {
+  background: transparent;
+  color: white;
+  border: 3px solid #0b5ed6;
+  border-radius: 10px;
+  padding: 10px;
+
+  margin: 10px;
+}
+
+.purchase-history-Style textarea {
+  background: transparent;
+  color: white;
+  border: 3px solid #0b5ed6;
+  border-radius: 10px;
+  padding: 10px;
+  height: 150px;
+  width: 650px;
+}
+
+.purchase-history table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.purchase-history th,
+.purchase-history td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.purchase-history th {
+  background: var(--background-color-form);
+  color: var(--color-letter-form);
+}
+
+.purchase-form {
+  margin-top: 20px;
+  /* border: 8px double #134999; */
+  border-radius: 20px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.purchase-history-page-boton button {
+  background: var(--background-color-form);
+  color: var(--color-letter-form);
+  margin: 3px;
+  border-radius: 20px;
+}
+
+/* Media Query para reducir el tamaño de los elementos cuando la pantalla es más pequeña */
+@media screen and (max-width: 600px) {
+  .purchase-history-Style textarea {
+    width: 90%;
+  }
+}

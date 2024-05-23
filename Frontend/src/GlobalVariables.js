@@ -26,6 +26,8 @@ export const urlReserveClassAsClient = `${baseUrl}/class/reserveAsClient`;
 export const urlReserveClassAsAdmin = `${baseUrl}/class/reserveAsAdmin`;
 export const urlService = `${baseUrl}/service`;
 export const urlGetStaff = `${baseUrl}/service/staff`;
+export const urlpurchasehistory = `${baseUrl}/purchase-history`;
+export const urlPlan = `${baseUrl}/plan`;
 
 // -------------------------------------------------------------
 // constante de cuanto tiempo mostrar los mensajes de error en milisegundos

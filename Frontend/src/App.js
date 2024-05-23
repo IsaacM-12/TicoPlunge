@@ -12,6 +12,8 @@ import Profile from "./Views/Profile/Profile";
 import Users from "./Views/Users/Users";
 import PrivateFeedback from "./Views/PrivateFeedback/PrivateFeedback";
 import CreateService from "./Views/Services/CreateService";
+import PurchaseHistory from "./Views/PurchaseHistory/PurchaseHistory";
+import CreatePlan from "./Views/Plans/CreatePlan";
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
             <Route path="/Profile" element={<Profile />} />
             <Route path="/Users" element={<Users />} />
             <Route path="/CreateService" element={<CreateService />} />
+            <Route path="/PurchaseHistory" element={<PurchaseHistory />} />
+            <Route path="/CreatePlan" element={<CreatePlan />} />
             <Route
               path="*"
               element={<NotFound mensaje="La página que busca no existe" />}

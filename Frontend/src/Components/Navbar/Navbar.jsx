@@ -217,10 +217,10 @@ function Navbar() {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              className="feather feather-codepen" 
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-codepen"
             >
               <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon>
               <line x1="12" y1="22" x2="12" y2="15.5"></line>
@@ -229,6 +229,49 @@ function Navbar() {
               <line x1="12" y1="2" x2="12" y2="8.5"></line>
             </svg>
             Servicios
+          </Link>
+        </div>
+
+        <div className={usuarioActivo.role === "Administrator" ? "" : "d-none"}>
+          <Link to="/PurchaseHistory" className="link-navbar">
+            <svg
+              xmlns="http://www3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-shopping-cart"
+            >
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a1 1 0 0 0 1 .61h9.72a1 1 0 0 0 1-.78l3.26-12.17a1 1 0 0 0-.94-1.22H6"></path>
+            </svg>
+            Historial de Compras
+          </Link>
+        </div>
+
+        <div className={usuarioActivo.role === "Administrator" ? "" : "d-none"}>
+          <Link to="/CreatePlan" className="link-navbar">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-check-square"
+            >
+              <polyline points="9 11 12 14 22 4"></polyline>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+            Planes
           </Link>
         </div>
 
