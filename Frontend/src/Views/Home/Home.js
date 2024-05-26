@@ -241,9 +241,6 @@ const Home = () => {
                 <div className="colorback">
                   <h2>¿Quiénes somos?</h2>
                   <p>Somos una empresa comprometida con nuestros clientes.</p>
-                  <Link to="/nosotros" className="btn btn-secondary">
-                    Conoce más
-                  </Link>
                 </div>
               </div>
             </div>
@@ -253,20 +250,9 @@ const Home = () => {
                   <div>
                     <div>
                       <h2>¡Visítanos!</h2>
-                      <p>Estamos ubicados en:</p>
-                      <p>Tu Dirección, Ciudad, País</p>
-                      <div className="electric-card">
-                        <a className="social-link1">
+                      <p>Estamos ubicados:</p>
+                      <p>350 sur del Complejo Gabelo Conejo, San Ramon, Alajuela, Costa Rica</p>
 
-                        </a>
-                      </div>
-                      {/* <Link
-                        to="https://api.whatsapp.com/message/NQD6MTRNSIW5N1?autoload=1&app_absent=0"
-                        className="btn btn-info"
-                        target="_blank"
-                      >
-                        Whatsapp
-                      </Link> */}
                       <p>Horario de atención: Lunes a Viernes, 9am - 6pm</p>
                     </div>
                   </div>
