@@ -33,6 +33,7 @@ app.use("/service", ServicesRoutes);
 app.use("/plan", PlanRoutes);
 app.use("/purchase-history", purchaseHistoryRouter);
 app.use("/planRequest", RequestPlanRoutes);
+app.use("/users", userRoutes);
 
 const port = process.env.PORT || 8080;
 app.listen(port, console.log(`Listening on port ${port}...`));
