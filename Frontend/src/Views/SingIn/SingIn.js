@@ -92,21 +92,9 @@ const SignIn = () => {
               onChange={handleChange}
               value={data.password}
               required
-              className="register-input"
+              className="register-input mb-3"
             />
-            <div className="register-inputBox">
-              <select
-                className="register-input"
-                name="role"
-                value={data.role}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select role</option>
-                <option value="Staff">Staff</option>
-                <option value="Client">User</option>
-              </select>
-            </div>
+
             {error && <div>{error}</div>}
             <button type="submit" className="register-form_btn">
               Registrarse
