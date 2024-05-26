@@ -7,6 +7,8 @@ import {
   urlSingIn,
   NotFound,
   selectUserByToken,
+  selectFilterToBD,
+  urlPlan,
 } from "../../GlobalVariables"; // Asegúrate de que esta URL sea correcta
 import axios from "axios";
 import "./Requests.css";
@@ -41,8 +43,16 @@ const Requests = () => {
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 30);
 
+        const planDetails = {
+          name: request.plan.name,
+          services: request.plan.services.map(service => ({
+            serviceId: service.service,
+            credits: service.credits
+          }))
+        };
+
         const updateData = {
-          planId: request.plan._id,
+          plan: planDetails,
           expirationDate: expirationDate.toISOString(),
         };
 
@@ -76,6 +86,10 @@ const Requests = () => {
     }
   };
 
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-GB'); // Cambia 'en-GB' a tu localidad si necesitas otro formato
+  };
+
   if (usuarioActivo.role !== "Administrator") {
     return <NotFound mensaje="Lo sentimos, no tienes acceso a esta página" />;
   }
@@ -103,7 +117,7 @@ const Requests = () => {
                 </td>
                 <td>{request.user.email}</td>
                 <td>{request.plan.name}</td>
-                <td>{new Date(request.createdAt).toLocaleDateString()}</td>
+                <td>{formatDate(new Date(request.createdAt))}</td>
                 <td>
                   <button
                     className="btn btn-primary m-3"

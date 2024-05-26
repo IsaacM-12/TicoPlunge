@@ -12,8 +12,9 @@ router.get("/", async (req, res) => {
 
     // Buscar al usuario por ID y poblar los detalles de los planes
     const user = await User.findById(decoded._id).populate({
-      path: "plans.plan", // 'plans.plan' es la referencia al documento Plan dentro del array plans
-      model: "Plan", // Asegúrate de que 'Plan' corresponda al nombre del modelo en tu base de datos
+      // Pobla el documento Plan dentro del array 'plans'
+      path: "plans.plan.services.service", // Aquí asumimos que 'services' es un array dentro de cada 'plan' y 'service' es una referencia a otro modelo
+      model: "Service", // Especifica el modelo 'Service' si el nombre de la referencia no coincide con el modelo
     });
 
     if (!user) {
@@ -48,17 +49,6 @@ router.post("/", async (req, res) => {
     const now = new Date();
     let isModified = false;
     if (user.plans.length > 0) {
-      console.log(
-        user.plans.filter((plan) => {
-          const expiration = new Date(plan.expiration);
-          if (expiration < now) {
-            isModified = true;
-            return false;
-          }
-          return true;
-        })
-      );
-
       user.plans = user.plans.filter((plan) => {
         const expiration = new Date(plan.expiration);
         if (expiration < now) {
@@ -77,7 +67,6 @@ router.post("/", async (req, res) => {
     const token = user.generateAuthToken();
     res.status(200).send({ data: token, message: "logged in successfully" });
   } catch (error) {
-    console.log(error);
     res.status(500).send({ message: "Internal Server Error" });
   }
 });

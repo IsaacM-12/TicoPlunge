@@ -65,6 +65,7 @@ const Appointment = () => {
   const reserveAsClient = async (idClass) => {
     const confirmacion = window.confirm("¿Está seguro que desea de reservar?");
 
+    console.log(idClass)
     if (!confirmacion) {
       setshowAlerts(<ErrorAlert message={"Accion Cancelada"} />);
       setTimeout(() => {

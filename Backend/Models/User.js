@@ -16,9 +16,21 @@ const userSchema = new mongoose.Schema(
     },
     plans: [
       {
-        plan: { type: mongoose.Schema.Types.ObjectId, ref: "Plan" },
-        expiration: { type: Date }
-      }
+        plan: {
+          name: { type: String, required: true },
+          services: [
+            {
+              service: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Service",
+                required: true,
+              },
+              credits: { type: Number, required: true },
+            },
+          ],
+        },
+        expiration: { type: Date },
+      },
     ],
   },
   { strict: "throw" }
@@ -42,7 +54,10 @@ userSchema.methods.generateAuthToken = function () {
   return token;
 };
 
-const User = mongoose.model("User", userSchema); // Capitalized the model name conventionally
+// Definir una opción de población personalizada
+userSchema.statics.populateOptions = {
+  select: "-password", // Excluir el campo 'password'
+};
 
 const validate = (data) => {
   const schema = Joi.object({
@@ -54,22 +69,26 @@ const validate = (data) => {
       .valid("Administrator", "Staff", "Client")
       .required()
       .label("Role"), // Validation for role
-      plans: Joi.array().items(
-        Joi.object({
-          plan: Joi.string().optional().label("Plan ID"),
-          expiration: Joi.date().optional().label("Expiration Date")
-        })
-      ).optional().label("Plans"),
-    });
-    return schema.validate(data);
-};
-
-const validatePlanId = (data) => {
-  const schema = Joi.object({
-    planId: Joi.string().required().label("Plan ID"),
-    expirationDate: Joi.date().required().label("Expiration Date")
   });
   return schema.validate(data);
 };
 
-module.exports = { User, validate, validatePlanId };
+const validatePlan = (data) => {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+    services: Joi.array()
+      .items(
+        Joi.object({
+          serviceId: Joi.string().required(),
+          credits: Joi.number().min(0).required(),
+        })
+      )
+      .required(),
+  });
+
+  return schema.validate(data);
+};
+
+const User = mongoose.model("User", userSchema);
+
+module.exports = { User, validate, validatePlanId: validatePlan };

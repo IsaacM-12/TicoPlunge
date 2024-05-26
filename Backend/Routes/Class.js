@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { Class, validateClass } = require("../Models/ClassModel");
 const { User, validate } = require("../Models/User");
 const mongoose = require("mongoose");
+const { Service } = require("../Models/ServiceModel");
 
 // Ruta para obtener todas las clases
 router.get("/", async (req, res) => {
@@ -139,59 +140,118 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// router.post("/reserveAsClient", async (req, res) => {
+//   const { userId, classId } = req.body;
+
+//   try {
+//     // Buscar el usuario por su ID
+//     const user = await User.findById(userId);
+
+//     // Verificar si se encontró el usuario
+//     if (!user) {
+//       return res.status(404).json({ error: "Usuario no encontrado" });
+//     }
+
+//     // Verificar si el usuario tiene créditos suficientes
+//     if (user.creditos === 0) {
+//       return res.status(400).json({ error: "Créditos insuficientes" });
+//     }
+
+//     // Buscar la clase por su ID
+//     const clase = await Class.findById(classId);
+
+//     // Verificar si se encontró la clase
+//     if (!clase) {
+//       return res.status(404).json({ error: "Clase no encontrada" });
+//     }
+
+//     // Verificar si el usuario ya está inscrito en la clase
+//     if (clase.students.includes(userId)) {
+//       return res
+//         .status(400)
+//         .json({ error: "Usuario ya inscrito en esta clase" });
+//     }
+
+//     // Verificar si hay cupos disponibles en la clase
+//     if (clase.capacity <= 0) {
+//       return res.status(400).json({ error: "No hay cupos disponibles" });
+//     }
+
+//     // Restar 1 al campo de créditos del usuario
+//     user.creditos -= 1;
+
+//     // Restar 1 al campo de capacity de la clase
+//     clase.capacity -= 1;
+
+//     // Agregar el ID del usuario a la lista de estudiantes de la clase
+//     clase.students.push(userId);
+
+//     // Guardar los cambios en la base de datos
+//     await Promise.all([user.save(), clase.save()]);
+
+//     res.status(200).json({ message: "Clase reservada exitosamente" });
+//   } catch (error) {
+//     console.error("Error al procesar la reserva:", error);
+//     res.status(500).json({ error: "Error al procesar la reserva" });
+//   }
+// });
+
+// Ruta para reservar una clase
 router.post("/reserveAsClient", async (req, res) => {
   const { userId, classId } = req.body;
 
   try {
-    // Buscar el usuario por su ID
+    // Obtener la clase y el usuario
+    const currentClass = await Class.findById(classId);
     const user = await User.findById(userId);
 
-    // Verificar si se encontró el usuario
-    if (!user) {
-      return res.status(404).json({ error: "Usuario no encontrado" });
+    if (!currentClass || !user) {
+      return res
+        .status(404)
+        .json({ error: "La clase o el usuario no existen" });
     }
 
-    // Verificar si el usuario tiene créditos suficientes
-    if (user.creditos === 0) {
-      return res.status(400).json({ error: "Créditos insuficientes" });
+    if (currentClass.students.includes(userId)) {
+      return res.status(400).json({ error: "Ya estás inscrito en esta clase" });
     }
 
-    // Buscar la clase por su ID
-    const clase = await Class.findById(classId);
+    const serviceId = currentClass.service.toString(); // El ID del servicio de la clase
 
-    // Verificar si se encontró la clase
-    if (!clase) {
-      return res.status(404).json({ error: "Clase no encontrada" });
+    // Revisar los planes del usuario
+    let isReservationPossible = false;
+    let remainingCredits = 0;
+
+    for (let plan of user.plans) {
+      for (let service of plan.plan.services) {
+        if (service.service.toString() === serviceId && service.credits > 0) {
+          // Restar un crédito y actualizar
+          service.credits -= 1;
+          remainingCredits = service.credits; // Guardar los créditos restantes
+          planName = plan.plan.name; // Almacenar el nombre del plan donde se encontraron los créditos
+          await user.save();
+          isReservationPossible = true;
+          break;
+        }
+      }
+      if (isReservationPossible) break;
     }
 
-    // Verificar si el usuario ya está inscrito en la clase
-    if (clase.students.includes(userId)) {
+    if (!isReservationPossible) {
       return res
         .status(400)
-        .json({ error: "Usuario ya inscrito en esta clase" });
+        .json({ error: "No tienes créditos disponibles para este servicio" });
     }
 
-    // Verificar si hay cupos disponibles en la clase
-    if (clase.capacity <= 0) {
-      return res.status(400).json({ error: "No hay cupos disponibles" });
-    }
+    // Añadir el estudiante a la clase y guardar
+    currentClass.students.push(userId);
+    await currentClass.save();
 
-    // Restar 1 al campo de créditos del usuario
-    user.creditos -= 1;
-
-    // Restar 1 al campo de capacity de la clase
-    clase.capacity -= 1;
-
-    // Agregar el ID del usuario a la lista de estudiantes de la clase
-    clase.students.push(userId);
-
-    // Guardar los cambios en la base de datos
-    await Promise.all([user.save(), clase.save()]);
-
-    res.status(200).json({ message: "Clase reservada exitosamente" });
+    res.json({
+      message: `Clase reservada correctamente. Créditos restantes para el plan (${planName}): ${remainingCredits}`,
+    });
   } catch (error) {
-    console.error("Error al procesar la reserva:", error);
-    res.status(500).json({ error: "Error al procesar la reserva" });
+    console.error("Error al reservar la clase:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
   }
 });
 

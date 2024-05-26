@@ -1,5 +1,9 @@
 const router = require("express").Router();
-const { User, validate, validatePlanId } = require("../Models/User");
+const {
+  User,
+  validate,
+  validatePlanId: validatePlan,
+} = require("../Models/User");
 const bcrypt = require("bcrypt");
 
 router.post("/", async (req, res) => {
@@ -26,22 +30,34 @@ router.post("/", async (req, res) => {
 
 router.put("/addPlan/:userId", async (req, res) => {
   const { userId } = req.params;
-  const { planId, expirationDate } = req.body;
+  const { plan, expirationDate } = req.body;
 
   try {
     // Validar el ID del plan
-    const { error } = validatePlanId({ planId, expirationDate });
+    const { error } = validatePlan( plan );
     if (error) {
-      console.log("error:", error)
       return res.status(400).send({ message: error.details[0].message });
     }
 
     // Buscar y actualizar el usuario agregando el planId y la fecha de expiración al array de plans
     const user = await User.findByIdAndUpdate(
       userId,
-      { $addToSet: { plans: { plan: planId, expiration: expirationDate } } },  // Usa $addToSet para evitar duplicados
-      { new: true, runValidators: true } // Devuelve el documento actualizado y ejecuta los validadores del esquema
-    ).populate('plans.plan');
+      {
+        $addToSet: {
+          plans: {
+            plan: {
+              name: plan.name,
+              services: plan.services.map((service) => ({
+                service: service.serviceId, // Asumiendo que serviceId es el ObjectId del servicio
+                credits: service.credits,
+              })),
+            },
+            expiration: expirationDate,
+          },
+        },
+      },
+      { new: true }
+    );
 
     if (!user) {
       return res.status(404).send({ message: "Usuario no encontrado." });
@@ -51,13 +67,15 @@ router.put("/addPlan/:userId", async (req, res) => {
     const token = user.generateAuthToken();
 
     // Enviar tanto el nuevo token como el usuario actualizado
-    res.header('x-auth-token', token).send({
+    res.header("x-auth-token", token).send({
       message: "Plan añadido con éxito.",
       user,
-      token
+      token,
     });
   } catch (error) {
-    res.status(500).send({ message: "Internal Server Error", error: error.message });
+    res
+      .status(500)
+      .send({ message: "Internal Server Error", error: error.message });
   }
 });
 

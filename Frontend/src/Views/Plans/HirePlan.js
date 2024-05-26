@@ -12,7 +12,6 @@ import {
   ErrorAlert,
   NotFound,
 } from "../../GlobalVariables";
-import { set } from "mongoose";
 
 const HirePlan = () => {
   const [showErroresForm, setshowErroresForm] = useState("");
