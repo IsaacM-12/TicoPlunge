@@ -14,7 +14,12 @@ const userSchema = new mongoose.Schema(
       required: true,
       enum: ["Administrator", "Staff", "Client"],
     },
-    creditos: { type: Number, default: 0, min: 0 }, // Nuevo campo "creditos"
+    plans: [
+      {
+        plan: { type: mongoose.Schema.Types.ObjectId, ref: "Plan" },
+        expiration: { type: Date }
+      }
+    ],
   },
   { strict: "throw" }
 );
@@ -27,6 +32,7 @@ userSchema.methods.generateAuthToken = function () {
       role: this.role,
       email: this.email,
       firstName: this.firstName,
+      plans: this.plans,
     },
     process.env.JWTPRIVATEKEY,
     {
@@ -34,11 +40,6 @@ userSchema.methods.generateAuthToken = function () {
     }
   );
   return token;
-};
-
-// Definir una opción de población personalizada
-userSchema.statics.populateOptions = {
-  select: '-password', // Excluir el campo 'password'
 };
 
 const User = mongoose.model("User", userSchema); // Capitalized the model name conventionally
@@ -53,9 +54,22 @@ const validate = (data) => {
       .valid("Administrator", "Staff", "Client")
       .required()
       .label("Role"), // Validation for role
-    creditos: Joi.number().min(0).label("Credits"), // Validación para el campo "creditos"
+      plans: Joi.array().items(
+        Joi.object({
+          plan: Joi.string().optional().label("Plan ID"),
+          expiration: Joi.date().optional().label("Expiration Date")
+        })
+      ).optional().label("Plans"),
+    });
+    return schema.validate(data);
+};
+
+const validatePlanId = (data) => {
+  const schema = Joi.object({
+    planId: Joi.string().required().label("Plan ID"),
+    expirationDate: Joi.date().required().label("Expiration Date")
   });
   return schema.validate(data);
 };
 
-module.exports = { User, validate };
+module.exports = { User, validate, validatePlanId };

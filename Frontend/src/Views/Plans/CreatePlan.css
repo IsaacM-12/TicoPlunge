@@ -269,3 +269,11 @@
   border-width: 0 0.15em 0.15em 0;
   transform: rotate(45deg);
 }
+
+/* Media Query para reducir el tamaño de los elementos cuando la pantalla es más pequeña */
+@media screen and (max-width: 600px) {
+  .card-plan {
+    width: 100%;
+    margin: 15px;
+  }
+}

@@ -11,6 +11,7 @@ const authRoutes = require("./Routes/authenticator");
 const ServicesRoutes = require("./Routes/service");
 const PlanRoutes = require("./Routes/plan");
 const purchaseHistoryRouter = require("./Routes/purchaseHistory");
+const RequestPlanRoutes = require("./Routes/planRequest");
 
 // database connection
 connection();
@@ -31,6 +32,7 @@ app.use("/class", ClassRoutes);
 app.use("/service", ServicesRoutes);
 app.use("/plan", PlanRoutes);
 app.use("/purchase-history", purchaseHistoryRouter);
+app.use("/planRequest", RequestPlanRoutes);
 
 const port = process.env.PORT || 8080;
 app.listen(port, console.log(`Listening on port ${port}...`));

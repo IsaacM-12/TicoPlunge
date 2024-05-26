@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { User, validate } = require("../Models/User");
+const { User, validate, validatePlanId } = require("../Models/User");
 const bcrypt = require("bcrypt");
 
 router.post("/", async (req, res) => {
@@ -23,29 +23,42 @@ router.post("/", async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
-router.get('/',async (req,res)=>{
-  try {
-    const allUsers = await User.find()
-    res.json(allUsers)
-  } catch (error) {
-    res.status(500).send({ message: "Error al consultar los usuarios" });
-  }
-})
-router.delete("/:id", async (req, res) => {
-  const userID = req.params.id;
+
+router.put("/addPlan/:userId", async (req, res) => {
+  const { userId } = req.params;
+  const { planId, expirationDate } = req.body;
 
   try {
-    const resultado = await User.deleteOne({ _id: userID }); // Eliminamos el comentario por su ID
-    if (resultado.deletedCount === 1) {
-      res.status(200).json({ message: "Usuario eliminado exitosamente." });
-    } else {
-      console.error("No se pudo encontrar el usuario para eliminar.");
-      res.status(404).json({ error: "Usuario no encontrado." });
+    // Validar el ID del plan
+    const { error } = validatePlanId({ planId, expirationDate });
+    if (error) {
+      console.log("error:", error)
+      return res.status(400).send({ message: error.details[0].message });
     }
+
+    // Buscar y actualizar el usuario agregando el planId y la fecha de expiración al array de plans
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { plans: { plan: planId, expiration: expirationDate } } },  // Usa $addToSet para evitar duplicados
+      { new: true, runValidators: true } // Devuelve el documento actualizado y ejecuta los validadores del esquema
+    ).populate('plans.plan');
+
+    if (!user) {
+      return res.status(404).send({ message: "Usuario no encontrado." });
+    }
+
+    // Generar un nuevo token JWT que refleje los cambios
+    const token = user.generateAuthToken();
+
+    // Enviar tanto el nuevo token como el usuario actualizado
+    res.header('x-auth-token', token).send({
+      message: "Plan añadido con éxito.",
+      user,
+      token
+    });
   } catch (error) {
-    console.error("Error al eliminar el usuario en MongoDB:", error);
-    res.status(500).json({ error: "Error al eliminar el usuario en MongoDB" });
+    res.status(500).send({ message: "Internal Server Error", error: error.message });
   }
 });
-module.exports = router;
 
+module.exports = router;
