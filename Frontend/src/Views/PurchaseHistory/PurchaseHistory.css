@@ -79,8 +79,8 @@
   margin-bottom: 4px;
 }
 
-.purchase-form input, select,
-textarea {
+.purchase-form input, .purchase-form select,
+.purchase-form textarea {
   background: var(--background-color-form);
   color: var(--color-letter-form);
   width: 100%;
