@@ -25,6 +25,9 @@ const CreateClass = () => {
   // Estado para almacenar y mostrar errores del formulario
   const [showErroresForm, setshowErroresForm] = useState("");
 
+  // Estado para almacenar los encargados disponibles para asignar a clases
+  const [existingStaff, setExistingStaff] = useState([]);
+
   // Estado para manejar los valores de los campos de entrada del formulario
   const [inputData, setInputData] = useState({
     service: "",
@@ -34,6 +37,7 @@ const CreateClass = () => {
     repeatNTimes: 1,
     repeatWeekly: 1,
     capacity: "",
+    user: "",
   });
 
   /**
@@ -62,14 +66,14 @@ const CreateClass = () => {
    * @returns {boolean} - True si se crea la clase con éxito, false si hay un error o si el usuario cancela.
    */
 
-  const createClassBD = async (date, service, capacity) => {
+  const createClassBD = async (date, service, capacity, staff) => {
     // Convertir la fecha al formato ISO manteniendo la zona horaria de Costa Rica
     const dateTime = moment(date).tz("America/Costa_Rica");
     const dateFormatted = dateTime.format(); // Esto garantiza el formato ISO con la zona horaria correcta
 
     const newClass = {
       date: dateFormatted, // Fecha en formato ISO con zona horaria
-      user: usuarioActivo._id,
+      user: staff,
       service: service,
       capacity: capacity,
     };
@@ -128,11 +132,17 @@ const CreateClass = () => {
     }
 
     let allCreated = true;
+    
+    if (usuarioActivo.role === "Staff") {
+      inputData.user = usuarioActivo._id;
+    }
+
     for (const appointment of newAppointments) {
       const success = await createClassBD(
         appointment.date,
         inputData.service,
-        inputData.capacity
+        inputData.capacity,
+        inputData.user
       );
       if (!success) {
         allCreated = false;
@@ -178,6 +188,23 @@ const CreateClass = () => {
       }
     } catch (error) {
       console.error("Error al obtener servicios existentes:", error);
+    }
+  };
+
+  const handleServiceChange = async (e) => {
+    const selectedServiceId = e.target.value;
+    setInputData({ ...inputData, service: selectedServiceId });
+
+    // Encuentra el servicio seleccionado de la lista de servicios existentes
+    const selectedService = existingServices.find(
+      (service) => service._id === selectedServiceId
+    );
+
+    // Establece los encargados de ese servicio
+    if (selectedService && selectedService.encargados) {
+      setExistingStaff(selectedService.encargados);
+    } else {
+      setExistingStaff([]); // Limpia los encargados si el servicio seleccionado no tiene ninguno
     }
   };
 
@@ -255,10 +282,10 @@ const CreateClass = () => {
                   id="inputActivity"
                   className="CreateClass-select"
                   value={inputData.service}
-                  onChange={(e) => handleChange(e, "service")}
+                  onChange={(e) => handleServiceChange(e, "service")}
                   required
                 >
-                  <option value="">Seleccione una opción</option>
+                  <option value="">Seleccione un servicio</option>
                   {existingServices.map((service) => (
                     <option key={service._id} value={service._id}>
                       {service.name}
@@ -267,6 +294,30 @@ const CreateClass = () => {
                 </select>
               </div>
 
+              <div
+                className={
+                  usuarioActivo.role === "Administrator"
+                    ? ""
+                    : "d-none"
+                }
+              >
+                <div className="CreateClass-input-group">
+                  <label htmlFor="inputEncargado">Encargado:</label>
+                  <select
+                    id="inputEncargado"
+                    className="CreateClass-select"
+                    value={inputData.user}
+                    onChange={(e) => handleChange(e, "user")}
+                  >
+                    <option value="">Seleccione un encargado</option>
+                    {existingStaff.map((staff) => (
+                      <option key={staff._id} value={staff._id}>
+                        {staff.firstName} {staff.lastName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
               <div className="CreateClass-input-group">
                 <label htmlFor="inputDate">*Fecha:</label>
                 <input

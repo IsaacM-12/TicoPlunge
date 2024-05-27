@@ -319,7 +319,8 @@ const Appointment = () => {
 
                     <p>Fecha: {moment(item.date).format("DD/MM/YYYY")}</p>
 
-                    <p>Profesor: {item.user.firstName}</p>
+                    {console.log("user", item.user)}
+                    <p>Profesor: {item.user && item.user.firstName} {item.user && item.user.lastName}</p>
 
                     <p>
                       Hora:{" "}

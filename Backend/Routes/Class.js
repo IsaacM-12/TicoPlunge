@@ -39,6 +39,7 @@ router.post("/", async (req, res) => {
   const claseData = req.body;
   // Validamos los datos de la clase
   const { error } = validateClass(claseData);
+  console.log("req.body", req.body);
 
   if (error) return res.status(400).send(error.details[0].message);
 
