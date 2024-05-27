@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 
+/*
+  Modelo de clase
+*/
+
 const classSchema = new mongoose.Schema(
   {
     date: { type: Date, required: true },
