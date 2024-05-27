@@ -13,7 +13,7 @@ export const redirectFeedback = `/Feedback `;
 // urls del backend
 // -------------------------------------------------------------
 
-export const baseUrl = "http://localhost:8080";
+export const baseUrl = "https://np72ncpj-8080.use2.devtunnels.ms";
 
 export const urlFeedback = `${baseUrl}/comentarios`;
 export const urlPrivateFeedback = `${baseUrl}/privatefeedback`;
