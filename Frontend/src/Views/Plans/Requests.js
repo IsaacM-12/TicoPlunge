@@ -10,10 +10,12 @@ import {
 import axios from "axios";
 import "./Requests.css";
 
+// Componente para manejar las solicitudes de planes hechas por los clientes
 const Requests = () => {
   const [planRequests, setPlanRequests] = useState([]);
   const [usuarioActivo, setUsuarioActivo] = useState({});
 
+  // Cargar las solicitudes de contratación de planes existentes
   const fetchPlanRequests = async () => {
     try {
       const response = await selectToBD(urlPlanRequest);
@@ -23,22 +25,24 @@ const Requests = () => {
     }
   };
 
+  // Cargar información del usuario activo
   const GetUserActive = async () => {
     const user = await selectUserByToken();
     setUsuarioActivo(user);
   };
 
+  // Efecto inicial para cargar los datos necesarios
   useEffect(() => {
     fetchPlanRequests();
     GetUserActive();
   }, []);
 
+  // Aceptar una solicitud de contratación de plan
   const handleAccept = async (request) => {
     if (window.confirm("¿Estás seguro de que deseas aceptar esta solicitud?")) {
       try {
-
         const expirationDate = new Date();
-        expirationDate.setDate(expirationDate.getDate() + 30);
+        expirationDate.setDate(expirationDate.getDate() + 30); // Configurar la expiración a 30 días desde hoy
 
         const planDetails = {
           name: request.plan.name,
@@ -53,11 +57,13 @@ const Requests = () => {
           expirationDate: expirationDate.toISOString(),
         };
 
+        // Actualizar la información del usuario para agregar el plan
         const response = await updateToBD(
           `${urlSingIn}/addPlan`,
           request.user._id,
           updateData
         );
+
         if (response.type.name === "SuccessAlert") {
           window.alert("Solicitud aceptada");
         }
@@ -69,28 +75,30 @@ const Requests = () => {
     }
   };
 
+  // Rechazar una solicitud
   const handleReject = async (requestId) => {
-    if (
-      window.confirm("¿Estás seguro de que deseas rechazar esta solicitud?")
-    ) {
+    if (window.confirm("¿Estás seguro de que deseas rechazar esta solicitud?")) {
       try {
         await axios.delete(`${urlPlanRequest}/${requestId}`);
         window.alert("Solicitud rechazada");
-        fetchPlanRequests(); // Actualiza la lista tras eliminar una solicitud
+        fetchPlanRequests(); // Actualizar la lista tras eliminar una solicitud
       } catch (error) {
         window.alert("Error al rechazar la solicitud:", error);
       }
     }
   };
 
+  // Formatear la fecha para mostrar
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-GB'); // Cambia 'en-GB' a tu localidad si necesitas otro formato
+    return new Date(dateString).toLocaleDateString('en-GB'); // Ajustar el formato según la localidad si es necesario
   };
 
+  // Verificar si el usuario tiene permisos para acceder
   if (usuarioActivo.role !== "Administrator") {
     return <NotFound mensaje="Lo sentimos, no tienes acceso a esta página" />;
   }
 
+  // Renderización de la lista de solicitudes
   return (
     <div className="request-style">
       <div className="request">

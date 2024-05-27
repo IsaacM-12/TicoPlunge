@@ -7,7 +7,9 @@ import {
   timeWaitAlert,
 } from "../../GlobalVariables";
 
+// Componente para editar un usuario
 const UserEdit = ({ user, onClose, onSave, setshowAlerts }) => {
+  // Estados para almacenar y gestionar los datos del usuario
   const [name, setName] = useState(user.firstName || "");
   const [lastname, setLastName] = useState(user.lastName || "");
   const [email, setEmail] = useState(user.email || "");
@@ -21,16 +23,11 @@ const UserEdit = ({ user, onClose, onSave, setshowAlerts }) => {
           "Content-Type": "application/json",
         },
       };
-      console.log(infoToSave);
 
-      // Send a PUT request to the service URL with the provided data
+      // Enviar una solicitud PUT a la URL del servicio con los datos proporcionados
       const response = await axios.put(serviceUrl, infoToSave, config);
 
-      //----------------------------------------------------------------------------------------------
-      // borrar al terminar el desarrollo
-      console.log("log del updatetoDB cuando se hizo con exito ", response);
-      //----------------------------------------------------------------------------------------------
-
+      // Muestra el mensaje de éxito
       const message = (
         <SuccessAlert
           message={response.data.message || "Se ha actualizado correctamente"}
@@ -39,12 +36,13 @@ const UserEdit = ({ user, onClose, onSave, setshowAlerts }) => {
 
       // Show success message
       return message;
+
     } catch (error) {
+      // Captura y manejo de errores
       if (error.response && error.response.data && error.response.data.error) {
         // Si el error proviene del servidor y contiene un mensaje de error
         console.error("Error al insertar documento en MongoDB:", error);
         const errorMessage = error.response.data.error;
-        // Aquí puedes usar el mensaje de error para mostrarlo en tu aplicación
         console.error("Mensaje de error:", errorMessage);
         const message = <ErrorAlert message={errorMessage} />;
         return message;
@@ -59,6 +57,7 @@ const UserEdit = ({ user, onClose, onSave, setshowAlerts }) => {
     }
   };
 
+  // Manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     const updatedUser = {
@@ -68,11 +67,13 @@ const UserEdit = ({ user, onClose, onSave, setshowAlerts }) => {
       email,
       role,
     };
+    // Actualiza el usuario y gestiona la interfaz de usuario según la respuesta
     await updateUser(updatedUser);
-    onSave();
-    onClose();
+    onSave();  // Ejecuta la función onSave después de la actualización
+    onClose(); // Cierra el formulario después de la actualización
   };
 
+  // Actualiza el usuario en la base de datos
   const updateUser = async (user) => {
     console.log(user);
     const response = await updateToDB(urlUsers, user);
@@ -82,6 +83,7 @@ const UserEdit = ({ user, onClose, onSave, setshowAlerts }) => {
     }, timeWaitAlert);
   };
 
+  // Renderizar el formulario
   return (
     <form className="container" onSubmit={handleSubmit}>
       <div className="form-group">

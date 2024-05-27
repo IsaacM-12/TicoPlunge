@@ -2,43 +2,62 @@ import { useState } from "react";
 import { updateToBD, urlFeedback, timeWaitAlert } from "../../GlobalVariables";
 import React from "react";
 
+// Componente para editar un comentario existente
 const FeedbackEdit = ({
-  feedback,
-  onClose,
-  onSave,
-  setshowAlerts,
-  selectComentariosBD,
+  feedback, // Objeto feedback actual a editar
+  onClose, // Función para cerrar el modal de edición
+  onSave, // Función que se llama al guardar los cambios con éxito
+  setshowAlerts, // Función para mostrar alertas
+  selectComentariosBD, // Función para actualizar la lista de comentarios
 }) => {
+  // Estados locales para manejar los valores del comentario y la calificación
   const [comentario, setComentario] = useState(feedback.comentario || "");
   const [rating, setRating] = useState(feedback.rating || 5);
 
+  /**
+   * Actualiza un comentario en la base de datos.
+   * @param {Object} comentario - El objeto comentario con los valores actualizados.
+   */
   const updateComentario = async (comentario) => {
-    // parametors minimos segun el Modelo del backend
+    // Parametros mínimos según el modelo del backend para actualizar un comentario.
     const parametrosActualizar = {
       comentario: comentario.comentario,
       rating: comentario.rating,
       user: comentario.user._id,
     };
-    const response = await updateToBD(
-      urlFeedback,
-      comentario._id,
-      parametrosActualizar
-    );
+
+    // Llamada a la API para actualizar el comentario.
+    const response = await updateToBD(urlFeedback, comentario._id, parametrosActualizar);
+
+    // Actualiza la lista de comentarios tras la actualización.
     selectComentariosBD();
+
+    // Muestra la respuesta y luego limpia la alerta después de un tiempo definido.
     setshowAlerts(response);
     setTimeout(() => {
       setshowAlerts("");
     }, timeWaitAlert);
   };
 
+  /**
+   * Maneja el envío del formulario para actualizar el comentario.
+   * @param {Event} e - Evento del formulario que evita el envío por defecto.
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedUser = { ...feedback, comentario: comentario, rating: rating };
-    await updateComentario(updatedUser);
+    const updatedFeedback = { ...feedback, comentario: comentario, rating: rating };
+
+    // Actualiza el comentario con los valores nuevos.
+    await updateComentario(updatedFeedback);
+
+    // Llama a la función onSave al completar la actualización.
     onSave();
+
+    // Cierra el modal de edición.
     onClose();
   };
 
+  // Renderización del formulario de edición.
   return (
     <form className="container" onSubmit={handleSubmit}>
       <div className="feedback-rating-stars-container">

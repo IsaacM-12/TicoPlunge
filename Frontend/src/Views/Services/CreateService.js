@@ -16,12 +16,13 @@ import {
 } from "../../GlobalVariables";
 
 const CreateService = () => {
+  // Estados para controlar la visualización de mensajes de error y datos de formulario
   const [showErroresForm, setshowErroresForm] = useState("");
   const [inputData, setInputData] = useState({
     name: "",
     encargados: [],
     otroServicio: "",
-    selectedStaff: null, // Cambiado a null para indicar que aún no se ha seleccionado ningún encargado
+    selectedStaff: null, // Indica que aún no se ha seleccionado ningún encargado
   });
   const [existingServices, setExistingServices] = useState([]);
   const [staffUsers, setStaffUsers] = useState([]);
@@ -30,11 +31,13 @@ const CreateService = () => {
   const [currentService, setCurrentService] = useState(null);
   const [usuarioActivo, setUsuarioActivo] = useState("");
 
+  // Función para obtener el usuario activo a partir del token de sesión
   const GetUserActive = async () => {
     const user = await selectUserByToken();
     setUsuarioActivo(user);
   };
 
+  // Función para cargar los servicios existentes desde la base de datos
   const fetchExistingServices = async () => {
     try {
       const ServicesData = await selectToBD(urlService);
@@ -53,6 +56,7 @@ const CreateService = () => {
     }
   };
 
+  // Función para obtener los usuarios con rol de staff
   const fetchStaffUsers = async () => {
     try {
       const { data } = await axios(urlGetStaff);
@@ -62,6 +66,7 @@ const CreateService = () => {
     }
   };
 
+  // Efecto para cargar los datos necesarios al montar el componente
   useEffect(() => {
     GetUserActive().then(() => {
       if (usuarioActivo.role === "Staff") {
@@ -75,6 +80,7 @@ const CreateService = () => {
     fetchStaffUsers();
   }, []);
 
+  // Manejo del clic en la tarjeta de servicio, para administradores
   const handleCardClick = (service) => {
     if (usuarioActivo.role === "Administrator") {
       setCurrentService(service);
@@ -82,6 +88,7 @@ const CreateService = () => {
     }
   };
 
+  // Controla cambios en los selectores de servicio
   const handleSelectChange = (e) => {
     const selectedService = e.target.value;
     if (selectedService === "Otro") {
@@ -99,6 +106,7 @@ const CreateService = () => {
     }
   };
 
+  // Controla cambios en los selectores de encargados
   const handleStaffSelectChange = (e) => {
     if (usuarioActivo.role === "Administrator") {
       const selectedStaffId = e.target.value;
@@ -112,11 +120,13 @@ const CreateService = () => {
     }
   };
 
+  // Cierra el modal de edición
   const handleModalClose = () => {
-    setCurrentService(false); // Limpia el comentario actual
-    setShowModal(false); // Oculta el modal};
+    setCurrentService(null);
+    setShowModal(false);
   };
 
+  // Actualiza los campos del formulario
   const handleChange = (e, field) => {
     setInputData({
       ...inputData,
@@ -124,6 +134,7 @@ const CreateService = () => {
     });
   };
 
+  // Manejo del envío del formulario para crear o actualizar un servicio
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -152,6 +163,7 @@ const CreateService = () => {
     }
   };
 
+  // Función para crear un servicio en la base de datos
   const createServiceBD = async () => {
     try {
       let serviceName = inputData.name;
@@ -160,9 +172,7 @@ const CreateService = () => {
       }
       const newService = {
         name: serviceName,
-        encargados: inputData.selectedStaff
-          ? [inputData.selectedStaff._id]
-          : [],
+        encargados: inputData.selectedStaff ? [inputData.selectedStaff._id] : [],
       };
 
       const response = await createToBD(urlService, newService);
@@ -179,6 +189,7 @@ const CreateService = () => {
     }
   };
 
+  // Renderiza la interfaz del usuario según su rol
   if (
     usuarioActivo.role !== "Administrator" &&
     usuarioActivo.role !== "Staff"

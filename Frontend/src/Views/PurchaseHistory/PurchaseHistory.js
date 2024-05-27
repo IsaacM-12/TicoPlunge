@@ -7,7 +7,12 @@ import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 import "./PurchaseHistory.css";
 
-import { urlpurchasehistory } from "../../GlobalVariables";
+import {
+  urlpurchasehistory,
+  urlUsers,
+  selectFilterToBD,
+  selectToBD,
+} from "../../GlobalVariables";
 
 // Componente para el buscador global
 function GlobalFilter({ globalFilter, setGlobalFilter }) {
@@ -27,27 +32,41 @@ function GlobalFilter({ globalFilter, setGlobalFilter }) {
 }
 
 const PurchaseHistory = () => {
-  const [history, setHistory] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [buyerName, setBuyerName] = useState("");
-  const [totalAmount, setTotalAmount] = useState("");
-  const [detail, setDetail] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [history, setHistory] = useState([]); // Historial de compras
+  const [showForm, setShowForm] = useState(false); // Mostrar u ocultar formulario de nueva compra
+  const [buyerName, setBuyerName] = useState(""); // Nombre del comprador
+  const [totalAmount, setTotalAmount] = useState(""); // Monto total de la compra
+  const [detail, setDetail] = useState(""); // Detalle de la compra
+  const [startDate, setStartDate] = useState(""); // Fecha de inicio para filtrado
+  const [endDate, setEndDate] = useState(""); // Fecha de fin para filtrado
+  const [clients, setClients] = useState([]); // Lista de clientes
 
+  // Función para obtener todos los clientes
+  const fetchClients = async () => {
+    try {
+      const response = await selectToBD(urlUsers + "/getClients");
+      setClients(response);
+    } catch (err) {
+      console.error("Error al obtener los clientes:", err);
+    }
+  };
+
+  // Efecto para cargar el historial de compras al iniciar el componente
   useEffect(() => {
     const fetchHistory = async () => {
       try {
         const response = await axios.get(urlpurchasehistory);
         setHistory(response.data);
       } catch (err) {
-        console.error(err);
+        console.error("Error al obtener el historial de compras:", err);
       }
+    fetchClients();
     };
 
     fetchHistory();
   }, []);
 
+  // Función para añadir una nueva compra
   const handleAddPurchase = async (e) => {
     e.preventDefault();
     try {
@@ -68,6 +87,7 @@ const PurchaseHistory = () => {
     }
   };
 
+  // Función para eliminar una compra
   const handleDeletePurchase = async (id) => {
     try {
       await axios.delete(`${urlpurchasehistory}/${id}`);
@@ -77,6 +97,7 @@ const PurchaseHistory = () => {
     }
   };
 
+  // Función para exportar el historial a Excel
   const handleExportToExcel = () => {
     const adjustedEndDate = endDate ? new Date(endDate) : null;
     if (adjustedEndDate) {
@@ -107,6 +128,7 @@ const PurchaseHistory = () => {
     saveAs(data, "HistorialDeCompra.xlsx");
   };
 
+  // Configuración de columnas para react-table
   const columns = useMemo(
     () => [
       {
@@ -170,8 +192,10 @@ const PurchaseHistory = () => {
     usePagination
   );
 
+  // Obtener propiedades y funciones de react-table
   const { globalFilter, pageIndex, pageSize } = state;
 
+  // Instancia de react-table para manejar tabla, filtros y paginación
   return (
     <div className="purchase-history-Style">
       <div className="purchase-history">
@@ -207,13 +231,20 @@ const PurchaseHistory = () => {
           <div className="purchase-form-container m-4">
             <form onSubmit={handleAddPurchase} className="purchase-form">
               <div>
-                <label>Cliente:</label>
-                <input
-                  type="text"
-                  value={buyerName}
-                  onChange={(e) => setBuyerName(e.target.value)}
-                  required
-                />
+                <select
+                  id="inputActivityreserve"
+                  className="m-2"
+                  onChange={(e) =>
+                    setBuyerName(e.target.value)
+                  }
+                >
+                  <option value="">Seleccione un cliente</option>
+                  {clients.map((client) => (
+                    <option key={client._id} value={client.firstName + " " + client.lastName}>
+                      {client.firstName} {client.lastName}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label>Monto total:</label>

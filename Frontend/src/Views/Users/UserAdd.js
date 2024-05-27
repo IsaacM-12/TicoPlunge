@@ -5,7 +5,9 @@ import {
   timeWaitAlert,
 } from "../../GlobalVariables";
 
+// Componente para agregar un nuevo usuario
 const UserAdd = ({ onClose, onSave, setshowAlerts }) => {
+  // Estados para almacenar los datos del nuevo usuario
   const [name, setName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -13,6 +15,7 @@ const UserAdd = ({ onClose, onSave, setshowAlerts }) => {
   const [validation, setValidation] = useState(false);
   const [password, setPassword] = useState("");
 
+  // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newUser = {
@@ -22,20 +25,23 @@ const UserAdd = ({ onClose, onSave, setshowAlerts }) => {
       role,
       password,
     };
+    // Función para agregar el nuevo usuario
     await addUser(newUser);
-    onSave();
-    onClose();
+    onSave();  // Función para manejar acciones post-guardado
+    onClose(); // Función para cerrar el formulario
   };
 
+  // Función para agregar el usuario a la base de datos
   const addUser = async (user) => {
-    console.log(user);
+    console.log(user); // Log del usuario para propósitos de debug
     const response = await createToBD(urlUsers, user);
-    setshowAlerts(response);
+    setshowAlerts(response); // Mostrar alertas basadas en la respuesta
     setTimeout(() => {
-      setshowAlerts("");
+      setshowAlerts(""); // Limpiar alertas después de un tiempo determinado
     }, timeWaitAlert);
   };
 
+  // Renderizar el formulario
   return (
     <form className="container" onSubmit={handleSubmit}>
       <div className="form-group">

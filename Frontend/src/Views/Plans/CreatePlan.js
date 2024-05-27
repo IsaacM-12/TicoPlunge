@@ -13,12 +13,16 @@ import {
   NotFound,
 } from "../../GlobalVariables";
 
+// Componente principal para la creación y gestión de planes.
 const CreatePlan = () => {
+  // Estado para gestionar la entrada de datos del formulario.
   const [inputData, setInputData] = useState({
     name: "",
     services: [],
     price: 0,
   });
+
+  // Estado para almacenar los planes existentes y controlar la visibilidad del modal.
   const [existingPlans, setExistingPlans] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentPlan, setCurrentPlan] = useState(null);
@@ -26,6 +30,7 @@ const CreatePlan = () => {
   const [showErroresForm, setshowErroresForm] = useState("");
   const [existingServices, setExistingServices] = useState([]);
 
+  // Función para obtener los planes existentes.
   const fetchExistingPlans = async () => {
     try {
       const plansData = await selectToBD(urlPlan);
@@ -35,6 +40,7 @@ const CreatePlan = () => {
     }
   };
 
+  // Función para obtener los servicios existentes.
   const fetchExistingServices = async () => {
     try {
       const servicesData = await selectToBD(urlService);
@@ -44,27 +50,32 @@ const CreatePlan = () => {
     }
   };
 
+  // Función para obtener el usuario activo.
   const GetUserActive = async () => {
     const user = await selectUserByToken();
     setUsuarioActivo(user);
   };
 
+  // Efecto inicial para cargar datos necesarios al renderizar el componente.
   useEffect(() => {
     GetUserActive();
     fetchExistingPlans();
     fetchExistingServices();
   }, []);
 
+  // Función para manejar el evento de clic en una tarjeta de plan, abriendo el modal de edición.
   const handleCardClick = (plan) => {
     setCurrentPlan(plan);
     setShowModal(true);
   };
 
+  // Función para cerrar el modal de edición.
   const handleModalClose = () => {
-    setCurrentPlan(false);
+    setCurrentPlan(null);
     setShowModal(false);
   };
 
+  // Función para seleccionar o deseleccionar servicios en el formulario.
   const handleSelectService = (serviceId) => {
     setInputData((prevState) => {
       const isAlreadySelected = prevState.services.some(
@@ -87,6 +98,7 @@ const CreatePlan = () => {
     });
   };
 
+  // Función para cambiar la cantidad de créditos asignados a un servicio.
   const handleChangeCredits = (serviceId, credits) => {
     setInputData((prevState) => ({
       ...prevState,
@@ -96,6 +108,7 @@ const CreatePlan = () => {
     }));
   };
 
+  // Función para manejar el envío del formulario de creación de plan.
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!inputData.name.trim()) {
@@ -104,7 +117,7 @@ const CreatePlan = () => {
       );
       return;
     }
-    // Check for name uniqueness
+    
     const isNameTaken = existingPlans.some(
       (plan) => plan.name.toLowerCase() === inputData.name.toLowerCase()
     );
@@ -124,9 +137,6 @@ const CreatePlan = () => {
       setTimeout(() => {
         setshowErroresForm("");
       }, timeWaitAlert);
-      if (response.type === "success") {
-        window.alert("¡Servicio creado exitosamente!");
-      }
       setInputData({
         name: "",
         services: [],
@@ -137,10 +147,12 @@ const CreatePlan = () => {
     }
   };
 
+  // Renderiza un mensaje de no autorizado si el usuario no es administrador.
   if (usuarioActivo.role !== "Administrator") {
     return <NotFound mensaje="Lo sentimos, no tienes acceso a esta página" />;
   }
 
+  // Renderización del componente de creación de planes.
   return (
     <div className="createPlanStyle-plan">
       <div className="form-container-plan">
@@ -251,7 +263,7 @@ const CreatePlan = () => {
       </div>
       <div className="social-message-plan">
         <div className="line-plan"></div>
-        <div className="message-plan">Servicios existentes</div>
+        <div className="message-plan">Planes existentes</div>
         <div className="line-plan"></div>
       </div>
       <br />

@@ -7,25 +7,31 @@ import {
   timeWaitAlert,
 } from "../../GlobalVariables";
 
+// Componente para editar la contraseña de un usuario
 const UserPasswordEdit = ({ user, onClose, onSave, setshowAlerts }) => {
+  // Estados para las contraseñas y validaciones
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [validation, setValidation] = useState(false);
   const [error, setError] = useState("");
 
+  // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Verifica si las contraseñas coinciden
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError("Las contraseñas no coinciden");
       return;
     }
-    console.log(user);
+    // Crea el objeto usuario actualizado con la nueva contraseña
     const updatedUser = { ...user, password };
+    // Función para actualizar la contraseña del usuario
     await updateUserPassword(updatedUser);
-    onSave();
-    onClose();
+    onSave();  // Ejecuta cualquier función adicional tras guardar
+    onClose(); // Cierra el formulario/modal
   };
 
+  // Función para actualizar información en la base de datos
   const updateToDB = async (serviceUrl, infoToSave) => {
     try {
       const config = {
@@ -35,42 +41,34 @@ const UserPasswordEdit = ({ user, onClose, onSave, setshowAlerts }) => {
       };
       console.log(infoToSave);
 
-      // Send a PUT request to the service URL with the provided data
+      // Envía una solicitud PUT a la URL del servicio con los datos proporcionados
       const response = await axios.put(serviceUrl, infoToSave, config);
 
-      //----------------------------------------------------------------------------------------------
-      // borrar al terminar el desarrollo
-      console.log("log del updatetoDB cuando se hizo con exito ", response);
-      //----------------------------------------------------------------------------------------------
-
+      // Retorna un mensaje de éxito
       const message = (
         <SuccessAlert
           message={response.data.message || "Se ha actualizado correctamente"}
         />
       );
-
-      // Show success message
       return message;
+      
     } catch (error) {
+      // Manejo de errores de la respuesta del servidor o errores generales
       if (error.response && error.response.data && error.response.data.error) {
-        // Si el error proviene del servidor y contiene un mensaje de error
-        console.error("Error al insertar documento en MongoDB:", error);
+        // Error específico del servidor
         const errorMessage = error.response.data.error;
-        // Aquí puedes usar el mensaje de error para mostrarlo en tu aplicación
-        console.error("Mensaje de error:", errorMessage);
         const message = <ErrorAlert message={errorMessage} />;
         return message;
       } else {
-        // Para errores no relacionados con el servidor, usa el mensaje de error predeterminado
+        // Error no especificado
         const errorMessage = error.message || "Error desconocido";
-        console.error("Error desconocido:", errorMessage);
-        console.error("Mensaje de error:", errorMessage);
         const message = <ErrorAlert message={errorMessage} />;
         return message;
       }
     }
   };
 
+  // Función para actualizar la contraseña del usuario
   const updateUserPassword = async (user) => {
     const response = await updateToDB(urlUsers, user);
     setshowAlerts(response);
@@ -79,6 +77,7 @@ const UserPasswordEdit = ({ user, onClose, onSave, setshowAlerts }) => {
     }, timeWaitAlert);
   };
 
+  // Renderizar el formulario
   return (
     <form className="container" onSubmit={handleSubmit}>
       <div className="form-group">

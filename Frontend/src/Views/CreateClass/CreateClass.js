@@ -14,22 +14,18 @@ import {
   timeWaitAlert,
 } from "../../GlobalVariables";
 
+// Componente para la creación de clases, maneja la lógica de creación y programación de clases.
 const CreateClass = () => {
-  // -------------------------------------------------------------
-  // Se usara para optener los datos de la persona activa
-  // -------------------------------------------------------------
+  // Estado para almacenar información del usuario activo
   const [usuarioActivo, setUsuarioActivo] = useState("Staff");
 
+  // Estado para almacenar los servicios disponibles para asignar a clases
   const [existingServices, setExistingServices] = useState([]);
 
-  // -------------------------------------------------------------
-  // Estas se mostraran en el HTML
-  // -------------------------------------------------------------
+  // Estado para almacenar y mostrar errores del formulario
   const [showErroresForm, setshowErroresForm] = useState("");
 
-  // -------------------------------------------------------------
-  // Seran input
-  // -------------------------------------------------------------
+  // Estado para manejar los valores de los campos de entrada del formulario
   const [inputData, setInputData] = useState({
     service: "",
     date: "",
@@ -61,8 +57,6 @@ const CreateClass = () => {
   /**
    * Crea una nueva clase en la base de datos.
    * @param {string} date - La fecha de la clase.
-   * @param {string} hour - La hora de la clase.
-   * @param {string} usuario - El usuario de la clase.
    * @param {string} service - El servicio de la clase.
    * @param {number} capacity - La capacidad de la clase.
    * @returns {boolean} - True si se crea la clase con éxito, false si hay un error o si el usuario cancela.
@@ -106,9 +100,9 @@ const CreateClass = () => {
     }
   };
 
-  // -------------------------------------------------------------
-  // Crea n cantidad de Appointments segun el form
-  // -------------------------------------------------------------
+  /**
+   * Función asincrónica para crear múltiples citas utilizando la configuración proporcionada en el formulario.
+   */
   const createAppointments = async () => {
     const initialDate = new Date(`${inputData.date}T${inputData.hour}:00`);
     const newAppointments = [];
@@ -166,6 +160,9 @@ const CreateClass = () => {
     }
   };
 
+  /**
+   * Función asincrónica para obtener los servicios existentes en la base de datos.
+   */
   const fetchExistingServices = async () => {
     try {
       const ServicesData = await selectToBD(urlService);
@@ -220,6 +217,11 @@ const CreateClass = () => {
     }
   };
 
+  /**
+   * Función para manejar cambios en los campos del formulario.
+   * @param {Event} e - Evento del cambio en el input.
+   * @param {string} field - Campo del estado que se actualizará.
+   */
   const handleChange = (e, field) => {
     setInputData({
       ...inputData,
@@ -227,9 +229,9 @@ const CreateClass = () => {
     });
   };
 
+  // Renderiza el formulario de creación de clases
   return (
     <div className="CreateClass-CreateClassStyle">
-      {/* mostrar solo a los de Administrator y Staff*/}
       <span
         className={
           usuarioActivo.role === "Administrator" ||
@@ -248,7 +250,7 @@ const CreateClass = () => {
             </div>
             <form onSubmit={handleSubmit} className="CreateClass-form">
               <div className="CreateClass-input-group">
-                <label htmlFor="inputActivity">*Actividad:</label>
+                <label htmlFor="inputActivity">Actividad:</label>
                 <select
                   id="inputActivity"
                   className="CreateClass-select"
@@ -346,12 +348,9 @@ const CreateClass = () => {
                   max="52"
                 />
               </div>
-
-              {/* por si hay un error en el form se muestre*/}
               <div className={`m-3 ${showErroresForm ? "" : "d-none"}`}>
                 {showErroresForm}
               </div>
-
               <button type="submit" className="CreateClass-buttom mt-4">
                 Crear Clase
               </button>
@@ -359,8 +358,6 @@ const CreateClass = () => {
           </div>
         </div>
       </span>
-
-      {/* mostrar mensaje si no ha iniciado sesion*/}
       <div className={!usuarioActivo.role ? "" : "d-none"}>
         <NotFound mensaje="Por favor, inicia sesión para continuar" />
       </div>

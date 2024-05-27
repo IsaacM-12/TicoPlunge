@@ -4,29 +4,36 @@ import React from "react";
 import "./EditService.css";
 import { deleteByIDToBD } from "../../GlobalVariables";
 
+// Componente que permite editar un servicio
 const EditService = ({
-  service,
-  onClose,
-  onSave,
-  setshowErroresForm,
-  selectServicesBD,
+  service, // objeto de servicio a editar
+  onClose, // función para cerrar el modal o componente de edición
+  onSave, // función para actualizar la lista de servicios en la vista principal tras guardar cambios
+  setshowErroresForm, // función para mostrar errores durante la edición
+  selectServicesBD, // función para recargar los servicios desde la base de datos
 }) => {
+  // Estado para manejar el nombre del servicio
   const [name, setName] = useState(service.name || "");
+  // Estado para almacenar la lista de encargados actuales
   const [encargados] = useState(service.encargados || []);
+  // Estado para manejar cambios temporales en la lista de encargados
   const [encargadosTemporales, setEncargadosTemporales] = useState(
     service.encargados || []
   );
 
   useEffect(() => {
+    // Sincroniza los encargados temporales con los encargados actuales cuando cambian
     setEncargadosTemporales(encargados);
   }, [encargados]);
 
+  // Maneja la eliminación de un encargado de la lista temporal
   const handleRemoveEncargado = (encargadoId) => {
     setEncargadosTemporales((prevEncargados) =>
       prevEncargados.filter((encargado) => encargado._id !== encargadoId)
     );
   };
 
+  // Procesa la eliminación del servicio
   const handleDeleteService = async () => {
     try {
       const response = await deleteByIDToBD(urlService, service._id);
@@ -41,13 +48,12 @@ const EditService = ({
     }
   };
 
+  // Maneja el envío del formulario de edición
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const confirmacion = window.confirm(
       "¿Está seguro de que desea guardar los cambios?"
     );
-
     if (confirmacion) {
       const updatedService = {
         ...service,
@@ -60,6 +66,7 @@ const EditService = ({
     }
   };
 
+  // Actualiza el servicio en la base de datos
   const updateService = async (service) => {
     const parametrosActualizar = {
       name: service.name,
@@ -77,10 +84,13 @@ const EditService = ({
     }, timeWaitAlert);
   };
 
+  // Renderiza el formulario de edición
   return (
     <form className="container-edit-service" onSubmit={handleSubmit}>
       <div className="form-group">
-        <label style={{ fontWeight: "bold", marginRight: "8px" }}>Nombre del servicio:</label>
+        <label style={{ fontWeight: "bold", marginRight: "8px" }}>
+          Nombre del servicio:
+        </label>
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -89,9 +99,14 @@ const EditService = ({
       </div>
       <br></br>
       <div className="form-group-edit-service">
-        <label style={{ marginBottom: "4px", fontWeight: "bold" }}>Encargados:</label>
+        <label style={{ marginBottom: "4px", fontWeight: "bold" }}>
+          Encargados:
+        </label>
         {encargadosTemporales.map((encargado, index) => (
-          <div key={index} style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div
+            key={index}
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
             <span className="flex-item-edit-service">
               {encargado.firstName} {encargado.lastName}
             </span>
@@ -109,7 +124,10 @@ const EditService = ({
       </div>
 
       <div className="modal-footer-edit-service">
-        <button className="btn btn-primary button-margin-edit-service" type="submit">
+        <button
+          className="btn btn-primary button-margin-edit-service"
+          type="submit"
+        >
           Guardar cambios
         </button>
         <button

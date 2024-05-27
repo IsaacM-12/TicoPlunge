@@ -178,6 +178,7 @@ const Feedback = () => {
     setShowModal(true); // Muestra el modal
   };
 
+  // Renderización de la vista de comentarios
   return (
     <div className="FeedbackStyle">
       {/* para mostrar mensajes de alerta*/}

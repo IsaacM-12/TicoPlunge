@@ -12,6 +12,7 @@ import {
 } from "../../GlobalVariables";
 
 const Users = () => {
+  // Estados para gestionar la lista de usuarios, modales y términos de búsqueda
   const [users, setUsers] = useState([]);
   const [editUser, setEditUser] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -20,42 +21,53 @@ const Users = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showAlerts, setshowAlerts] = useState("");
 
+  // Efecto para cargar los usuarios al montar el componente
   useEffect(() => {
     fetchUsers();
   }, []);
 
+  // Función para obtener los usuarios de la base de datos
   const fetchUsers = async () => {
     const response = await selectToBD(urlUsers);
     setUsers(response);
   };
 
+  // Función para cargar el usuario a editar en el modal
   const LoadEdit = (user) => {
     setEditUser(user);
     setShowEditModal(true);
   };
+
+  // Función para cerrar el modal de edición
   const handleEditModalClose = () => {
     setEditUser(null);
     setShowEditModal(false);
   };
 
+  // Función para cerrar el modal de agregar
   const handleAddModalClose = () => {
     setShowAddModal(false);
   };
 
+  // Función para cargar el modal de edición de contraseña
   const RestorePassword = (user) => {
     setEditUser(user);
     setShowPasswordModal(true);
   };
+
+  // Función para cerrar el modal de edición de contraseña
   const handlePasswordModalClose = () => {
     setEditUser(null);
     setShowPasswordModal(false);
   };
 
+  // Función para eliminar un usuario
   const Removefunction = async (user) => {
     await deleteByIDToBD(urlUsers, user._id);
     fetchUsers();
   };
 
+  // Función para filtrar los usuarios según el término de búsqueda
   const filteredUsers = users.filter((user) => {
     const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
     const searchTermLower = searchTerm.toLowerCase();
@@ -66,9 +78,9 @@ const Users = () => {
     );
   });
 
+  // Renderizado del componente
   return (
     <div className="Users-Style">
-      {/* para mostrar mensajes de alerta*/}
       <div className={` ${showAlerts ? "" : "d-none"}`}>
         <div className="mostrar-alert">{showAlerts}</div>
       </div>

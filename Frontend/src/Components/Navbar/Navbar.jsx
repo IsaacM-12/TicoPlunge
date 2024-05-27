@@ -5,13 +5,12 @@ import { selectUserByToken } from "../../GlobalVariables";
 import { useEffect, useState } from "react";
 
 function Navbar() {
-  // -------------------------------------------------------------
-  // Se usara para optener los datos de la persona activa
-  // -------------------------------------------------------------
+
+  // Estado para almacenar el usuario activo
   const [usuarioActivo, setUsuarioActivo] = useState("");
 
   /**
-   * Función asincrónica para obtener y establecer el usuario activo utilizando el token de autenticación.
+   * Función asíncrona para obtener el usuario activo.
    */
   const GetUserActive = async () => {
     const user = await selectUserByToken();
@@ -19,14 +18,18 @@ function Navbar() {
   };
 
   /**
-   * Efecto secundario que se ejecuta al montar el componente para obtener el usuario activo y seleccionar los comentarios de la base de datos.
-   * El segundo argumento vacío asegura que se llame solo una vez al cargar la página.
+   * Hook de efecto para obtener y establecer el usuario activo.
+   * Se ejecuta al renderizar el componente.
+   * Se ejecuta una sola vez.
    */
   useEffect(() => {
-    // Llamar a la función para obtener y establecer el usuario activo
     GetUserActive();
   }, []);
 
+  /**
+   * Función para cerrar sesión.
+   * Se ejecuta al hacer clic en el botón de cerrar sesión.
+   */
   const handleLogout = () => {
     const confirmLogout = window.confirm(
       "¿Estás seguro de que deseas cerrar sesion?"
@@ -36,6 +39,8 @@ function Navbar() {
       window.location = "/";
     }
   };
+
+  // Renderizado del componente
   return (
     <div>
       <div className="containe-navbar">

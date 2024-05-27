@@ -10,19 +10,13 @@ import {
 import "./Profile.css";
 import axios from "axios";
 
+// Componente para gestionar el perfil del usuario
 const Profile = () => {
-  // -------------------------------------------------------------
-  // Se usara para optener los datos de la persona activa
-  // -------------------------------------------------------------
   const [usuarioActivo, setUsuarioActivo] = useState({});
   const [activeTab, setActiveTab] = useState("about"); // Estado para manejar la pestaña activa
   const [editMode, setEditMode] = useState(false);
   const [metadata, setMetadata] = useState({});
   const [existMetadata, setExistMetadata] = useState(false);
-
-  // -------------------------------------------------------------
-  // Seran input
-  // -------------------------------------------------------------
 
   /**
    * Función asincrónica para obtener y establecer el usuario activo utilizando el token de autenticación.
@@ -33,6 +27,9 @@ const Profile = () => {
     return user; // Devuelve el usuario obtenido
   };
 
+  /**
+   * Función asincrónica para obtener los metadatos del usuario activo.
+   */
   const GetMetadata = async (user) => {
     try {
       const updatedUrl = urlMetadata + "/" + user._id;
@@ -44,28 +41,32 @@ const Profile = () => {
     }
   };
 
+  // Manejo de cambio de pestañas en el perfil
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
+  // Manejo de cambios en los campos del formulario de metadatos
   const handleChange = (e) => {
-    metadata.user = usuarioActivo._id;
     setMetadata({ ...metadata, [e.target.name]: e.target.value });
   };
 
+  // Alternar entre modo de edición y modo normal
   const handleEditMode = () => setEditMode(!editMode);
 
-  // Factoriza la lógica de guardado en funciones separadas
+  // Guardar los nuevos metadatos del usuario
   const saveNewMetadata = async () => {
     const response = await createToBD(urlMetadata, metadata);
     handleSaveResponse(response);
   };
 
+  // Actualizar los metadatos existentes del usuario
   const updateExistingMetadata = async () => {
     const response = await updateToBD(urlMetadata, usuarioActivo._id, metadata);
     handleSaveResponse(response);
   };
 
+  // Procesar la respuesta del servidor después de intentar guardar datos
   const handleSaveResponse = (response) => {
     if (response) {
       setEditMode(false);
@@ -74,33 +75,30 @@ const Profile = () => {
     }
   };
 
-  // Simplifica el método handleSave usando operador ternario
+  // Decidir si actualizar o crear nuevos metadatos basado en la existencia previa
   const handleSave = async () => {
     existMetadata ? updateExistingMetadata() : saveNewMetadata();
   };
 
-  /**
-   * Efecto secundario que se ejecuta al montar el componente (cargar la pagina)
-   * El segundo argumento vacío asegura que se llame solo una vez al cargar la página.
-   */
+  // Cargar usuario y metadatos al iniciar el componente
   useEffect(() => {
-    // Llamar a la función para obtener y establecer el usuario activo
     GetUserActive().then((user) => {
       if (user._id) GetMetadata(user);
     });
   }, []);
 
-  // Función para formatear la fecha
+  // Formatear fecha a formato local
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    date.setDate(date.getDate() + 1); // Suma un día a la fecha
-    return date.toLocaleDateString("en-GB"); // Devuelve la fecha en formato dd-mm-aaaa
+    return date.toLocaleDateString("en-GB");
   };
 
+  // Mostrar mensaje si el usuario no está identificado
   if (!usuarioActivo) {
     return <NotFound mensaje="Por favor, inicia sesión o crea tu cuenta." />;
   }
 
+  // Renderizar el perfil del usuario
   return (
     <div className="container emp-profile">
       <form method="post">

@@ -124,12 +124,10 @@ const PrivateFeedback = () => {
 
   return (
     <div className="PrivateFeedbackStyle">
-      {/* para mostrar mensajes de alerta*/}
       <div className={` ${showAlerts ? "" : "d-none"}`}>
         <div className="mostrar-alert">{showAlerts}</div>
       </div>
 
-      {/* mostrar form de private feedback solo a los de Client*/}
       <span className={usuarioActivo.role === "Client" ? "" : "d-none"}>
         <div className="PrivateFeedback-rating-card">
           <form onSubmit={handleSubmit}>
@@ -155,7 +153,6 @@ const PrivateFeedback = () => {
               />
             </div>
 
-            {/* por si hay un error en el form se muestre*/}
             <div className={` ${showErroresForm ? "" : "d-none"}`}>
               <div className="d-flex justify-content-center align-items-center">
                 {showErroresForm}
@@ -170,13 +167,12 @@ const PrivateFeedback = () => {
           </form>
           <div className="m-4">
             <Link to={redirectFeedback} className="btn btn-primary m-2">
-              Dejar comentario privado
+              Dejar comentario público
             </Link>
           </div>
         </div>
       </span>
 
-      {/* mostrar los mensajes privados solo a Staff y Administrator */}
       <span
         className={
           usuarioActivo.role === "Administrator" ||
@@ -198,8 +194,6 @@ const PrivateFeedback = () => {
                   <span className="feedback-notibody">
                     Comentario: {item.comentario}
                   </span>
-
-                  {/* mostrar boton borrar solo al admin */}
                   <span
                     className={
                       usuarioActivo.role === "Administrator" ? "" : "d-none"
@@ -224,8 +218,6 @@ const PrivateFeedback = () => {
           </div>
         </div>
       </span>
-
-      {/* mostrar mensaje si no ha iniciado sesion*/}
       <div className={!usuarioActivo.role ? "" : "d-none"}>
         <NotFound mensaje="Por favor, inicia sesión para continuar" />
       </div>

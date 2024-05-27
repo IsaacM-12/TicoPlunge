@@ -13,6 +13,7 @@ import {
   NotFound,
 } from "../../GlobalVariables";
 
+// Componente para permitir a los usuarios contratar planes
 const HirePlan = () => {
   const [showErroresForm, setshowErroresForm] = useState("");
   const [existingPlans, setExistingPlans] = useState([]);
@@ -21,6 +22,7 @@ const HirePlan = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [usuarioActivo, setUsuarioActivo] = useState({});
 
+  // Obtener planes disponibles desde la base de datos
   const fetchExistingPlans = async () => {
     try {
       const plansData = await selectToBD(urlPlan);
@@ -30,88 +32,56 @@ const HirePlan = () => {
     }
   };
 
+  // Obtener solicitudes de planes hechas por el usuario
   const fetchPlanRequests = async () => {
     if (usuarioActivo) {
       try {
         const requestData = await selectToBD(urlPlanRequest);
         setExistingRequests(requestData);
       } catch (error) {
-        console.error(
-          "Error al obtener las solicitudes de plan existentes:",
-          error
-        );
+        console.error("Error al obtener las solicitudes de plan existentes:", error);
       }
     }
   };
 
+  // Obtener el usuario activo desde la base de datos
   const GetUserActive = async () => {
     const user = await selectUserByToken();
     setUsuarioActivo(user);
   };
 
-  // Cargar todos los planes disponibles
   useEffect(() => {
     fetchExistingPlans();
     GetUserActive();
     fetchPlanRequests();
   }, []);
 
-  // Función para manejar la contratación de un plan
+  // Manejar la contratación de un plan
   const handleHire = async (planId) => {
     try {
-      if (!usuarioActivo) {
-        alert("Usuario no identificado, no es posible enviar la solicitud");
-        return;
-      }
-      let alreadyRequested = false;
-      // Verificar si ya existe una solicitud para este plan
-      if (existingRequests.length > 0) {
-        alreadyRequested = existingRequests.some(
-          (request) =>
-            request.plan._id === planId &&
-            request.user._id === usuarioActivo._id
-        );
-      }
+      let alreadyRequested = existingRequests.some(
+        (request) => request.plan._id === planId && request.user._id === usuarioActivo._id
+      );
 
-      // Verificar si ya tiene contratado el plan
-      let alreadyHired = false;
-      if (usuarioActivo.plans.length > 0) {
-        alreadyHired = usuarioActivo.plans.some((plan) => plan._id === planId);
-      }
+      let alreadyHired = usuarioActivo.plans?.some(
+        (plan) => plan._id === planId
+      );
 
       if (alreadyRequested || alreadyHired) {
-        const message = alreadyRequested ? (
-          <ErrorAlert
-            message={"Ya has solicitado este plan. Espera la confirmación."}
-          />
-        ) : (
-          <ErrorAlert
-            message={"Ya has contratado este plan. Escoge uno nuevo."}
-          />
-        );
-        setshowErroresForm(message);
+        const message = alreadyRequested ? "Ya has solicitado este plan. Espera la confirmación." : "Ya has contratado este plan. Escoge uno nuevo.";
+        setshowErroresForm(<ErrorAlert message={message} />);
         setTimeout(() => {
           setshowErroresForm("");
         }, timeWaitAlert);
-        fetchPlanRequests();
         return;
       }
 
-      const inputData = {
+      const response = await createToBD(urlPlanRequest, {
         user: usuarioActivo._id,
         plan: planId,
-      };
+      });
 
-      const response = await createToBD(urlPlanRequest, inputData);
-
-      if (response.type.name === "SuccessAlert") {
-        const message = (
-          <SuccessAlert message={"Se ha solicitado el plan exitosamente."} />
-        );
-        setshowErroresForm(message);
-      } else {
-        setshowErroresForm(response);
-      }
+      setshowErroresForm(<SuccessAlert message={"Solicitud enviada exitosamente."} />);
       setTimeout(() => {
         setshowErroresForm("");
       }, timeWaitAlert);
@@ -122,25 +92,23 @@ const HirePlan = () => {
     fetchPlanRequests();
   };
 
-  // Función para abrir el modal de contratación
+  // Abrir modal de confirmación para contratación de plan
   const openModal = (plan) => {
     setSelectedPlan(plan);
     setShowModal(true);
   };
 
-  // Función para cerrar el modal
+  // Cerrar modal de confirmación
   const closeModal = () => {
     setShowModal(false);
     setSelectedPlan(null);
   };
 
-  if (
-    usuarioActivo.role !== "Client" &&
-    usuarioActivo.role !== "Administrator"
-  ) {
+  if (usuarioActivo.role !== "Client" && usuarioActivo.role !== "Administrator") {
     return <NotFound mensaje="Lo sentimos, no tienes acceso a esta página" />;
   }
 
+  // Renderizar la vista de contratación de planes
   return (
     <div className="hirePlanStyle">
       <div className={`m-3 ${showErroresForm ? "" : "d-none"}`}>

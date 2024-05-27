@@ -9,21 +9,27 @@ import {
 } from "../../GlobalVariables";
 import "./Register.css";
 
+// Componente para iniciar sesión
 const Login = () => {
+  // Estado para almacenar los datos de entrada del usuario (email y contraseña)
   const [data, setData] = useState({ email: "", password: "" });
+  // Estado para almacenar y mostrar mensajes de error
   const [error, setError] = useState("");
 
+  // Manejar los cambios en los campos de entrada y actualizar el estado correspondientemente
   const handleChange = ({ target: { name, value } }) => {
     setData((prevState) => ({ ...prevState, [name]: value }));
   };
 
+  // Manejar el envío del formulario para el inicio de sesión
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const { data: res } = await axios.post(urlLogin, data);
-      localStorage.setItem("token", res.data);
-      window.location = "/"; // Or redirect using react-router
+      localStorage.setItem("token", res.data); // Guardar el token de inicio de sesión en localStorage
+      window.location = "/"; // Redirigir al usuario a la página principal después del inicio de sesión exitoso
     } catch (error) {
+      // Verificar si el error es un error de respuesta y mostrarlo
       if (
         error.response &&
         error.response.status >= 400 &&
@@ -34,6 +40,7 @@ const Login = () => {
     }
   };
 
+  // Renderizar el componente
   return (
     <div className="register_container">
       <div className="register_form_container">

@@ -8,13 +8,15 @@ import {
 } from "../../GlobalVariables";
 import "./EditPlan.css";
 
+// Componente para editar un plan existente
 const EditPlan = ({
-  plan,
-  onClose,
-  onSave,
-  fetchExistingPlans,
-  setshowErroresForm,
+  plan, // Objeto del plan actual a editar
+  onClose, // Función para cerrar el modal de edición
+  onSave, // Función para realizar acciones tras guardar los cambios
+  fetchExistingPlans, // Función para recargar los planes desde la base de datos
+  setshowErroresForm, // Función para mostrar errores en el formulario
 }) => {
+  // Estado local para manejar los datos del plan
   const [planData, setPlanData] = useState({
     name: plan.name,
     services: plan.services,
@@ -22,6 +24,7 @@ const EditPlan = ({
   });
   const [existingServices, setExistingServices] = useState([]);
 
+  // Función para obtener los servicios existentes desde la base de datos
   const fetchExistingServices = async () => {
     try {
       const servicesData = await selectToBD(urlService);
@@ -31,10 +34,12 @@ const EditPlan = ({
     }
   };
 
+  // Efecto para cargar los servicios al montar el componente
   useEffect(() => {
     fetchExistingServices();
   }, []);
 
+  // Maneja los cambios en los campos de entrada del formulario
   const handleInputChange = (e) => {
     setPlanData({
       ...planData,
@@ -42,6 +47,7 @@ const EditPlan = ({
     });
   };
 
+  // Toggle para agregar o quitar servicios del plan
   const handleToggleService = (service) => {
     const isSelected = planData.services.some(
       (s) => s.service._id === service._id
@@ -53,8 +59,8 @@ const EditPlan = ({
     setPlanData({ ...planData, services: updatedServices });
   };
 
+  // Cambia los créditos para un servicio específico
   const handleCreditsChange = (serviceId, credits) => {
-    console.log("serviceID:", serviceId, "Creditos:", credits);
     const updatedServices = planData.services.map((contratedService) =>
       contratedService.service._id === serviceId
         ? { ...contratedService, credits: parseInt(credits) || 0 }
@@ -63,47 +69,40 @@ const EditPlan = ({
     setPlanData({ ...planData, services: updatedServices });
   };
 
+  // Maneja el envío del formulario para guardar los cambios
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-      const confirmacion = window.confirm(
-        "¿Está seguro de que desea guardar los cambios?"
-      );
-
-      if (confirmacion) {
-        try {
-          const response = await updateToBD(urlPlan, plan._id, planData);
-          if (response.success) {
-            onSave();
-            setshowErroresForm("Plan actualizado exitosamente.");
-          } else {
-            setshowErroresForm(
-              "Error actualizando el plan: " + response.message
-            );
-          }
+    const confirmacion = window.confirm("¿Está seguro de que desea guardar los cambios?");
+    if (confirmacion) {
+      try {
+        const response = await updateToBD(urlPlan, plan._id, planData);
+        if (response.success) {
+          onSave();
+          setshowErroresForm("Plan actualizado exitosamente.");
           onClose();
-        } catch (error) {
-          window.alert("Error al actualizar el plan.");
-          setshowErroresForm(
-            "Se ha fallado actualizando plan: " + error.message
-          );
+        } else {
+          setshowErroresForm("Error actualizando el plan: " + response.message);
         }
+      } catch (error) {
+        setshowErroresForm("Se ha fallado actualizando plan: " + error.message);
       }
-
+    }
     fetchExistingPlans();
   };
 
-  const handleDelete = async () => { 
-      try {
-        await deleteByIDToBD(urlPlan, plan._id);
-        fetchExistingPlans();
-        onClose();
-        window.alert("Plan eliminado exitosamente.");
-      } catch (error) {
-        setshowErroresForm("Error eliminando el plan: " + error.message);
-      }
+  // Elimina el plan actual
+  const handleDelete = async () => {
+    try {
+      await deleteByIDToBD(urlPlan, plan._id);
+      fetchExistingPlans();
+      onClose();
+      window.alert("Plan eliminado exitosamente.");
+    } catch (error) {
+      setshowErroresForm("Error eliminando el plan: " + error.message);
+    }
   };
 
+  // Renderiza el formulario de edición de plan
   return (
     <form className="container-edit-plan" onSubmit={handleSubmit}>
       <div className="form-group">

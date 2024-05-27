@@ -9,27 +9,36 @@ import {
 } from "../../GlobalVariables";
 import "./Register.css";
 
+// Componente para registrar un nuevo usuario
 const SignIn = () => {
+  // Estado para almacenar los datos del formulario de registro
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
-    role: "Client",
+    role: "Client", // Rol por defecto para nuevos usuarios
   });
+  // Estado para almacenar y mostrar mensajes de error o éxito
   const [error, setError] = useState("");
+  // Hook para navegar programáticamente después de acciones como el registro
   useNavigate();
 
+  // Manejar cambios en los campos de entrada del formulario y actualizar el estado
   const handleChange = ({ currentTarget: input }) => {
     setData({ ...data, [input.name]: input.value });
   };
 
+  // Manejar el envío del formulario de registro
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const { data: res } = await axios.post(urlSingIn, data);
+      // Mostrar mensaje de éxito y potencialmente redirigir al usuario
       setError(<SuccessAlert message={res.message} />);
+      // Aquí podrías incluir navigate('/') para redirigir al inicio o a otra ruta
     } catch (error) {
+      // Verificar si el error es un error de respuesta del servidor y mostrarlo
       if (
         error.response &&
         error.response.status >= 400 &&
@@ -40,6 +49,7 @@ const SignIn = () => {
     }
   };
 
+  // Renderizar el componente
   return (
     <div className="register_container">
       <div className="register_form_container">

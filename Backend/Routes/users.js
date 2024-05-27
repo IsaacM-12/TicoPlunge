@@ -88,6 +88,15 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/getClients", async (req, res) => {
+  try {
+    const allUsers = await User.find({ role: "Client" });
+    res.json(allUsers);
+  } catch (error) {
+    res.status(500).send({ message: "Error al consultar los usuarios" });
+  }
+});
+
 router.put("/", async (req, res) => {
   const userId = req.body._id;
 

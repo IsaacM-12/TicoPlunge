@@ -20,24 +20,20 @@ import {
 } from "../../GlobalVariables";
 
 const Appointment = () => {
-  // -------------------------------------------------------------
-  // Se usara para optener los datos de la persona activa
-  // -------------------------------------------------------------
+
+  // Estado para almacenar el usuario activo 
   const [usuarioActivo, setUsuarioActivo] = useState("");
 
+  // Estado para almacenar los servicios existentes
   const [existingServices, setExistingServices] = useState([]);
 
-  // -------------------------------------------------------------
-  // Seran input
-  // -------------------------------------------------------------
+  // Estado para almacenar los datos de entrada del formulario de búsqueda
   const [inputData, setInputData] = useState({
     searchDate: "",
     searchClass: "",
   });
 
-  // -------------------------------------------------------------
-  // Estas se mostraran en el HTML
-  // -------------------------------------------------------------
+  // Estados para mostrar mensajes y clases
   const [showClasses, setshowClasses] = useState("");
   const [showErrorSearch, setshowErrorSearch] = useState("");
   const [showAlerts, setshowAlerts] = useState("");
@@ -68,6 +64,7 @@ const Appointment = () => {
   const reserve = async (idClass) => {
     const confirmacion = window.confirm("¿Está seguro que desea reservar?");
 
+    // Si el usuario cancela la acción, no se realiza la reserva
     if (!confirmacion) {
       setshowAlerts(<ErrorAlert message={"Acción Cancelada"} />);
       setTimeout(() => {
@@ -76,6 +73,7 @@ const Appointment = () => {
       return;
     }
 
+    // Obtener el ID del usuario activo y el ID de la clase a reservar
     const userId = usuarioActivo._id;
     const classId = idClass;
 
@@ -97,13 +95,16 @@ const Appointment = () => {
       return;
     }
 
+    // Crear la reserva en la base de datos
     const response = await createToBD(urlreserve, {
       userId,
       classId,
     });
 
+    // Mostrar el mensaje de confirmación o error
     await selectClassBD();
 
+    // Mostrar el mensaje de confirmación o error
     setshowAlerts(response);
     setTimeout(() => {
       setshowAlerts("");
@@ -199,10 +200,7 @@ const Appointment = () => {
     await searchByAnyBD();
   };
 
-  // -------------------------------------------------------------
-  // parametros para el edit
-  // -------------------------------------------------------------
-
+  // Estados para manejar la edición de un Appointment
   const [appointmentActual, setAppointmentActual] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [mostrarEditAppointment, setMostrarEditAppointment] = useState(false);
@@ -228,6 +226,9 @@ const Appointment = () => {
     setShowModal(true);
   };
 
+  /**
+   * Función asincrónica para obtener los servicios existentes en la base de datos.
+   */
   const fetchExistingServices = async () => {
     try {
       const ServicesData = await selectToBD(urlService);
@@ -246,13 +247,13 @@ const Appointment = () => {
     }
   };
 
+  // Renderizar la vista de Appointment
   return (
     <div>
       {/* mostrar solo a los registrados*/}
       <span className={usuarioActivo.role ? "" : "d-none"}>
         <div className="AppointmentStyle">
           <h1>Reserva tu clase </h1>
-          {/* para mostrar mensajes */}
           <div className={`m-4 ${showAlerts ? "" : "d-none"}`}>
             <div className="mostrar-alert">{showAlerts}</div>
           </div>
@@ -261,7 +262,6 @@ const Appointment = () => {
             <div className="search">
               <form className="form-inline" onSubmit={handleSubmitSearch}>
                 <div className="CreateClass-input-group">
-                  <label htmlFor="inputActivity">*Actividad:</label>
                   <select
                     id="inputActivityreserve"
                     className="m-2"
@@ -273,7 +273,7 @@ const Appointment = () => {
                       })
                     }
                   >
-                    <option value="">Seleccione una opción</option>
+                    <option value="">Seleccione un servicio</option>
                     {existingServices.map((service) => (
                       <option key={service._id} value={service._id}>
                         {service.name}
@@ -294,14 +294,13 @@ const Appointment = () => {
                   />
                 </div>
 
-                {/* por si hay un error en el form se muetre */}
                 <div className={`m-4 ${showErrorSearch ? "" : "d-none"}`}>
                   <div className="d-flex justify-content-center align-items-center">
                     {showErrorSearch}
                   </div>
                 </div>
 
-                <button type="submit" className="btn btn-primary m-4">
+                <button type="submit" className="btn btn-primary m-2">
                   Buscar
                 </button>
               </form>
@@ -371,13 +370,10 @@ const Appointment = () => {
           </div>
         </div>
       </span>
-
-      {/* mostrar mensaje si no ha iniciado sesion*/}
       <div className={!usuarioActivo.role ? "" : "d-none"}>
         <NotFound mensaje="Por favor, inicia sesión para continuar" />
       </div>
 
-      {/* Ventana para editar  */}
       <Modal show={showModal} onHide={handleModalClose}>
         <Modal.Header closeButton>
           <Modal.Title>Editar Clase</Modal.Title>
