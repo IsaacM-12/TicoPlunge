@@ -10,7 +10,6 @@ import "./PurchaseHistory.css";
 import {
   urlpurchasehistory,
   urlUsers,
-  selectFilterToBD,
   selectToBD,
 } from "../../GlobalVariables";
 
