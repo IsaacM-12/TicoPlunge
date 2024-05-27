@@ -1,4 +1,10 @@
 .createPlanStyle-plan {
+  background: var(--background-color-principal);
+  background-attachment: fixed;
+
+  color: white;
+  padding-top: 30px;
+  padding-bottom: 30px;
   margin: 0;
   min-height: calc(100vh - 44px);
 }
@@ -23,7 +29,7 @@
   padding: 20px;
   background-color: var(--class-background-color-plan);
   border: 1px solid rgb(48, 128, 148);
-  border-radius: 0.90rem;
+  border-radius: 0.9rem;
   box-shadow: blue;
   text-align: center;
   cursor: pointer;
@@ -36,10 +42,10 @@
   color: var(--class-color-letter-plan);
 }
 
-.card-title-plan { 
-  font-size: 1.5rem; 
-  font-weight: 700; 
-  margin-bottom: 0.5rem; 
+.card-title-plan {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
 .card-subtitle-plan {
@@ -49,20 +55,20 @@
   font-weight: 700;
 }
 
-.card-divider-plan { 
-  width: 80%; 
+.card-divider-plan {
+  width: 80%;
   height: 1px;
   background-color: rgba(156, 163, 175, 1);
   margin-bottom: 0.5rem;
 }
 
 .card-list-plan {
-  text-align: center; 
+  text-align: center;
   width: 100%;
   font-size: medium;
-  display: flex; 
+  display: flex;
   flex-direction: column;
-  align-items: center; 
+  align-items: center;
 }
 
 .card-plan:hover {
@@ -72,7 +78,7 @@
 
 .form-container-plan {
   width: 320px;
-  border-radius: 0.90rem;
+  border-radius: 0.9rem;
   background-color: var(--class-background-color-plan);
   padding: 2rem;
   color: var(--class-color-letter-plan);
@@ -129,13 +135,13 @@
 
 .input-group-createPlan-plan {
   display: flexbox;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: flex-start;
   align-items: center;
 }
 
 .input-group-createPlan-plan label {
-  display:block;
+  display: block;
   color: rgb(212, 212, 212);
   margin-bottom: 4px;
 }
@@ -229,7 +235,7 @@
 }
 
 .container-plan-checkbox input:checked ~ .checkmark-plan {
-  background-image: linear-gradient(#255CD2, #1D52C1);
+  background-image: linear-gradient(#255cd2, #1d52c1);
 }
 
 .checkmark-plan:after {
@@ -254,15 +260,15 @@
   position: absolute;
   top: 0;
   left: 0;
-  height: 1.0em;
-  width: 1.0em;
+  height: 1em;
+  width: 1em;
   background-color: #bbbbbb;
   border-radius: 7px;
 }
 
 .checkmark-plan:after {
   left: 0.45em;
-  top: 0.20em;
+  top: 0.2em;
   width: 0.24em;
   height: 0.6em;
   border: solid white;

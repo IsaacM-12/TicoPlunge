@@ -29,6 +29,7 @@ export const urlGetStaff = `${baseUrl}/service/staff`;
 export const urlpurchasehistory = `${baseUrl}/purchase-history`;
 export const urlPlan = `${baseUrl}/plan`;
 export const urlPlanRequest = `${baseUrl}/planRequest`;
+export const urlMetadata = `${baseUrl}/metadata`;
 
 // -------------------------------------------------------------
 // constante de cuanto tiempo mostrar los mensajes de error en milisegundos

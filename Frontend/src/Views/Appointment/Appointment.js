@@ -15,7 +15,9 @@ import {
   deleteByIDToBD,
   selectUserByToken,
   urlClass,
+  selectToBD,
   NotFound,
+  urlService,
   ErrorAlert,
   timeWaitAlert,
 } from "../../GlobalVariables";
@@ -26,11 +28,14 @@ const Appointment = () => {
   // -------------------------------------------------------------
   const [usuarioActivo, setUsuarioActivo] = useState("");
 
+  const [existingServices, setExistingServices] = useState([]);
+
   // -------------------------------------------------------------
   // Seran input
   // -------------------------------------------------------------
   const [inputData, setInputData] = useState({
     searchDate: "",
+    searchClass: "",
   });
 
   // -------------------------------------------------------------
@@ -56,18 +61,18 @@ const Appointment = () => {
     // Llamar a la función para obtener y establecer el usuario activo
     GetUserActive();
     selectClassBD();
+    fetchExistingServices();
   }, []);
 
   /**
-   * Reserva una clase como cliente.
+   * Reserva una clase como cliente o administrador.
    * @param {string} idClass - El ID de la clase que se va a reservar.
    */
-  const reserveAsClient = async (idClass) => {
-    const confirmacion = window.confirm("¿Está seguro que desea de reservar?");
+  const reserve = async (idClass) => {
+    const confirmacion = window.confirm("¿Está seguro que desea reservar?");
 
-    console.log(idClass)
     if (!confirmacion) {
-      setshowAlerts(<ErrorAlert message={"Accion Cancelada"} />);
+      setshowAlerts(<ErrorAlert message={"Acción Cancelada"} />);
       setTimeout(() => {
         setshowAlerts("");
       }, timeWaitAlert);
@@ -76,7 +81,26 @@ const Appointment = () => {
 
     const userId = usuarioActivo._id;
     const classId = idClass;
-    const response = await createToBD(urlReserveClassAsClient, {
+
+    // Selecciona el URL apropiado dependiendo del rol del usuario
+    let urlreserve;
+    if (usuarioActivo.role === "Client") {
+      urlreserve = urlReserveClassAsClient;
+    } else if (
+      usuarioActivo.role === "Administrator" ||
+      usuarioActivo.role === "Staff"
+    ) {
+      urlreserve = urlReserveClassAsAdmin;
+    } else {
+      // Manejar el caso en que el rol no es reconocido
+      setshowAlerts(<ErrorAlert message={"Rol no reconocido"} />);
+      setTimeout(() => {
+        setshowAlerts("");
+      }, timeWaitAlert);
+      return;
+    }
+
+    const response = await createToBD(urlreserve, {
       userId,
       classId,
     });
@@ -88,8 +112,6 @@ const Appointment = () => {
       setshowAlerts("");
     }, timeWaitAlert);
   };
-
-  const reserveAsAdmin = async () => {};
 
   /**
    * Función para seleccionar clases de la base de datos con fecha mayor a la actual.
@@ -136,6 +158,12 @@ const Appointment = () => {
         },
       });
     }
+    // Verificar si se ha proporcionado un servicio específico para búsqueda
+    if (inputData.searchClass) {
+      filtro.$and.push({
+        service: inputData.searchClass,
+      });
+    }
 
     const response = await selectFilterToBD(urlClass, filtro);
     setshowClasses(response);
@@ -164,10 +192,11 @@ const Appointment = () => {
    */
   const handleSubmitSearch = async (event) => {
     event.preventDefault(); // Evitar que el formulario se envíe vacio
-    if (!inputData.searchDate) {
+    if (!inputData.searchClass && !inputData.searchDate) {
       selectClassBD();
       return;
     }
+
     setshowErrorSearch("");
 
     await searchByAnyBD();
@@ -202,6 +231,24 @@ const Appointment = () => {
     setShowModal(true);
   };
 
+  const fetchExistingServices = async () => {
+    try {
+      const ServicesData = await selectToBD(urlService);
+      if (ServicesData.length > 0) {
+        setExistingServices(
+          ServicesData.map((service) => ({
+            ...service,
+            encargados: service.encargados,
+          }))
+        );
+      } else {
+        setExistingServices([]);
+      }
+    } catch (error) {
+      console.error("Error al obtener servicios existentes:", error);
+    }
+  };
+
   return (
     <div>
       {/* mostrar solo a los registrados*/}
@@ -216,6 +263,28 @@ const Appointment = () => {
           <div className="container mt-5">
             <div className="search">
               <form className="form-inline" onSubmit={handleSubmitSearch}>
+                <div className="CreateClass-input-group">
+                  <label htmlFor="inputActivity">*Actividad:</label>
+                  <select
+                    id="inputActivityreserve"
+                    className="m-2"
+                    value={inputData.searchClass}
+                    onChange={(e) =>
+                      setInputData({
+                        ...inputData,
+                        searchClass: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="">Seleccione una opción</option>
+                    {existingServices.map((service) => (
+                      <option key={service._id} value={service._id}>
+                        {service.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 <div className="mb-2">
                   <input
                     type="date"
@@ -267,7 +336,7 @@ const Appointment = () => {
 
                     <button
                       className="btn btn-primary m-2"
-                      onClick={() => reserveAsClient(item._id)}
+                      onClick={() => reserve(item._id)}
                     >
                       INSCRIBIRSE
                     </button>

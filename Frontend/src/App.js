@@ -16,6 +16,7 @@ import PurchaseHistory from "./Views/PurchaseHistory/PurchaseHistory";
 import CreatePlan from "./Views/Plans/CreatePlan";
 import HirePlan from "./Views/Plans/HirePlan";
 import Request from "./Views/Plans/Requests";
+import Metadata from "./Views/Profile/Profile"
 
 function App() {
   return (
@@ -37,6 +38,8 @@ function App() {
             <Route path="/CreatePlan" element={<CreatePlan />} />
             <Route path="/HirePlan" element={<HirePlan />} />
             <Route path="/Requests" element={<Request />} />
+            <Route path="/Metadata" element={<Metadata />} />
+
             <Route
               path="*"
               element={<NotFound mensaje="La página que busca no existe" />}

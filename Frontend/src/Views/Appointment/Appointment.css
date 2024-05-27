@@ -22,6 +22,22 @@
   color: white;
 }
 
+.AppointmentStyle select {
+  /* background: var(--background-color-form);
+  color: var(--color-letter-form); */
+  border: 3px solid #0b5ed6;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: transparent;
+  color: white;
+}
+
+.AppointmentStyle option {
+  /* background: var(--background-color-form);
+  color: var(--color-letter-form); */
+  border-radius: 10px;
+  background-color: black;
+}
 /* ---------------------------------------
 --  Estilo de como mostrar las citas
 ------------------------------------------ */

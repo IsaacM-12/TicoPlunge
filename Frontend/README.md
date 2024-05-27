@@ -3,10 +3,14 @@
 ## By
 
 - Isaac Meléndez Gatgens
+- Gerald Matarrita Alvarado
+- Pablo Sandí Sánchez
+- Jeaustin Obando Arias
+- Emmanuel López Ramírez 
 
 ## Información del Proyecto
 
-- Última Edición: 25 / 4/ 2024
+- Última Edición: 26 / 5 / 2024
 
 ## Tecnologías Utilizadas
 
