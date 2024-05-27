@@ -45,7 +45,7 @@ const FeedbackEdit = ({
         {[...Array(5)].map((_, i) => {
           const value = 5 - i; // Ajuste del valor para corregir el orden
           return (
-            <React.Fragment key={i}>
+            <React.Fragment key={"stars" + i}>
               <input
                 value={value} // El valor del input, que va de 1 a 5
                 name="rate"

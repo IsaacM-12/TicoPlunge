@@ -12,19 +12,22 @@ const ServicesRoutes = require("./Routes/service");
 const PlanRoutes = require("./Routes/plan");
 const purchaseHistoryRouter = require("./Routes/purchaseHistory");
 const RequestPlanRoutes = require("./Routes/planRequest");
-const MetadataRoutes = require("./Routes/metaData"); 
+const MetadataRoutes = require("./Routes/metaData");
+const helmet = require('helmet');
 
-// database connection
+// Conexión a la base de datos
 connection();
 
-// middlewares
+// Middlewares
 app.use(express.json());
 app.use(cors());
+app.use(helmet())
 
+// Body parser
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
-// routes
+// Routes
 app.use("/register", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/comentarios", FeedbackRoutes);
@@ -35,7 +38,8 @@ app.use("/plan", PlanRoutes);
 app.use("/purchase-history", purchaseHistoryRouter);
 app.use("/planRequest", RequestPlanRoutes);
 app.use("/users", userRoutes);
-app.use("/metadata", MetadataRoutes); 
+app.use("/metadata", MetadataRoutes);
 
+// Configuración del puerto
 const port = process.env.PORT || 8080;
 app.listen(port, console.log(`Listening on port ${port}...`));

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   createToBD,
-  SuccessAlert,
   urlUsers,
   timeWaitAlert,
 } from "../../GlobalVariables";

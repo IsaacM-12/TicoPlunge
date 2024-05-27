@@ -3,6 +3,9 @@ const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
 
+/**
+ * Modelo de usuario.
+ */
 const userSchema = new mongoose.Schema(
   {
     firstName: { type: String, required: true },
@@ -36,7 +39,11 @@ const userSchema = new mongoose.Schema(
   { strict: "throw" }
 );
 
-// Modify the token generation to include the user role
+/**
+ * Función de validación de datos de usuario.
+ * @param {Object} data - Datos a validar.
+ * @returns {Object} - Objeto con los errores y el valor.
+ */
 userSchema.methods.generateAuthToken = function () {
   const token = jwt.sign(
     {
@@ -59,8 +66,13 @@ userSchema.statics.populateOptions = {
   select: "-password", // Excluir el campo 'password'
 };
 
+/**
+ * Función de validación de datos de usuario.
+ * @param {Object} data - Datos a validar.
+ * @returns {Object} - Objeto con los errores y el valor.
+ */
 const validate = (data) => {
-  const schema = Joi.object({
+  const schema = Joi.object({ // Esquema de validación
     firstName: Joi.string().required().label("First Name"),
     lastName: Joi.string().required().label("Last Name"),
     email: Joi.string().email().required().label("Email"),
@@ -68,13 +80,18 @@ const validate = (data) => {
     role: Joi.string()
       .valid("Administrator", "Staff", "Client")
       .required()
-      .label("Role"), // Validation for role
+      .label("Role"),
   });
   return schema.validate(data);
 };
 
+/**
+ * Función de validación de datos de plan.
+ * @param {Object} data - Datos a validar.
+ * @returns {Object} - Objeto con los errores y el valor.
+ */
 const validatePlan = (data) => {
-  const schema = Joi.object({
+  const schema = Joi.object({ // Esquema de validación
     name: Joi.string().required(),
     services: Joi.array()
       .items(
@@ -89,6 +106,8 @@ const validatePlan = (data) => {
   return schema.validate(data);
 };
 
+// Definición del modelo de usuario
 const User = mongoose.model("User", userSchema);
 
+// Exportación del modelo y la función de validación
 module.exports = { User, validate, validatePlanId: validatePlan };

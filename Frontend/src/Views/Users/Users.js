@@ -9,12 +9,10 @@ import {
   selectToBD,
   deleteByIDToBD,
   urlUsers,
-  SuccessAlert,
 } from "../../GlobalVariables";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
-  const [isLoading, setLoading] = useState(true);
   const [editUser, setEditUser] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -29,7 +27,6 @@ const Users = () => {
   const fetchUsers = async () => {
     const response = await selectToBD(urlUsers);
     setUsers(response);
-    setLoading(false);
   };
 
   const LoadEdit = (user) => {

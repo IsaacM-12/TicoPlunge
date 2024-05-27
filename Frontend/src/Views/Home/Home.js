@@ -78,8 +78,8 @@ const Home = () => {
                   El "cold plunge" o inmersión en agua fría es cuando te
                   sumerges en agua muy fría, por unos pocos minutos. Piensa en
                   meterte en una piscina con agua casi helada.
-                </p>{" "}
-                <p>¿Por qué lo hacen las personas? </p>
+                </p>
+                <p>¿Por qué lo hacen las personas?</p>
                 <li>
                   <strong>
                     Recuperación: Ayuda a que tus músculos se sientan mejor
@@ -91,13 +91,13 @@ const Home = () => {
                     Mejora la circulación: El frío hace que la sangre circule
                     mejor por tu cuerpo.
                   </strong>
-                </li>{" "}
+                </li>
                 <li>
                   <strong>
                     Refuerza el sistema inmunológico: Puede ayudar a que no te
                     enfermes tanto.
                   </strong>
-                </li>{" "}
+                </li>
                 <li>
                   <strong>
                     Mejora el ánimo: Estar en agua fría puede hacerte sentir más
@@ -118,7 +118,7 @@ const Home = () => {
                   Los Pilates son una forma de ejercicio que te ayuda a
                   fortalecer los músculos, especialmente los del abdomen y la
                   espalda. También mejora tu postura, flexibilidad y equilibrio.
-                </p>{" "}
+                </p>
                 <p>¿Cómo se hacen? </p>
                 <p>
                   Puedes hacer Pilates en una colchoneta en el suelo o usando
@@ -139,14 +139,14 @@ const Home = () => {
                     dolores de espalda y cuello, y mejora la eficiencia de tus
                     movimientos diarios.
                   </strong>
-                </li>{" "}
+                </li>
                 <li>
                   <strong>
                     Aumentan la flexibilidad: Una mayor flexibilidad puede
                     mejorar tu rango de movimiento, reducir la rigidez y hacer
                     que te sientas más ágil y menos propenso a lesiones.
                   </strong>
-                </li>{" "}
+                </li>
                 <li>
                   <strong>
                     Reducen el estrés: Los movimientos suaves y fluidos también
@@ -167,7 +167,7 @@ const Home = () => {
                   contra la otra usando solo sus puños. Se enfrentan en un
                   cuadrilátero y tratan de golpearse entre sí mientras se mueven
                   alrededor del ring.
-                </p>{" "}
+                </p>
                 <p>Beneficios</p>
                 <li>
                   <strong>
@@ -185,7 +185,7 @@ const Home = () => {
                     presenta el boxeo puede ser muy gratificante y promover un
                     sentido de logro personal.
                   </strong>
-                </li>{" "}
+                </li>
                 <li>
                   <strong>
                     Autodefensa y Seguridad Personal: Aprender técnicas de boxeo
@@ -193,7 +193,7 @@ const Home = () => {
                     autodefensa y aumentar su confianza en situaciones
                     potencialmente peligrosas.
                   </strong>
-                </li>{" "}
+                </li>
                 <li>
                   <strong>
                     Alivio del Estrés y Canalización de Emociones: Golpear el
@@ -218,7 +218,7 @@ const Home = () => {
                   El yoga es una antigua práctica que combina movimientos
                   físicos, técnicas de respiración y meditación para promover el
                   bienestar general del cuerpo, la mente y el espíritu.
-                </p>{" "}
+                </p>
                 <p>Beneficios de la Yoga </p>
                 <li>
                   <strong>
@@ -235,7 +235,7 @@ const Home = () => {
                     mente y reducir el estrés. La práctica regular de yoga puede
                     ayudar a gestionar la ansiedad y promover la relajación.
                   </strong>
-                </li>{" "}
+                </li>
                 <li>
                   <strong>
                     Mejora del bienestar mental: El yoga fomenta la atención
@@ -243,7 +243,7 @@ const Home = () => {
                     ayudar a reducir los pensamientos negativos y aumentar la
                     autoaceptación y el amor propio.
                   </strong>
-                </li>{" "}
+                </li>
                 <li>
                   <strong>
                     Aumento de la energía y la vitalidad: Las prácticas de
@@ -256,7 +256,7 @@ const Home = () => {
             </div>
           </div>
 
-          <Link to="/AppointmentForm" className="btn btn-primary">
+          <Link to="/AppointmentForm" className="btn-personalizado">
             RESERVA YA!!
           </Link>
 

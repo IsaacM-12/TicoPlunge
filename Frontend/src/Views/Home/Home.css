@@ -84,9 +84,17 @@
   border-radius: 30px;
 }
 
-.btn-primary {
+.btn-personalizado {
   background: linear-gradient(to bottom, rgb(69, 81, 87), #0097ee);
+  border-color: transparent;
   margin: 30px;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.btn-personalizado:hover {
+  background: linear-gradient(to bottom, #0097ee, rgb(255, 255, 255));
 }
 
 .cold-plunge {
@@ -123,7 +131,6 @@
 
 .titulo {
   border-radius: 10px;
-  position: 0;
   color: hsla(0, 0%, 0%, 0.9);
   font: normal 140px Varela Round, sans-serif;
   height: auto;
@@ -149,9 +156,8 @@
   padding-right: 50px;
   padding-left: 40px;
   border: 1px solid black;
-  background-color: azure;
   border-radius: 89px;
-  background: linear-gradient(145deg, #e6e6e6, #ffffff);
+  background-color: linear-gradient(145deg, #e6e6e6, #ffffff);
   box-shadow: 34px 34px 67px #b0b0b0, -34px -34px 67px #ffffff;
 }
 
@@ -176,6 +182,7 @@ footer {
   position: absolute;
   display: flex;
   width: 60%;
+  transform: scale(1);
   height: 100%;
   font-size: 24px;
   font-weight: 700;
@@ -186,8 +193,8 @@ footer {
 }
 
 .card-principal .social-link1,
-.card-principal .social-link2,
-.card-principal .social-link3 {
+.social-link2,
+.social-link3 {
   position: relative;
   display: flex;
   align-items: center;
@@ -198,10 +205,6 @@ footer {
   text-decoration: none;
   transition: 0.25s;
   border-radius: 50px;
-}
-
-.card-principal svg {
-  transform: scale(1);
 }
 
 .card-principal .social-link1:hover {

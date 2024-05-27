@@ -3,11 +3,8 @@ import { useEffect, useState } from "react";
 import {
   selectUserByToken,
   NotFound,
-  selectFilterToBD,
   urlMetadata,
-  urlPlanRequest,
   updateToBD,
-  selectToBD,
   createToBD,
 } from "../../GlobalVariables";
 import "./Profile.css";
@@ -58,18 +55,28 @@ const Profile = () => {
 
   const handleEditMode = () => setEditMode(!editMode);
 
-  const handleSave = async () => {
-    let response = null;
-    if (!existMetadata) {
-      response = await createToBD(urlMetadata, metadata);
-    } else {
-      response = await updateToBD(urlMetadata, usuarioActivo._id, metadata);
-    }
+  // Factoriza la lógica de guardado en funciones separadas
+  const saveNewMetadata = async () => {
+    const response = await createToBD(urlMetadata, metadata);
+    handleSaveResponse(response);
+  };
+
+  const updateExistingMetadata = async () => {
+    const response = await updateToBD(urlMetadata, usuarioActivo._id, metadata);
+    handleSaveResponse(response);
+  };
+
+  const handleSaveResponse = (response) => {
     if (response) {
       setEditMode(false);
     } else {
       alert("Ocurrió un error al guardar los cambios.");
     }
+  };
+
+  // Simplifica el método handleSave usando operador ternario
+  const handleSave = async () => {
+    existMetadata ? updateExistingMetadata() : saveNewMetadata();
   };
 
   /**
@@ -79,7 +86,7 @@ const Profile = () => {
   useEffect(() => {
     // Llamar a la función para obtener y establecer el usuario activo
     GetUserActive().then((user) => {
-      if (user && user._id) GetMetadata(user);
+      if (user._id) GetMetadata(user);
     });
   }, []);
 
@@ -170,15 +177,16 @@ const Profile = () => {
         </div>
         <div className="row">
           <div className="col-md-4">
-            {usuarioActivo.role === "Client" ? (
+            <div className={usuarioActivo.role === "Client" ? "" : "d-none"}>
               <div className="profile-work">
                 <p>Algunas funciones</p>
                 <a href="HirePlan">Contratar un plan</a>
                 <br />
-                <a href="Feedback">Dejanos tu comentario</a>
+                <a href="Feedback">Dejános tu comentario</a>
                 <br />
               </div>
-            ) : usuarioActivo.role === "Administrator" ? (
+            </div>
+            <div className={usuarioActivo.role === "Staff" ? "" : "d-none"}>
               <div className="profile-work">
                 <p>Algunas funciones</p>
                 <a href="CreateService">Asignarte un servicio</a>
@@ -188,7 +196,10 @@ const Profile = () => {
                 <a href="Feedback">Revisar comentarios</a>
                 <br />
               </div>
-            ) : (
+            </div>
+            <div
+              className={usuarioActivo.role === "Administrator" ? "" : "d-none"}
+            >
               <div className="profile-work">
                 <p>Algunas funciones</p>
                 <a href="Requests">Revisar solicitudes</a>
@@ -196,7 +207,7 @@ const Profile = () => {
                 <a href="Feedback">Revisar comentarios</a>
                 <br />
               </div>
-            )}
+            </div>
           </div>
           <div className="col-md-8">
             <div className="tab-content profile-tab" id="myTabContent">
@@ -326,7 +337,7 @@ const Profile = () => {
                               <label>
                                 {" "}
                                 {service.service.name} - {service.credits}{" "}
-                                créditos
+                                créditos restantes
                               </label>
                             </li>
                           ))}

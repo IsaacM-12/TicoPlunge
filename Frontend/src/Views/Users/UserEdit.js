@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import {
   ErrorAlert,
@@ -54,6 +54,7 @@ const UserEdit = ({ user, onClose, onSave, setshowAlerts }) => {
         console.error("Error desconocido:", errorMessage);
         console.error("Mensaje de error:", errorMessage);
         const message = <ErrorAlert message={errorMessage} />;
+        return message;
       }
     }
   };

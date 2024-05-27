@@ -66,6 +66,7 @@ const UserPasswordEdit = ({ user, onClose, onSave, setshowAlerts }) => {
         console.error("Error desconocido:", errorMessage);
         console.error("Mensaje de error:", errorMessage);
         const message = <ErrorAlert message={errorMessage} />;
+        return message;
       }
     }
   };

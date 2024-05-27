@@ -164,6 +164,7 @@ router.post("/reserveAsClient", async (req, res) => {
     // Revisar los planes del usuario
     let isReservationPossible = false;
     let remainingCredits = 0;
+    const planName = "";
 
     for (let plan of user.plans) {
       for (let service of plan.plan.services) {

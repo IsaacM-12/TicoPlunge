@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./Navbar.css";
 import { selectUserByToken } from "../../GlobalVariables";
 import { useEffect, useState } from "react";
@@ -9,7 +9,6 @@ function Navbar() {
   // Se usara para optener los datos de la persona activa
   // -------------------------------------------------------------
   const [usuarioActivo, setUsuarioActivo] = useState("");
-  const navigate = useNavigate();
 
   /**
    * Función asincrónica para obtener y establecer el usuario activo utilizando el token de autenticación.
@@ -235,7 +234,7 @@ function Navbar() {
         <div className={usuarioActivo.role === "Administrator" ? "" : "d-none"}>
           <Link to="/PurchaseHistory" className="link-navbar">
             <svg
-              xmlns="http://www3.org/2000/svg"
+              xmlns="https://www3.org/2000/svg"
               width="24"
               height="24"
               viewBox="0 0 24 24"
@@ -257,7 +256,7 @@ function Navbar() {
         <div className={usuarioActivo.role === "Administrator" ? "" : "d-none"}>
           <Link to="/CreatePlan" className="link-navbar">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              xmlns="https://www.w3.org/2000/svg"
               width="24"
               height="24"
               viewBox="0 0 24 24"
@@ -278,7 +277,7 @@ function Navbar() {
         <div className={usuarioActivo.role === "Client" ? "" : "d-none"}>
           <Link to="/HirePlan" className="link-navbar">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              xmlns="https://www.w3.org/2000/svg"
               width="24"
               height="24"
               viewBox="0 0 24 24"
@@ -299,7 +298,7 @@ function Navbar() {
         <div className={usuarioActivo.role === "Administrator" ? "" : "d-none"}>
           <Link to="/Requests" className="link-navbar">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              xmlns="https://www.w3.org/2000/svg"
               width="24"
               height="24"
               viewBox="0 0 24 24"
@@ -320,7 +319,7 @@ function Navbar() {
         <div className={usuarioActivo.role === "Administrator" ? "" : "d-none"}>
           <Link to="/Users" className="link-navbar">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              xmlns="https://www.w3.org/2000/svg"
               width="24"
               height="24"
               viewBox="0 0 24 24"
@@ -343,7 +342,7 @@ function Navbar() {
         <div className={usuarioActivo.role ? "" : "d-none"}>
           <Link className="link-navbar" onClick={handleLogout}>
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              xmlns="https://www.w3.org/2000/svg"
               width="24"
               height="24"
               viewBox="0 0 24 24"

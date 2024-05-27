@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Modal } from "react-bootstrap";
 import "./CreatePlan.css";
 import EditPlan from "./EditPlan";
@@ -61,13 +60,6 @@ const CreatePlan = () => {
     setShowModal(true);
   };
 
-  const handleChange = (e, field) => {
-    setInputData({
-      ...inputData,
-      [field]: e.target.value,
-    });
-  };
-
   const handleModalClose = () => {
     setCurrentPlan(false);
     setShowModal(false);
@@ -124,7 +116,7 @@ const CreatePlan = () => {
     const confirmacion = window.confirm(
       "¿Está seguro de iniciar la creación del servicio?"
     );
-    
+
     if (confirmacion) {
       const response = await createToBD(urlPlan, inputData);
       fetchExistingPlans();
@@ -155,9 +147,7 @@ const CreatePlan = () => {
         <h2 className="title-plan">Crear Plan</h2>
         <div className="social-message-service">
           <div className="line-service"></div>
-          <div className="message-plan">
-            Crear servicio o añadir encargado
-          </div>
+          <div className="message-plan">Crear servicio o añadir encargado</div>
           <div className="line-service"></div>
           <br />
         </div>
@@ -203,7 +193,12 @@ const CreatePlan = () => {
                 </label>
                 {inputData.services.some((s) => s.service === service._id) && (
                   <>
-                    <label htmlFor={`credits-${service._id}`} style={ {fontSize: '14px'} }>Créditos:</label>
+                    <label
+                      htmlFor={`credits-${service._id}`}
+                      style={{ fontSize: "14px" }}
+                    >
+                      Créditos:
+                    </label>
                     <input
                       type="number"
                       value={
@@ -222,22 +217,32 @@ const CreatePlan = () => {
               </div>
             ))}
             <div className="input-group-createPlan-plan">
-            <label
-              style={{ color: "rgba(156, 163, 175, 1)" }}
-              htmlFor="inputPrice"
-            >
-              Precio del Plan (₡):
-            </label>
-            <input
-              type="number"
-              id="inputPrice"
-              value={inputData.price}
-              onChange={(e) => setInputData({ ...inputData, price: parseFloat(e.target.value) || 0 })}
-              className="input"
-              required
-              min="0"
-            />
+              <label
+                style={{ color: "rgba(156, 163, 175, 1)" }}
+                htmlFor="inputPrice"
+              >
+                Precio del Plan (₡):
+              </label>
+              <input
+                type="number"
+                id="inputPrice"
+                value={inputData.price}
+                onChange={(e) =>
+                  setInputData({
+                    ...inputData,
+                    price: parseFloat(e.target.value) || 0,
+                  })
+                }
+                className="input"
+                required
+                min="0"
+              />
+            </div>
           </div>
+          <div className={`m-4 ${showErroresForm ? "" : "d-none"}`}>
+            <div className="d-flex justify-content-center align-items-center">
+              {showErroresForm}
+            </div>
           </div>
           <button type="submit" className="buttomCreate-plan mt-4">
             Crear Plan
@@ -258,15 +263,16 @@ const CreatePlan = () => {
               key={item._id}
               onClick={() => handleCardClick(item)}
             >
-              <span className="card-title-plan" id={index}>
+              <span className="card-title-plan" id={"plan" + index}>
                 {item.name}
               </span>
               <div className="card-divider-plan"></div>
               <span className="card-subtitle-plan">Servicios incluidos:</span>
               <span className="card-list-plan">
                 {item.services.map((contractedService, index) => (
-                  <li key={index} className="custom-li-plan">
-                    {contractedService.service.name} - {contractedService.credits} créditos
+                  <li key={"planservice" + index} className="custom-li-plan">
+                    {contractedService.service.name} -{" "}
+                    {contractedService.credits} créditos
                   </li>
                 ))}
               </span>

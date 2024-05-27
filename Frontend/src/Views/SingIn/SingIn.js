@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  createToBD,
-  deleteByIDToBD,
-  selectToBD,
   urlSingIn,
   redirectLogin,
   SuccessAlert,
@@ -21,7 +18,7 @@ const SignIn = () => {
     role: "Client",
   });
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  useNavigate();
 
   const handleChange = ({ currentTarget: input }) => {
     setData({ ...data, [input.name]: input.value });

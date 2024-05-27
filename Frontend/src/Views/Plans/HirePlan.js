@@ -58,9 +58,8 @@ const HirePlan = () => {
 
   // Función para manejar la contratación de un plan
   const handleHire = async (planId) => {
-    console.log("requestData", existingRequests);
     try {
-      if (!usuarioActivo || !usuarioActivo._id) {
+      if (!usuarioActivo) {
         alert("Usuario no identificado, no es posible enviar la solicitud");
         return;
       }

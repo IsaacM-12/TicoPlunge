@@ -159,7 +159,6 @@ const PurchaseHistory = () => {
     previousPage,
     setPageSize,
     state,
-    preGlobalFilteredRows,
     setGlobalFilter,
   } = useTable(
     {

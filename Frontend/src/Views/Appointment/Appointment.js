@@ -2,10 +2,7 @@ import { useEffect, useState } from "react";
 import "./Appointment.css";
 import { Modal } from "react-bootstrap";
 import AppointmentEdit from "./AppointmentEdit";
-import { format, parseISO } from "date-fns";
-import { es } from "date-fns/locale";
 import moment from "moment-timezone";
-import axios from "axios";
 
 import {
   createToBD,

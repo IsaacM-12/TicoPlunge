@@ -98,11 +98,6 @@ export const createToBD = async (serviceUrl, infoToSave) => {
     // Send a POST request to the service URL with the provided data
     const response = await axios.post(serviceUrl, infoToSave, config);
 
-    //----------------------------------------------------------------------------------------------
-    // borrar al terminar el desarrollo
-    console.log("log del createToBD cuando se hizo con exito ", response);
-    //----------------------------------------------------------------------------------------------
-
     const message = (
       <SuccessAlert
         message={response.data.message || "Se ha creado correctamente"}
@@ -126,6 +121,7 @@ export const createToBD = async (serviceUrl, infoToSave) => {
       console.error("Error desconocido:", errorMessage);
       console.error("Mensaje de error:", errorMessage);
       const message = <ErrorAlert message={errorMessage} />;
+      return message;
     }
   }
 };
@@ -151,11 +147,6 @@ export const updateToBD = async (serviceUrl, documentId, newData) => {
       newData,
       config
     );
-
-    //----------------------------------------------------------------------------------------------
-    // borrar al terminar el desarrollo
-    console.log("log del updateToBD cuando se hizo con exito ", response);
-    //----------------------------------------------------------------------------------------------
 
     const message = (
       <SuccessAlert
@@ -312,11 +303,7 @@ export function NotFound({ mensaje }) {
 }
 
 export const SuccessAlert = ({ message }) => {
-  const [showAlert, setShowAlert] = useState(true);
-
-  const handleCloseAlert = () => {
-    setShowAlert(false);
-  };
+  const [showAlert] = useState(true);
 
   return (
     showAlert && (
@@ -357,11 +344,7 @@ export const SuccessAlert = ({ message }) => {
 };
 
 export const ErrorAlert = ({ message }) => {
-  const [showAlert, setShowAlert] = useState(true);
-
-  const handleCloseAlert = () => {
-    setShowAlert(false);
-  };
+  const [showAlert] = useState(true);
 
   return (
     showAlert && (

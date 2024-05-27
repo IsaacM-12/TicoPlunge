@@ -2,13 +2,10 @@ import React, { useEffect, useState } from "react";
 import {
   urlPlanRequest,
   selectToBD,
-  deleteByIDToBD,
   updateToBD,
   urlSingIn,
   NotFound,
   selectUserByToken,
-  selectFilterToBD,
-  urlPlan,
 } from "../../GlobalVariables"; // Asegúrate de que esta URL sea correcta
 import axios from "axios";
 import "./Requests.css";

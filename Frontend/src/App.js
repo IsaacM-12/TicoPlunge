@@ -16,7 +16,7 @@ import PurchaseHistory from "./Views/PurchaseHistory/PurchaseHistory";
 import CreatePlan from "./Views/Plans/CreatePlan";
 import HirePlan from "./Views/Plans/HirePlan";
 import Request from "./Views/Plans/Requests";
-import Metadata from "./Views/Profile/Profile"
+import Metadata from "./Views/Profile/Profile";
 
 function App() {
   return (

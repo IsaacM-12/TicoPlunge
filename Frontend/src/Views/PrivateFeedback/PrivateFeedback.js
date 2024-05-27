@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import "./PrivateFeedback.css";
-import { Modal } from "react-bootstrap";
 import React from "react";
 import { NotFound } from "../../GlobalVariables";
 import { Link } from "react-router-dom";
